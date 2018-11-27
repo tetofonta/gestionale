@@ -1,9 +1,10 @@
 # CIAONE
 
 ## How to start up
-Copy network.config.json.TEMPLATE as network.config.json in ./src, ./backend
+- Run populate.sh
+- Copy network.config.json.TEMPLATE as network.config.json in ./src, ./backend
 Edit the files with values.\
-*DO NOT EDIT *.TEMPLATE FILE!*
+- *DO NOT EDIT .TEMPLATE FILE!*
 
 ## Funzionalitá:
 - [x] Login
