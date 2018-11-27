@@ -618,7 +618,7 @@ class Editor extends React.Component {
                             label="Contenuto"
                             placeholder={this.state.content[this.state.toedit].data}
                             onChange={(e) => {
-                                this.state.content[this.state.toedit].data = e.target.data;
+                                this.state.content[this.state.toedit].data = e.target.value;
                                 this.forceUpdate()
                             }}
 

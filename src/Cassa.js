@@ -392,7 +392,7 @@ class Cassa extends React.Component {
                                         num: this.state.ordernum,
                                         time: Math.floor(Date.now() / 1000)
                                     }),
-                                    buono: this.state.usabuono ? `BUONO ${this.state.buonoDesc}` : "",
+                                    buono: this.state.usabuono ? `BUONO ${this.state.buonoDesc}` : " ",
                                     ordnum: null
                                 }}
                             />
