@@ -38,9 +38,9 @@ app.get('/api/hello', (req, res) => {
 
 app.post('/api/new_order', (r, e) => increment(r,e)); //Ritorna il numero di ordine incrementale
 
-app.post('/api/rst_counter');
-app.post('/api/shutdown');
-app.post('/api/stats');
+app.post('/api/rst_counter'); //TODO
+app.post('/api/shutdown'); //TODO
+app.post('/api/stats'); //TODO
 
 app.post('/api/auth', (r, e) => auth(r, e));
 app.post('/api/refresh', (r, e) => auth_refresh(r, e));

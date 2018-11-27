@@ -121,63 +121,10 @@ const styles = theme => ({
 });
 
 function getip() {
-    let adr = []
-    try {
-        let RTCPeerConnection = window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
-        if (RTCPeerConnection) (function () {
-            let rtc = new RTCPeerConnection({iceServers: []});
-            if (1 || window.mozRTCPeerConnection) {
-                rtc.createDataChannel('', {reliable: false});
-            }
-            ;
-
-            rtc.onicecandidate = function (evt) {
-                if (evt.candidate) grepSDP("a=" + evt.candidate.candidate);
-            };
-            rtc.createOffer(function (offerDesc) {
-                grepSDP(offerDesc.sdp);
-                rtc.setLocalDescription(offerDesc);
-            }, function (e) {
-                console.warn("offer failed", e);
-            });
-
-
-            let addrs = Object.create(null);
-            addrs["0.0.0.0"] = false;
-
-            function updateDisplay(newAddr) {
-                if (newAddr in addrs) return;
-                else addrs[newAddr] = true;
-                let displayAddrs = Object.keys(addrs).filter(function (k) {
-                    return addrs[k];
-                });
-                adr.push(displayAddrs.join(" or perhaps ") || "n/a");
-
-            }
-
-            function grepSDP(sdp) {
-                var hosts = [];
-                sdp.split('\r\n').forEach(function (line) {
-                    if (~line.indexOf("a=candidate")) {
-                        var parts = line.split(' '),
-                            addr = parts[4],
-                            type = parts[7];
-                        if (type === 'host') updateDisplay(addr);
-                    } else if (~line.indexOf("c=")) {
-                        var parts = line.split(' '),
-                            addr = parts[2];
-                    }
-                });
-            }
-        })();
-    } catch (ex) {
-    }
-    return adr;
+    return "0.0.0.0" //TODO
 }
 
 class Cassa extends React.Component {
-
-    client = null;
 
     status = {
         category: 0,
@@ -216,6 +163,8 @@ class Cassa extends React.Component {
 
     images = [];
 
+    total = [0, 0];
+
     normalizeCart = () => {
         return normalizeCart(this.state.cart)
     };
@@ -223,8 +172,6 @@ class Cassa extends React.Component {
     getCartLenght = () => {
         return getCartLenght(this.state.cart);
     };
-
-    total = [0, 0];
 
     getTotal = () => {
         let t = getTotal(this.state.cart);
@@ -241,10 +188,11 @@ class Cassa extends React.Component {
     };
 
     componentDidMount() {
-        POST(apiCalls.productList, {}).then(res => Object.keys(res.list).forEach(e => {
-            this.images.push({title: e, url: res.list[e].bg, prods: res.list[e].elements, width: CategoryWidth});
-            this.setState({ordernum: Cassa.generateRandom(11)})
-        }))
+        POST(apiCalls.productList, {}).then(res =>
+            Object.keys(res.list).forEach(e => {
+                this.images.push({title: e, url: res.list[e].bg, prods: res.list[e].elements, width: CategoryWidth});
+                this.setState({ordernum: Cassa.generateRandom(11)})
+            }))
     };
 
     static generateRandom(bits) {
@@ -284,23 +232,30 @@ class Cassa extends React.Component {
                                 currentList: image.prods
                             })} image={image}/>
                         ))}
+                        <ImageButton onClick={() => {
+                            this.setState({
+                                currentState: this.status.product,
+                                currentList: this.images.map(im => im.prods).flat()
+                            });
+                        }
+                        } image={{title: "Full List", url: "", width: "25%"}}/>
                     </div>
                 </Paper>}
 
                 {this.state.currentState === this.status.product &&
                 <Paper className={this.props.classes.marginTopNoX}>
-                    <Grid container spacing={24} justify="center" alignItems="center">
-                        <Grid item xs={12} justify="center" alignItems="center">
+                    <Grid container spacing={24}>
+                        <Grid item xs={12}>
                             <Paper className={this.props.classes.paperTitle}>
-                                <Grid container spacing={24} justify="center" alignItems="center">
-                                    <Grid item xs={2} justify="center" alignItems="center">
+                                <Grid container spacing={24}>
+                                    <Grid item xs={2}>
                                         <Button
                                             onClick={() => this.setState({currentState: this.status.category})}>Indietro</Button>
                                     </Grid>
-                                    <Grid item xs={8} justify="center" alignItems="center">
+                                    <Grid item xs={8}>
                                         <Typography noWrap variant='title'>Prodotti Disponibili</Typography>
                                     </Grid>
-                                    <Grid item xs={2} justify="center" alignItems="center">
+                                    <Grid item xs={2}>
                                     </Grid>
                                 </Grid>
                             </Paper>

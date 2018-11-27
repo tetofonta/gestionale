@@ -18,7 +18,7 @@ const styles = theme => ({
         height: productsHeight,
         textAlign: 'center',
         margin: 0,
-        minWidth: tileWidth
+        width: tileWidth
     },
     paperTitle: {
         padding: '15px',
