@@ -1,0 +1,60 @@
+{
+  "width": 80,
+  "kw": {
+    "total": "_totale",
+    "pagato": "_pagato",
+    "resto": "_resto",
+    "qrdata": "_qr",
+    "buono": "_buonoText",
+    "ordnum": "_numero",
+    "qta": "_qta",
+    "entry": "_entry",
+    "partial": "_price"
+  },
+  "header": {
+    "height": 20,
+    "content": [
+      {
+        "type": "text",
+        "text": "dfcvgbhnj",
+        "font": "Courier",
+        "variant": "bold",
+        "size": 11,
+        "x": 10,
+        "y": 10,
+        "parse": true
+      }
+    ]
+  },
+  "element": {
+    "height": 15,
+    "content": [
+      {
+        "type": "text",
+        "text": "bhhhhj",
+        "font": "helvetica",
+        "variant": "italic",
+        "size": 11,
+        "x": 0,
+        "y": 5,
+        "parse": true
+      }
+    ]
+  },
+  "footer": {
+    "height": 50,
+    "content": [
+      {
+        "type": "qr",
+        "data": "ThisIsAQrCode",
+        "parse": true,
+        "bg": "white",
+        "fg": "black",
+        "correction": "H",
+        "size": 120,
+        "x": 10,
+        "y": 10
+      }
+    ]
+  }
+}

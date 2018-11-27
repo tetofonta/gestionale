@@ -1,0 +1,29 @@
+{
+  "mysql": {
+    "user": "--mysql username--",
+    "host": "--mysql host--",
+    "password": "--mysql password--",
+    "database": "--mysql database--"
+  },
+
+  "network":{
+    "opNetwork": {
+      "ip": [192, 168, 1, 0],
+      "subnet": 24,
+      "comment": "192.168.1.0/24"
+    }
+  },
+
+  "mqtt": {
+    "broker": {
+      "bind": "0.0.0.0",
+      "port": 1887,
+      "ws": {
+        "bind": "0.0.0.0",
+        "port": 1886
+      }
+    }
+  },
+
+  "serverIP": "192.168.1.1"
+}
