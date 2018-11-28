@@ -1,7 +1,7 @@
 # CIAONE
 
 ## How to start up
-- Run populate.sh
+- Run populate.sh (```sh ./populate.sh```, do _not_ run as root)
 - Copy network.config.json.TEMPLATE as network.config.json in ./src, ./backend
 Edit the files with values.\
 - *DO NOT EDIT .TEMPLATE FILE!*
