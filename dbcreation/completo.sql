@@ -1,11 +1,8 @@
 -- MySQL dump 10.13  Distrib 5.7.24, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: GSagrav2
+-- Host: localhost    Database: GSagrav2
 -- ------------------------------------------------------
 -- Server version	5.7.24-0ubuntu0.16.04.1-log
-
-create database GSagraV2;
-use GSagraV2;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -42,7 +39,7 @@ CREATE TABLE `ads` (
 
 LOCK TABLES `ads` WRITE;
 /*!40000 ALTER TABLE `ads` DISABLE KEYS */;
-INSERT INTO `ads` VALUES (1,'sampa',2,1,'/ads/%sampa.png'),(3,'coin',1,1,'/ads/%coin.png'),(5,'bsfc',3,0,'/ads/%bsfc.png');
+INSERT INTO `ads` VALUES (1,'sampa',2,2,'/ads/%sampa.png'),(3,'coin',1,1,'/ads/%coin.png'),(5,'bsfc',3,1,'/ads/%bsfc.png');
 /*!40000 ALTER TABLE `ads` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -201,7 +198,7 @@ CREATE TABLE `funzioni` (
   UNIQUE KEY `funzioni_titolo_uindex` (`titolo`),
   KEY `funzioni_categoria_id_fk` (`categoria`),
   CONSTRAINT `funzioni_categoria_id_fk` FOREIGN KEY (`categoria`) REFERENCES `categoria` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -210,7 +207,7 @@ CREATE TABLE `funzioni` (
 
 LOCK TABLES `funzioni` WRITE;
 /*!40000 ALTER TABLE `funzioni` DISABLE KEYS */;
-INSERT INTO `funzioni` VALUES (1,'Cassa','',1,'\'\'',11,'/newOrdine',NULL),(3,'Magazzino','Gestione magazzino e risorse',3,'\'\'',11,'/',NULL),(5,'Statistiche','Andamenti e incassi',3,'\'\'',13,'/',NULL);
+INSERT INTO `funzioni` VALUES (1,'Cassa','',1,'\'\'',1,'/newOrdine',NULL),(3,'Magazzino','Gestione magazzino e risorse',3,'\'\'',5,'/magazzino',NULL),(5,'Statistiche','Andamenti e incassi',3,'\'\'',7,'/stats',NULL),(7,'Editor','Editor modelli pdf',5,'\'\'',11,'/editor',NULL);
 /*!40000 ALTER TABLE `funzioni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -297,7 +294,7 @@ CREATE TABLE `previlegi` (
 
 LOCK TABLES `previlegi` WRITE;
 /*!40000 ALTER TABLE `previlegi` DISABLE KEYS */;
-INSERT INTO `previlegi` VALUES (1,'PRIV1'),(3,'PRIV2'),(5,'PRIV3'),(7,'PRIV4'),(9,'PRIV5'),(11,'PRIV6'),(13,'PRIV7');
+INSERT INTO `previlegi` VALUES (9,'AZIONI'),(3,'BUONI'),(1,'CASSA'),(11,'EDITOR'),(5,'MAGAZZINO'),(13,'PRIV7'),(7,'STATISTICHE');
 /*!40000 ALTER TABLE `previlegi` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -371,4 +368,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-18 21:46:12
+-- Dump completed on 2018-11-29  8:11:32
