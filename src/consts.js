@@ -21,7 +21,9 @@ const apiCalls = {
     productList: "/api/products",
     getFncs: "/api/getfunctions",
     getOrdNum: "/api/new_order",
-    buono: "/api/buono"
+    buono: "/api/buono",
+    buoni: "/api/buoni",
+    updbuoni: "/api/updateBuoni"
 };
 
 const mqttServer = `ws://${cfg.serverIP}:${cfg.mqtt.broker.ws.port}`;

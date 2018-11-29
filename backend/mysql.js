@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-const cfg = require('./network.config')
+const cfg = require('./network.config');
 
 let connection = undefined;
 
@@ -15,6 +15,10 @@ function connect(host, user, password, db) {
 
 }
 
+function secure(str){
+    return str.replaceAll("'", "").replaceAll("`", "").replaceAll('"', "").replaceAll("--", "")
+}
+
 function getConnection() {
     if (!connection)
         connect(cfg.mysql.host, cfg.mysql.user, cfg.mysql.password, cfg.mysql.database);
@@ -23,3 +27,4 @@ function getConnection() {
 }
 
 module.exports.getConnection = getConnection;
+module.exports.secure = secure;

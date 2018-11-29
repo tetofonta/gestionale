@@ -584,11 +584,11 @@ class Cassa extends React.Component {
                                             this.state.faketotal = "0.00";
                                             this.state.buonoDesc = (-this.total[0] + this.total[1] / 100).toFixed(2) + Currency
                                         }
-                                        else if (res.tipo === 3) {
+                                        else if (res.tipo === 2) {
                                             this.state.faketotal = (this.total[0] + this.total[1] / 100 - res.valore).toFixed(2);
                                             this.state.buonoDesc = (-res.valore).toFixed(2) + Currency
                                         }
-                                        else if (res.tipo === 5) {
+                                        else if (res.tipo === 3) {
                                             this.state.faketotal = (this.total[0] + this.total[1] / 100 - res.valore * (this.total[0] + this.total[1] / 100) / 100).toFixed(2);
                                             this.state.buonoDesc = (-res.valore).toFixed(2) + "%"
                                         }

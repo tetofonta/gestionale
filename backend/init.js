@@ -9,8 +9,12 @@ const {auth, auth_refresh} = require('./auth');
 const {usr_getList, usr_edit, usr_new, usr_del, usr_getAccessibleFunctions} = require('./users');
 const {get_most_suitable_ads} = require("./ads");
 const {get_products_list} = require("./magazzino");
-const {increment, get_buono_detail} = require("./administration");
+const {increment, get_buono_detail, get_buoni, upd_buoni} = require("./administration");
 
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
 
 let privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
 let certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
@@ -54,6 +58,8 @@ app.post('/api/ads', (r, e) => get_most_suitable_ads(r, e));
 
 app.post('/api/products', (r, e) => get_products_list(r, e));
 app.post('/api/buono', (r, e) => get_buono_detail(r, e));
+app.post('/api/buoni', (r, e) => get_buoni(r, e));
+app.post('/api/updateBuoni', (r, e) => upd_buoni(r, e));
 
 let httpsServer = https.createServer(credentials, app);
 httpsServer.listen(port, () => console.log(`Listening on port ${port}`));

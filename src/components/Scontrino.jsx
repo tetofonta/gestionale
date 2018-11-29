@@ -26,44 +26,6 @@ class Scontrino extends React.Component {
 
     _data = <Typography variant="title">Caricamento...</Typography>;
 
-    // model = {
-    //     width: 80,
-    //     headerh: 35,
-    //     elemh: 6,
-    //     footerh: 80,
-    //     header: (doc) => {
-    //         let image = "";
-    //
-    //         doc.addImage(image, 'PNG', 5, 6, 20, 20);
-    //         write(doc, 'helvetica', 'bold', 24, 30, 20, "S.Lorenzo");
-    //         write(doc, 'times', 'italic', 15, 55, 26, "Capriolo");
-    //         doc.line(10, 32, 70, 32)
-    //
-    //     },
-    //     element: (doc, y, qty, text, price) => {
-    //         y += 4;
-    //         write(doc, 'helvetica', 'normal', 11, 5, y, `${qty} ${text}`);
-    //         write(doc, 'courier', 'normal', 11, 80 - (price.length + 1) * 3, y, `${price}E`)
-    //     },
-    //     footer: (doc, y, totale, contanti, resto, numOrdine, qr, buono) => {
-    //         y += 15;
-    //         doc.line(5, y-10, 75, y-10);
-    //
-    //         write(doc, 'helvetica', 'normal', 11, 80 - (buono.length + 1) * 4, y-2, `${buono}`);
-    //
-    //         write(doc, 'helvetica', 'bold', 20, 5, y+5, `TOTALE`);
-    //         write(doc, 'courier', 'normal', 20, 80 - (totale.length + 1) * 5, y+5, `${totale}E`);
-    //
-    //         write(doc, 'helvetica', 'bold', 14, 5, y+6+5, `CONTANTI`);
-    //         write(doc, 'courier', 'normal', 14, 80 - (contanti.length + 1) * 4, y+6+5, `${contanti}E`);
-    //
-    //         write(doc, 'helvetica', 'bold', 14, 5, y+11+5, `Resto`);
-    //         write(doc, 'courier', 'normal', 14, 80 - (resto.length + 1) * 4, y+11+5, `${resto}E`);
-    //
-    //         doc.addImage(qr, 'PNG', 5, y + 20+5, 25, 25);
-    //         write(doc, 'helvetica', 'bold', 40, 37, y+35+5, "" + numOrdine);
-    //     }
-    // };
     map = new Map();
     kw = null;
 

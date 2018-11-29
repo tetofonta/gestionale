@@ -39,34 +39,8 @@ CREATE TABLE `ads` (
 
 LOCK TABLES `ads` WRITE;
 /*!40000 ALTER TABLE `ads` DISABLE KEYS */;
-INSERT INTO `ads` VALUES (1,'sampa',2,2,'/ads/%sampa.png'),(3,'coin',1,1,'/ads/%coin.png'),(5,'bsfc',3,1,'/ads/%bsfc.png');
+INSERT INTO `ads` VALUES (1,'sampa',2,2,'/ads/%sampa.png'),(3,'coin',1,1,'/ads/%coin.png'),(5,'bsfc',3,2,'/ads/%bsfc.png');
 /*!40000 ALTER TABLE `ads` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `allowed_access`
---
-
-DROP TABLE IF EXISTS `allowed_access`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `allowed_access` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_funzione` int(11) NOT NULL,
-  `id_previlegio` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `allowed_access_id_uindex` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `allowed_access`
---
-
-LOCK TABLES `allowed_access` WRITE;
-/*!40000 ALTER TABLE `allowed_access` DISABLE KEYS */;
-INSERT INTO `allowed_access` VALUES (1,1,1),(3,1,2),(5,1,4),(7,2,1),(9,3,5);
-/*!40000 ALTER TABLE `allowed_access` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -121,7 +95,7 @@ CREATE TABLE `cupons` (
 
 LOCK TABLES `cupons` WRITE;
 /*!40000 ALTER TABLE `cupons` DISABLE KEYS */;
-INSERT INTO `cupons` VALUES (12548,1,-1,10,0),(45885,5,32,15.5,0),(52484,3,20,100,0);
+INSERT INTO `cupons` VALUES (12548,2,10,10,0),(35091,2,50,50,0),(45885,2,32,15.5,0),(46904,3,50,50,0),(52484,1,20,30,0);
 /*!40000 ALTER TABLE `cupons` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -138,7 +112,7 @@ CREATE TABLE `cupons_types` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `Cupons_types_id_uindex` (`id`),
   UNIQUE KEY `Cupons_types_descrizione_uindex` (`descrizione`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -147,7 +121,7 @@ CREATE TABLE `cupons_types` (
 
 LOCK TABLES `cupons_types` WRITE;
 /*!40000 ALTER TABLE `cupons_types` DISABLE KEYS */;
-INSERT INTO `cupons_types` VALUES (3,'FIXED'),(1,'FULL'),(5,'PERCENTAGE');
+INSERT INTO `cupons_types` VALUES (2,'FIXED'),(1,'FULL'),(3,'PERCENTAGE');
 /*!40000 ALTER TABLE `cupons_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -198,7 +172,7 @@ CREATE TABLE `funzioni` (
   UNIQUE KEY `funzioni_titolo_uindex` (`titolo`),
   KEY `funzioni_categoria_id_fk` (`categoria`),
   CONSTRAINT `funzioni_categoria_id_fk` FOREIGN KEY (`categoria`) REFERENCES `categoria` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -207,7 +181,7 @@ CREATE TABLE `funzioni` (
 
 LOCK TABLES `funzioni` WRITE;
 /*!40000 ALTER TABLE `funzioni` DISABLE KEYS */;
-INSERT INTO `funzioni` VALUES (1,'Cassa','',1,'\'\'',1,'/newOrdine',NULL),(3,'Magazzino','Gestione magazzino e risorse',3,'\'\'',5,'/magazzino',NULL),(5,'Statistiche','Andamenti e incassi',3,'\'\'',7,'/stats',NULL),(7,'Editor','Editor modelli pdf',5,'\'\'',11,'/editor',NULL);
+INSERT INTO `funzioni` VALUES (1,'Cassa','',1,'\'\'',1,'/newOrdine',NULL),(3,'Magazzino','Gestione magazzino e risorse',3,'\'\'',5,'/magazzino',NULL),(5,'Statistiche','Andamenti e incassi',3,'\'\'',7,'/stats',NULL),(7,'Editor','Editor modelli pdf',5,'\'\'',11,'/editor',NULL),(9,'Gestione Buoni','Gestisci e crea buoni',3,'\'\'',3,'/buoni',NULL);
 /*!40000 ALTER TABLE `funzioni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -325,7 +299,7 @@ CREATE TABLE `utenti` (
 
 LOCK TABLES `utenti` WRITE;
 /*!40000 ALTER TABLE `utenti` DISABLE KEYS */;
-INSERT INTO `utenti` VALUES (1,'stefano','2866093772d6f50c923fb6a19f976bb22e87124c','Stefano',1,1,1),(3,'giovanni','d033e22ae348aeb5660fc2140aec35850c4da997','Enrichetto',1,1,0),(4,'luucaa','d033e22ae348aeb5660fc2140aec35850c4da997','Luca',0,1,1),(5,'luca','d033e22ae348aeb5660fc2140aec35850c4da997','Luca',0,1,0),(7,'matteo','0f6eb7fe64dc90c95a2e10db7f865825cad49c9b','cipo',1,1,0),(11,'pier','c44386c0d8a91e6dd5ec8dcc9120c23ad83cf827','Pierangelo',1,1,1);
+INSERT INTO `utenti` VALUES (1,'stefano','2866093772d6f50c923fb6a19f976bb22e87124c','Stefano',1,1,1),(3,'giovanni','d033e22ae348aeb5660fc2140aec35850c4da997','Enrichetto',1,1,0),(4,'luucaa','d033e22ae348aeb5660fc2140aec35850c4da997','Luca',0,1,1),(5,'luca','d033e22ae348aeb5660fc2140aec35850c4da997','Luca',0,1,0),(7,'matteo','b1b3773a05c0ed0176787a4f1574ff0075f7521e','cipo',0,1,0),(11,'pier','c44386c0d8a91e6dd5ec8dcc9120c23ad83cf827','Pierangelo',1,1,1);
 /*!40000 ALTER TABLE `utenti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -346,7 +320,7 @@ CREATE TABLE `utenti_previlegi_assoc` (
   KEY `utenti_previlegi_assoc_previlegi_id_fk` (`previlegi_FOREGIN`),
   CONSTRAINT `utenti_previlegi_assoc_abilities_id_fk` FOREIGN KEY (`utenti_FOREGIN`) REFERENCES `previlegi` (`id`),
   CONSTRAINT `utenti_previlegi_assoc_previlegi_id_fk` FOREIGN KEY (`previlegi_FOREGIN`) REFERENCES `previlegi` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -355,7 +329,7 @@ CREATE TABLE `utenti_previlegi_assoc` (
 
 LOCK TABLES `utenti_previlegi_assoc` WRITE;
 /*!40000 ALTER TABLE `utenti_previlegi_assoc` DISABLE KEYS */;
-INSERT INTO `utenti_previlegi_assoc` VALUES (51,3,1),(53,3,3),(55,3,5),(57,3,7),(59,3,11),(63,1,1),(65,1,3),(67,1,5),(69,1,7),(71,1,9),(73,1,11),(75,1,13),(77,5,1),(79,7,1),(85,11,1),(87,11,7),(89,11,13);
+INSERT INTO `utenti_previlegi_assoc` VALUES (51,3,1),(53,3,3),(55,3,5),(57,3,7),(59,3,11),(63,1,1),(65,1,3),(67,1,5),(69,1,7),(71,1,9),(73,1,11),(75,1,13),(77,5,1),(85,11,1),(87,11,7),(89,11,13),(91,7,1);
 /*!40000 ALTER TABLE `utenti_previlegi_assoc` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -368,4 +342,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-29  8:11:32
+-- Dump completed on 2018-11-29 21:06:39

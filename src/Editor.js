@@ -77,9 +77,9 @@ class Editor extends React.Component {
 
         json: {
             width: 0,
-            header: {},
-            element: {},
-            footer: {}
+            header: {height: 0, content: []},
+            element: {height: 0, content: []},
+            footer: {height: 0, content: []}
         }
     };
 
@@ -722,8 +722,8 @@ class Editor extends React.Component {
                     <div>
                         <List>
                             <ListItem button onClick={() => {
-                                this.state.json.header.height = this.state.height;
-                                this.state.json.width = this.state.width;
+                                this.state.json.header.height = parseInt(this.state.height);
+                                this.state.json.width = parseInt(this.state.width);
                                 this.state.json.header.content = JSON.parse(JSON.stringify(this.state.content));
                                 this.setState({height: 50, saveDialog: false, content: []})
                             }}>
@@ -735,8 +735,8 @@ class Editor extends React.Component {
                                 <ListItemText primary={'Salva header'}/>
                             </ListItem>
                             <ListItem button onClick={() => {
-                                this.state.json.element.height = this.state.height;
-                                this.state.json.width = this.state.width;
+                                this.state.json.element.height = parseInt(this.state.height);
+                                this.state.json.width = parseInt(this.state.width);
                                 this.state.json.element.content = JSON.parse(JSON.stringify(this.state.content));
                                 this.setState({height: 50, saveDialog: false, content: []})
                             }}>
@@ -748,8 +748,8 @@ class Editor extends React.Component {
                                 <ListItemText primary={'Salva Element'}/>
                             </ListItem>
                             <ListItem button onClick={() => {
-                                this.state.json.footer.height = this.state.height;
-                                this.state.json.width = this.state.width;
+                                this.state.json.footer.height = parseInt(this.state.height);
+                                this.state.json.width = parseInt(this.state.width);
                                 this.state.json.footer.content = JSON.parse(JSON.stringify(this.state.content));
                                 this.setState({height: 50, saveDialog: false, content: []})
                             }}>
