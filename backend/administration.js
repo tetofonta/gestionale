@@ -6,6 +6,14 @@ const {getConnection} = require("./mysql");
 let currentno = 0;
 let accessing = false;
 
+/**
+ * @userAuthenticated
+ * Incrementa il contatore degli ordini restituendo il prossimo numero di ordine.
+ * @param req express request obj
+ * @param res express response obj
+ * @requires POST, {user: String, token: String}
+ * @return JSON, {state: bool, ordnum: Number}
+ */
 function increment(req, res) {
     onUserAuthenticated(req, res, () => {
         while(accessing);
@@ -17,6 +25,13 @@ function increment(req, res) {
     });
 }
 
+/**
+ * Ritorna i dati relativi al buono di id=req.body.id, letto dal database
+ * @param req express request obj
+ * @param res express response obj
+ * @requires POST, {user: String, token: String, id: Number}
+ * @return JSON, {state: bool, [state = false] err: String / [state = true] tipo: Number, valore: Number, minimo: Number}
+ */
 function get_buono_detail(req, res) {
     onUserAuthenticated(req, res, (data) => {
         getConnection().query(`SELECT tipo, valore, minimo FROM cupons WHERE usato = 0 AND id = ${data.id}`, (e, r, f) => {
@@ -34,6 +49,14 @@ function get_buono_detail(req, res) {
     });
 }
 
+/**
+ * @userAuthenticated
+ * Ritorna i dati relativi a tutti i buoni, letto dal database
+ * @param req express request obj
+ * @param res express response obj
+ * @requires POST, {user: String, token: String}
+ * @return JSON, {state: bool, [state = false] err: String / [state = true] list: [{id: Number, tipo: Number, valore: Number, minimo: Number, usato: Number}, ...]}
+ */
 function get_buoni(req, res){
     onUserAuthenticated(req, res, (data) => {
         getConnection().query(`SELECT id, tipo, valore, minimo, usato FROM cupons WHERE 1 ORDER BY id ASC`, (e, r, f) => {
@@ -50,6 +73,14 @@ function get_buoni(req, res){
     });
 }
 
+/**
+ * @userAuthenticated
+ * Aggiorna i dati relativi ai buoni
+ * @param req express request obj
+ * @param res express response obj
+ * @requires POST, {user: String, token: String, modified: [{id: Number, tipo: Number, valore: Number, minimo: Number, usato: bool}, ...]}
+ * @return 402
+ */
 function upd_buoni(req, res){
     onUserAuthenticated(req, res, (data) => {
         if(data.modified)

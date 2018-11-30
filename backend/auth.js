@@ -4,14 +4,30 @@ const {getConnection, secure} = require('./mysql');
 const user_association = new Map();
 const crypto = require('crypto');
 
+/**
+ * @return stringa alfanumerica casuale di 148 caratteri
+ */
 function getNewToken() {
     return srs({length: 148});
 }
 
+/**
+ *
+ * @return {Map<String, String>}, Mappa di associazione utenti/token
+ */
 function getUsers(){
     return user_association
 }
 
+/**
+ * Esegue cb(data) se l'utente é loggato correttamente
+ * @param req express request obj
+ * @param res express response obj
+ * @param cb function cb(data): callback. data: oggetto della richiesta
+ * @param permitGuest bool, permesso alla rete guest.
+ * @requires POST, {user: String, token: String, <key>: <value>, ..., ...}
+ * @return JSON, {state: bool, err: String} in caso di errore, altrimenti é compito di cb(data) scrivere sull'oggetto res.
+ */
 function onUserAuthenticated(req, res, cb, permitGuest = false){
     if (getNW(req) || permitGuest) {
 
@@ -35,6 +51,13 @@ function onUserAuthenticated(req, res, cb, permitGuest = false){
     res.send({state: false, err: "Access denied from guest network."})
 }
 
+/**
+ * Autentica l'utente
+ * @param req express request obj
+ * @param res express response obj
+ * @requires POST, {user: String, token: String}
+ * @return JSON, {state: bool, err: String} in caso di errore, {state: bool, token: String, username: String, name: String, secure: Number *as bool*, isAdmin: Number *as bool*}
+ */
 function auth(req, res) {
     if (getNW(req)) {
 
@@ -61,6 +84,14 @@ function auth(req, res) {
     res.send({state: false, err: "Access denied from guest network."})
 }
 
+/**
+ * @userAuthenticated
+ * Refresh dell'autenticazione
+ * @param req express request obj
+ * @param res express response obj
+ * @requires POST, {username: String, token: String}
+ * @return JSON, {state: bool, err: String} in caso di errore, {state: bool, token: String*}
+ */
 function auth_refresh(req, res) {
     if (getNW(req)) {
         let user = user_association.get(req.body.username);

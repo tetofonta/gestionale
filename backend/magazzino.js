@@ -1,6 +1,13 @@
 const {getConnection} = require("./mysql");
 
-module.exports.get_products_list = (req, res) => {
+/**
+ * Ritorna la lista dei piatti disponibili
+ * @param req express request obj
+ * @param res express response obj
+ * @requires POST/GET
+ * @return JSON, {state: bool} in caso di errore, {state: bool, list: {<CATEGORIA>: {bg: String, elements: [{desc: String, info: String, dispon: bool, eur: Number, cents: Number, details: {display: bool, title: String, dialog: {select: [vals...], choose: [vals...]}}]}, <...>:{...}}}
+ */
+function get_product_list(req, res){
     getConnection().query(`SELECT magazzino.descrizione as descrizione, magazzino.info as info, magazzino.giacenza > 10 as disponibile, magazzino.prezzoEur as eur, magazzino.prezzoCents as cents, gruppi_cucina.nome as gnome, gruppi_cucina.bg as gbg, details.json as json FROM magazzino, gruppi_cucina, details WHERE magazzino.gruppo = gruppi_cucina.id AND magazzino.details = details.id`, (e, r, f) => {
         if (r && !e) {
             let map = new Map();
@@ -31,5 +38,7 @@ module.exports.get_products_list = (req, res) => {
         console.log(e);
         res.send({state: false})
     })
-};
+}
+
+module.exports.get_products_list = get_product_list;
 
