@@ -38,7 +38,7 @@ class Scontrino extends React.Component {
         Object.keys(e).forEach(q => {
             this.map.set(this.kw[q], e[q]);
         });
-        this._parse(element, offset)
+        this._parse(JSON.parse(JSON.stringify(element)), offset)
     }
 
     _parse(element, offset=0) {
@@ -58,7 +58,7 @@ class Scontrino extends React.Component {
                         break;
                     case "text":
                         if (e.parse) this.map.forEach((v, k) => e.text = e.text.replace(k, v));
-                        write(this.doc, e.font, e.variant, e.size, e.x, e.y + offset, e.text);
+                        write(this.doc, e.font, e.variant, e.size, e.x, e.y + offset, JSON.parse(JSON.stringify(e.text))) ;
                         break;
                     case "qr":
                         if (e.parse) this.map.forEach((v, k) => e.data = e.data.replace(k, v));
@@ -114,7 +114,7 @@ class Scontrino extends React.Component {
         this._parse(res.header.content, 0);
 
         if(this.props.elementi !== undefined)
-            this.props.elementi.forEach((e, i) => this._elem(res.element.content, e, res.header.height + i*res.element.height));
+            this.props.elementi.forEach((e, i) => this._elem(res.element.content, e, res.header.height + i * res.element.height));
 
         this._parse(res.footer.content, res.header.height + res.element.height * this.props.elementi.length);
 

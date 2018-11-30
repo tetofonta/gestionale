@@ -7,7 +7,7 @@ const connection_status = Object.freeze({
     noapi: "noapi"
 });
 
-const sagraName = "Sagra San Lorenzo";
+const sagraName = cfg.sagraName;
 
 const apiCalls = {
     refresh: "/api/refresh",
@@ -30,18 +30,20 @@ const mqttServer = `ws://${cfg.serverIP}:${cfg.mqtt.broker.ws.port}`;
 const loginLogo =
         <img src={"/logo/drawing.svg.png"} width="76px"/>;
 
-const CategoryWidth = "25%";
-const CategoryHeight = 200;
+const CategoryWidth = cfg.react.categoryWidth;
+const CategoryHeight = cfg.react.categoryHeight;
 
-const ProductsWidth = {"360": 6, "768": 4, "1024": 3, "1920": 2, "over": 2}; //over 12 cols colspan
-const productsHeight = 110;
-const tileWidth = 270;
+const ProductsWidth = cfg.react.productsWidth; //over 12 cols colspan
+const productsHeight = cfg.react.productsHeight;
+const tileWidth = cfg.react.tileWidth;
 
-const Currency = "EUR";
+const Currency = cfg.react.currency;
 
-const orderCifres = 4;
+const orderCifres = cfg.react.orderCifres;
 
-const scontrinoModel = "/TEMPLATES/scontrino.json";
+const scontrinoModel = cfg.react.scontrino;
+
+const categorieCucina = cfg.react.categorieCucina;
 
 
-export {orderCifres, mqttServer, connection_status, sagraName, apiCalls, loginLogo, CategoryWidth, CategoryHeight, ProductsWidth, Currency, productsHeight,tileWidth, scontrinoModel};
+export {orderCifres, mqttServer, connection_status, sagraName, apiCalls, loginLogo, CategoryWidth, CategoryHeight, ProductsWidth, Currency, productsHeight,tileWidth, scontrinoModel, categorieCucina};

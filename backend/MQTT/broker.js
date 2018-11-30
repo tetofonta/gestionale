@@ -4,13 +4,19 @@ const cfg = require("../network.config");
 
 let restrictedTopics = ["order/official"];
 
-function nop(){}
+function nop() {
+}
+
 mosca.Server.prototype.publish = function publish(packet, client, callback) {
 
     try {
-        if(restrictedTopics.includes(packet.topic))
-            if(!getNW_st(client.connection.stream.socket._socket.remoteAddress)) return;
-    } catch (e) {}
+        if (restrictedTopics.includes(packet.topic))
+            if (!getNW_st(client.connection.stream.socket._socket.remoteAddress)) {
+                console.log("Denied connection from " + client.connection.stream.socket._socket.remoteAddress)
+                return;
+            }
+    } catch (e) {
+    }
 
 
     var that = this;
@@ -44,9 +50,9 @@ mosca.Server.prototype.publish = function publish(packet, client, callback) {
         opts.clientId = client.id;
     }
 
-    that.storePacket(newPacket, function() {
+    that.storePacket(newPacket, function () {
         if (that.closed) {
-            logger.debug({ packet: newPacket }, "not delivering because we are closed");
+            logger.debug({packet: newPacket}, "not delivering because we are closed");
             return;
         }
 
@@ -54,12 +60,12 @@ mosca.Server.prototype.publish = function publish(packet, client, callback) {
             newPacket.topic,
             newPacket.payload,
             opts,
-            function() {
-                that.published(newPacket, client, function() {
-                    if( newPacket.topic.indexOf( '$SYS' ) >= 0 ) {
-                        logger.trace({ packet: newPacket }, "published packet");
+            function () {
+                that.published(newPacket, client, function () {
+                    if (newPacket.topic.indexOf('$SYS') >= 0) {
+                        logger.trace({packet: newPacket}, "published packet");
                     } else {
-                        logger.debug({ packet: newPacket }, "published packet");
+                        logger.debug({packet: newPacket}, "published packet");
                     }
                     that.emit("published", newPacket, client);
                     callback(undefined, newPacket);

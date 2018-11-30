@@ -8,7 +8,7 @@ import {
     ProductsWidth,
     sagraName,
     staticServer,
-    productsHeight, tileWidth, mqttServer, scontrinoModel
+    productsHeight, tileWidth, mqttServer, scontrinoModel, categorieCucina
 } from "./consts";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import {withStyles} from '@material-ui/core/styles';
@@ -194,6 +194,13 @@ class Cassa extends React.Component {
                 this.setState({ordernum: Cassa.generateRandom(11)})
             }))
     };
+
+    static isInCategory(ename, cat){
+        for(let i = 0; i < cat.prods.length; i++){
+            if(cat.prods[i].desc === ename) return true;
+        }
+        return false;
+    }
 
     static generateRandom(bits) {
         let vocali = "aeiou";
@@ -403,9 +410,14 @@ class Cassa extends React.Component {
                                     onClick={() => {
                                         let client = mqtt.connect(mqttServer);
                                         client.on('connect', () => {
+
                                             client.publish('order/official', JSON.stringify(
                                                 {
-                                                    cart: [...this.normalizeCart()],
+                                                    cart: [...this.normalizeCart()].filter(e => {
+                                                        let x = false;
+                                                        this.images.forEach(cat => {x = x || (categorieCucina.includes(cat.title) && Cassa.isInCategory(e[0], cat))});
+                                                        return x;
+                                                    }),
                                                     orderID: this.state.ordernum,
                                                     asporto: this.state.isAsporto,
                                                     message: this.state.note,

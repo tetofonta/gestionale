@@ -30,9 +30,9 @@
   "scripts": {
     "start-server": "cd backend && nodemon init.js",
     "start-mqtt": "cd backend/MQTT && nodemon broker.js",
-    "start-order-processor": "cd backend/MQTT/CLIENTS && nodemon orderProcessor.js",
+    "start-order-processor": "cd backend/MQTT/CLIENTS/orderProcessor && nodemon orderProcessor.js",
     "start": "HTTPS=true && react-scripts start",
-    "dev": "concurrently --kill-others-on-fail \"yarn start-server\" \"yarn start\"  \"yarn start-order-processor\"",
+    "dev": "concurrently --kill-others-on-fail \"yarn start-server\" \"yarn start\" \"yarn start-mqtt\" \"yarn start-order-processor\"",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
