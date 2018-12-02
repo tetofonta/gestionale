@@ -7,7 +7,7 @@ scripts/flow/*/.flowconfig
 _SpecRunner.html
 __benchmarks__
 build/
-orders/
+*.pdf
 remote-repo/
 coverage/
 .module-cache
