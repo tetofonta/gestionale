@@ -38,7 +38,7 @@
   },
 
   "serverIP": "192.168.178.23",
-  "serverPort": "5000",
+  "serverPort": 5000,
   "sagraName": "Sagra San Lorenzo",
   "printerName": "Samsung-C460-Series"
 }

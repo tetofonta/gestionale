@@ -2,7 +2,7 @@ const mqtt = require('mqtt');
 const cfg = require("../../../network.config");
 const {getConnection, secure} = require("../../../mysql");
 const {logger_init} = require("../../../logger");
-logger_init("/log/processor.error.log", "/log/processor.log");
+logger_init("./log/processor.error.log", "./log/processor.log");
 
 let client = mqtt.connect(`mqtt://${cfg.serverIP}:${cfg.mqtt.broker.port}`);
 
@@ -18,6 +18,7 @@ client.on('message', function (topic, message, packet) {
     if (topic === "order/official") {
 
         let cart = JSON.parse(message.toString());
+        if(cart.reprint) return;
         if(cart.buono)
             getConnection().query(`UPDATE cupons SET usato=${cart.time} WHERE id=${cart.buonoID}`, (e) => {if(e) console.error(e)});
 

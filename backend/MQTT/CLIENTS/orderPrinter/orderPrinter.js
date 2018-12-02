@@ -6,7 +6,7 @@ const fs = require('fs');
 const flatten = require('flatten');
 const {execFile} = require('child_process');
 const {logger_init} = require("../../../logger");
-logger_init("/log/printer.error.log", "/log/printer.log");
+logger_init("./log/printer.error.log", "./log/printer.log");
 
 let client = mqtt.connect(`mqtt://${cfg.serverIP}:${cfg.mqtt.broker.port}`);
 

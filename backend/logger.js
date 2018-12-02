@@ -4,8 +4,8 @@ const log_stdout = process.stdout;
 const log_stderr = process.stderr;
 
 function logger_init(err, log, debug=false){
-    const log_file = fs.createWriteStream(__dirname + log, {flags : 'a'});
-    const err_file = fs.createWriteStream(__dirname + err, {flags : 'a'});
+    const log_file = fs.createWriteStream(log, {flags : 'a'});
+    const err_file = fs.createWriteStream(err, {flags : 'a'});
 
     console.log = function(d) {
         log_file.write(util.format("[" + Date.now() + "]" + "\t\t" + JSON.stringify(d)) + '\n');

@@ -2,7 +2,7 @@ const mosca = require('mosca');
 const {getNW_st} = require("../network");
 const cfg = require("../network.config");
 const {logger_init} = require("../logger");
-logger_init("/log/broker.error.log", "/log/broker.log");
+logger_init("./log/broker.error.log", "./log/broker.log");
 
 let restrictedTopics = ["order/official"];
 
@@ -17,7 +17,7 @@ mosca.Server.prototype.publish = function publish(packet, client, callback) {
                 console.log("Denied connection from " + client.connection.stream.socket._socket.remoteAddress)
                 return;
             }
-            console.log(packet)
+        console.log(packet)
     } catch (e) {
         console.error(e)
     }
@@ -79,14 +79,34 @@ mosca.Server.prototype.publish = function publish(packet, client, callback) {
     });
 };
 
+// let settings = {
+//     http: {
+//         port: cfg.mqtt.broker.ws.port,
+//         bundle: true,
+//         static: './',
+//         host: cfg.mqtt.broker.ws.bind
+//     },
+//     port: cfg.mqtt.broker.port,
+//     host: cfg.mqtt.broker.bind
+// };
+
 let settings = {
-    http: {
-        port: cfg.mqtt.broker.ws.port,
-        bundle: true,
-        static: './',
-        host: cfg.mqtt.broker.ws.bind
-    },
-    port: cfg.mqtt.broker.port,
+    interfaces: [
+        {type: "mqtt", port: cfg.mqtt.broker.port},
+        {
+            type: "mqtts",
+            port: cfg.mqtt.broker.secure,
+            credentials: {keyPath: "./sslcert/server.key", certPath: "./sslcert/server.crt"}
+        },
+        {type: "http", port: cfg.mqtt.broker.ws.port, bundle: true},
+        {
+            type: "https",
+            port: cfg.mqtt.broker.ws.secure,
+            bundle: true,
+            credentials: {keyPath: "./sslcert/server.key", certPath: "./sslcert/server.crt"}
+        }
+    ],
+    secure: {keyPath: "./sslcert/server.key", certPath: "./sslcert/server.crt"},
     host: cfg.mqtt.broker.bind
 };
 

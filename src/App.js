@@ -5,6 +5,10 @@ import {connection_status} from "./consts"
 
 class App extends NetComponent {
 
+    componentDidMount(){
+        this.forceUpdate()
+    }
+
     render() {
         let result = this.getOperationMode();
         console.log(result);

@@ -35,7 +35,7 @@ function resetTimer() {
     startTimer();
 }
 
-setupTimers();
+// setupTimers();
 
 window.ctx = new Map();
 let oldOnes = undefined;

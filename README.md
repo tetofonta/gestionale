@@ -6,6 +6,11 @@
 Edit the files with values.\
 - *DO NOT EDIT .TEMPLATE FILE!*
 
+## How to deploy
+- edit deploy.sh, edit line 1 with the architecture list you want
+- yarn deploy
+- cd output && sh run.sh <arch> (EX. ```sh run.sh -linux-x64```)
+
 ## Funzionalitá:
 - [x] Login
 - [x] Rete diversa: routes diverse

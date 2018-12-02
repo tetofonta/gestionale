@@ -26,7 +26,8 @@ const apiCalls = {
     updbuoni: "/api/updateBuoni"
 };
 
-const mqttServer = `ws://${cfg.serverIP}:${cfg.mqtt.broker.ws.port}`;
+// const mqttServer = `ws://${cfg.serverIP}:${cfg.mqtt.broker.ws.port}`;
+const mqttServer = `wss://${cfg.serverIP}:${cfg.mqtt.broker.ws.secure}`;
 const loginLogo =
         <img src={"/logo/drawing.svg.png"} width="76px"/>;
 

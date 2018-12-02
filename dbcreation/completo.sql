@@ -39,7 +39,7 @@ CREATE TABLE `ads` (
 
 LOCK TABLES `ads` WRITE;
 /*!40000 ALTER TABLE `ads` DISABLE KEYS */;
-INSERT INTO `ads` VALUES (1,'sampa',2,2,'/ads/%sampa.png'),(3,'coin',1,1,'/ads/%coin.png'),(5,'bsfc',3,1,'/ads/%bsfc.png');
+INSERT INTO `ads` VALUES (1,'sampa',2,1,'/ads/%sampa.png'),(3,'coin',1,0,'/ads/%coin.png'),(5,'bsfc',3,3,'/ads/%bsfc.png');
 /*!40000 ALTER TABLE `ads` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -262,7 +262,7 @@ CREATE TABLE `ordini_dettagli` (
   `client` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `ordini_dettagli_id_uindex` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -271,7 +271,7 @@ CREATE TABLE `ordini_dettagli` (
 
 LOCK TABLES `ordini_dettagli` WRITE;
 /*!40000 ALTER TABLE `ordini_dettagli` DISABLE KEYS */;
-INSERT INTO `ordini_dettagli` VALUES (13,1543766464,'0001','',0,'192.168.178.23'),(15,1543766526,'0001','',0,'192.168.178.23');
+INSERT INTO `ordini_dettagli` VALUES (13,1543766464,'0001','',0,'192.168.178.23'),(15,1543766526,'0001','',0,'192.168.178.23'),(17,1543780495,'0000','',0,'192.168.178.23'),(19,1543780497,'0000','',0,'192.168.178.23'),(21,1543780507,'0000','',0,'192.168.178.23');
 /*!40000 ALTER TABLE `ordini_dettagli` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -294,7 +294,7 @@ CREATE TABLE `ordini_prodotti` (
   KEY `ordini_prodotti_magazzino_id_fk` (`product`),
   CONSTRAINT `ordini_prodotti_magazzino_id_fk` FOREIGN KEY (`product`) REFERENCES `magazzino` (`id`),
   CONSTRAINT `ordini_prodotti_ordini_dettagli_id_fk` FOREIGN KEY (`order`) REFERENCES `ordini_dettagli` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -303,7 +303,7 @@ CREATE TABLE `ordini_prodotti` (
 
 LOCK TABLES `ordini_prodotti` WRITE;
 /*!40000 ALTER TABLE `ordini_prodotti` DISABLE KEYS */;
-INSERT INTO `ordini_prodotti` VALUES (13,13,1,'NULL',3),(15,15,1,'[{qta:3,var:{select:{values:[null,true,true],labels:[ketchup,senape,mayo]}}}]',3);
+INSERT INTO `ordini_prodotti` VALUES (13,13,1,'NULL',3),(15,15,1,'[{qta:3,var:{select:{values:[null,true,true],labels:[ketchup,senape,mayo]}}}]',3),(17,17,3,'NULL',2),(19,19,3,'NULL',2),(21,21,3,'NULL',2);
 /*!40000 ALTER TABLE `ordini_prodotti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -403,4 +403,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-02 17:07:20
+-- Dump completed on 2018-12-02 21:06:03
