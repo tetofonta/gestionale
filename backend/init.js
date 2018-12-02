@@ -11,10 +11,8 @@ const {get_most_suitable_ads} = require("./ads");
 const {get_products_list} = require("./magazzino");
 const {increment, get_buono_detail, get_buoni, upd_buoni} = require("./administration");
 
-String.prototype.replaceAll = function(search, replacement) {
-    var target = this;
-    return target.replace(new RegExp(search, 'g'), replacement);
-};
+const {logger_init} = require("./logger");
+logger_init("/log/express.error.log", "/log/express.log");
 
 let privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
 let certificate = fs.readFileSync('sslcert/server.crt', 'utf8');

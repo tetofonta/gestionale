@@ -25,14 +25,16 @@
     "webpack-hot-middleware": "^2.24.3",
     "jspdf": "^1.4.1",
     "base-64": "~0.1.0",
-    "mosca": "^2.8.3"
+    "mosca": "^2.8.3",
+    "flatten": "^1.0.2"
   },
   "scripts": {
     "start-server": "cd backend && nodemon init.js",
     "start-mqtt": "cd backend/MQTT && nodemon broker.js",
+    "start-order-printer": "cd backend/MQTT/CLIENTS/orderPrinter && nodemon orderPrinter.js",
     "start-order-processor": "cd backend/MQTT/CLIENTS/orderProcessor && nodemon orderProcessor.js",
     "start": "HTTPS=true && react-scripts start",
-    "dev": "concurrently --kill-others-on-fail \"yarn start-server\" \"yarn start\" \"yarn start-mqtt\" \"yarn start-order-processor\"",
+    "dev": "concurrently --kill-others-on-fail \"yarn start-server\" \"yarn start\" \"yarn start-mqtt\" \"yarn start-order-printer\" \"yarn start-order-processor\"",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

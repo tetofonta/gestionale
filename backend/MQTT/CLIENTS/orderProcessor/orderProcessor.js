@@ -1,8 +1,8 @@
 const mqtt = require('mqtt');
 const cfg = require("../../../network.config");
-const model = require("./model");
-const {Scontrino} = require("./Scontrino");
-const fs = require('fs');
+const {getConnection, secure} = require("../../../mysql");
+const {logger_init} = require("../../../logger");
+logger_init("/log/processor.error.log", "/log/processor.log");
 
 let client = mqtt.connect(`mqtt://${cfg.serverIP}:${cfg.mqtt.broker.port}`);
 
@@ -15,10 +15,26 @@ client.on('connect', function () {
 });
 
 client.on('message', function (topic, message, packet) {
-    if(topic === "order/official"){
-        console.log(message.toString())
+    if (topic === "order/official") {
+
+        let cart = JSON.parse(message.toString());
+        if(cart.buono)
+            getConnection().query(`UPDATE cupons SET usato=${cart.time} WHERE id=${cart.buonoID}`, (e) => {if(e) console.error(e)});
+
+        getConnection().query(`INSERT INTO ordini_dettagli(timestamp, ordnum, message, asporto, client) VALUES (${cart.time}, '${secure(cart.ordnum)}', '${secure(cart.message)}', ${cart.asporto ? 1 : 0}, '${secure(cart.ip)}')`, (e) => {
+            if(e) console.error(e);
+            else {
+                getConnection().query(`SELECT LAST_INSERT_ID() as last;`, (e, r) => {
+                    let oid;
+                    if(r) oid = r[0].last;
+                    if(e){ console.error(e); oid = -200}
+                    let hasErrored = false;
+                    cart.cart.forEach(elem => {
+                        if(!hasErrored) getConnection().query(`INSERT INTO ordini_prodotti(\`order\`, product, variant, qta) VALUES (${oid}, ${elem[1].id}, '${secure(elem[1].variants ? JSON.stringify(elem[1].variants) : "NULL")}', ${elem[1].qta})`, (e) => {if(e){console.error(e); hasErrored = true}});
+                    })
+                })
+            }
+        });
+
     }
 });
-//
-// let s = new Scontrino(undefined, {ordnum: 0, descrizione: "lolololol", importo: 36, minimo: 11, emesso: Date.now()}, [], 0, model);
-// fs.writeFileSync('./document.pdf', s.getDoc().output());

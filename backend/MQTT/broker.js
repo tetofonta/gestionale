@@ -1,6 +1,8 @@
 const mosca = require('mosca');
 const {getNW_st} = require("../network");
 const cfg = require("../network.config");
+const {logger_init} = require("../logger");
+logger_init("/log/broker.error.log", "/log/broker.log");
 
 let restrictedTopics = ["order/official"];
 
@@ -15,7 +17,9 @@ mosca.Server.prototype.publish = function publish(packet, client, callback) {
                 console.log("Denied connection from " + client.connection.stream.socket._socket.remoteAddress)
                 return;
             }
+            console.log(packet)
     } catch (e) {
+        console.error(e)
     }
 
 

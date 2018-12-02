@@ -11,12 +11,14 @@ let normalizeCart = (cart) => {
     let map = new Map();
     cart.forEach(e => {
         if (typeof(e.variant) === "undefined" && !map.has(e.desc)) map.set(e.desc, {
+            id: e.id,
             qta: e.qta,
             eur: e.eur,
             cents: e.cents
         });
         else if (typeof(e.variant) === "undefined") map.get(e.desc).qta = e.qta;
         else if (!map.has(e.desc)) map.set(e.desc, {
+            id: e.id,
             qta: e.qta,
             eur: e.eur,
             cents: e.cents,
@@ -65,10 +67,14 @@ let renderCart = (cart, classes, classs) => {
     return (
         <Paper className={classes.paper}>
             <Grid container spacing={24}>
-                {[...normalizeCart(cart)].map(e => {
+                {[...normalizeCart(cart)].map((e, idx) => {
                     let k = e[0], v = e[1];
                     tote += parseInt(v.eur) * v.qta;
                     totc += parseInt(v.cents) * v.qta;
+                    if(v.qta < 1){
+                        cart.splice(idx, 1);
+                        classs.forceUpdate()
+                    }
                     return (
                         <Grid item xs={12}>
                             <Grid container spacing={24}>
@@ -97,7 +103,7 @@ let renderCart = (cart, classes, classs) => {
                                         <Button onClick={() => {
                                             for (let i = 0; i < cart.length; i++)
                                                 if (cart[i].desc === k) {
-                                                    cart[i].qta > 0 ? cart[i].qta-- : console.log("Coglione non si va sotto zero =)");
+                                                    cart[i].qta > 0 ? cart[i].qta-- : cart.splice(i, 1);
                                                     break;
                                                 }
                                             classs.forceUpdate()
@@ -127,7 +133,7 @@ let renderCart = (cart, classes, classs) => {
                                             <Grid item xs={2}>
                                                 <Button onClick={() => {
                                                     for (let i = 0; i < cart.length; i++)
-                                                        if (cart[i].desc === k && cart[i].variant === e.var) cart[i].qta > 0 ? cart[i].qta-- : console.log("Coglione non si va sotto zero =)");
+                                                        if (cart[i].desc === k && cart[i].variant === e.var) cart[i].qta > 0 ? cart[i].qta-- : cart.splice(i, 1);
                                                     classs.forceUpdate()
                                                 }} variant="contained" color="secondary"><MinusIcon/></Button>
                                             </Grid>

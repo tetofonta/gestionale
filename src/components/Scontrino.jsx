@@ -4,7 +4,7 @@ import React from "react";
 import qrc from 'qrious'
 import Typography from "@material-ui/core/es/Typography/Typography";
 import {GET, GETSync, POST} from "../network";
-import {apiCalls} from "../consts";
+import {apiCalls, orderCifres} from "../consts";
 import Snackbar from "@material-ui/core/es/Snackbar/Snackbar";
 
 Number.prototype.pad = function (size) {
@@ -138,12 +138,11 @@ class Scontrino extends React.Component {
                 user: window.ctx.get("username"),
                 token: window.ctx.get("token")
             }).then(res => {
-                this.props.kw.ordnum = res.ordnum.pad(4);
+                this.props.kw.ordnum = res.ordnum.pad(orderCifres);
                 this.props.kw.date  = Date.now();
                 this.createPaper();
             });
         else {
-            this.props.kw.ordnum  = this.props.ordnum;
             this.props.kw.date  = Date.now();
             this.createPaper();
         }

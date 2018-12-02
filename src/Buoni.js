@@ -78,7 +78,7 @@ class Buoni extends React.Component {
                 this.setState({list: res.list});
                 this.state.list.forEach(e => {
                     if (e.tipo === 1) e.valore = null;
-                    e.usato = e.usato === 1;
+                    e.usato = e.usato !== 0;
                     e.edited = false;
                 });
                 this.forceUpdate();

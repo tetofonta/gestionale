@@ -3,6 +3,12 @@ const cfg = require('./network.config');
 
 let connection = undefined;
 
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
+
+
 function connect(host, user, password, db) {
     connection = mysql.createConnection({
         host: host,

@@ -8,7 +8,7 @@ import {
     ProductsWidth,
     sagraName,
     staticServer,
-    productsHeight, tileWidth, mqttServer, scontrinoModel, categorieCucina
+    productsHeight, tileWidth, mqttServer, scontrinoModel, categorieCucina, orderCifres
 } from "./consts";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import {withStyles} from '@material-ui/core/styles';
@@ -120,10 +120,6 @@ const styles = theme => ({
     }
 });
 
-function getip() {
-    return "0.0.0.0" //TODO
-}
-
 class Cassa extends React.Component {
 
     status = {
@@ -165,6 +161,8 @@ class Cassa extends React.Component {
 
     total = [0, 0];
 
+    ip = "unavailable";
+
     normalizeCart = () => {
         return normalizeCart(this.state.cart)
     };
@@ -187,17 +185,36 @@ class Cassa extends React.Component {
         return getBillData(this.state.cart)
     };
 
-    componentDidMount() {
+    reloadList(){
+        this.images = []
         POST(apiCalls.productList, {}).then(res =>
             Object.keys(res.list).forEach(e => {
                 this.images.push({title: e, url: res.list[e].bg, prods: res.list[e].elements, width: CategoryWidth});
                 this.setState({ordernum: Cassa.generateRandom(11)})
-            }))
+            }));
+    }
+
+    componentDidMount() {
+        this.reloadList()
+
+        let that = this;
+
+        window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;//compatibility for Firefox and chrome
+        let pc = new RTCPeerConnection({iceServers: []}), noop = function () {
+        };
+        pc.createDataChannel('');//create a bogus data channel
+        pc.createOffer(pc.setLocalDescription.bind(pc), noop);// create offer and set local description
+        pc.onicecandidate = function (ice) {
+            if (ice && ice.candidate && ice.candidate.candidate) {
+                that.ip = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
+                pc.onicecandidate = noop;
+            }
+        };
     };
 
-    static isInCategory(ename, cat){
-        for(let i = 0; i < cat.prods.length; i++){
-            if(cat.prods[i].desc === ename) return true;
+    static isInCategory(ename, cat) {
+        for (let i = 0; i < cat.prods.length; i++) {
+            if (cat.prods[i].desc === ename) return true;
         }
         return false;
     }
@@ -213,6 +230,38 @@ class Cassa extends React.Component {
             isAVocale = !isAVocale
         }
         return ret;
+    }
+
+    scontrino = <Typography variant='title'>Getting order Number...</Typography>
+    ordnum = -1
+
+    genScontrino() {
+        POST(apiCalls.getOrdNum, {
+            user: window.ctx.get("username"),
+            token: window.ctx.get("token")
+        }).then(res => {
+            if (res.state) {
+                res = res.ordnum.pad(orderCifres);
+                this.ordnum = res;
+                this.scontrino =
+                    <Scontrino
+                        path={scontrinoModel}
+                        elementi={this.getBillData()}
+                        kw={{
+                            totale: this.state.usabuono ? this.state.faketotal : this.getTotal(),
+                            pagato: parseFloat(this.state.payed).toFixed(2),
+                            resto: (-Math.floor(((this.total[0] + this.total[1] / 100) - parseFloat(this.state.payed)) * 100) / 100).toFixed(2),
+                            qrdata: JSON.stringify({
+                                num: this.state.ordernum,
+                                time: Math.floor(Date.now() / 1000)
+                            }),
+                            buono: this.state.usabuono ? `BUONO ${this.state.buonoDesc}` : " ",
+                            ordnum: res
+                        }}
+                    />;
+                this.forceUpdate()
+            }
+        });
     }
 
     render() {
@@ -337,10 +386,11 @@ class Cassa extends React.Component {
                                 }
                                 label="Ordine d'asporto"
                             />
-                            {this.getCartLenght() > 0 && <Button onClick={() => {
+                            {this.getCartLenght() > 0 && <Button variant="extendedFab" color='green' aria-label="Delete"
+                                                                 className={this.props.classes.button} onClick={() => {
+                                this.genScontrino();
                                 this.setState({step: 2, currentState: this.status.code});
-                            }} variant="extendedFab" color='green' aria-label="Delete"
-                                                                 className={this.props.classes.button}>
+                            }}>
                                 <SendIcon className={this.props.classes.extendedIcon}/>
                                 Invia
                             </Button>}
@@ -359,7 +409,7 @@ class Cassa extends React.Component {
                                     orderID: th.state.ordernum,
                                     asporto: th.state.isAsporto,
                                     message: th.state.note,
-                                    ip: getip(),
+                                    ip: this.ip,
                                     time: Math.floor(Date.now() / 1000)
                                 }));
                             client.end();
@@ -374,7 +424,7 @@ class Cassa extends React.Component {
                                             orderID: th.state.ordernum,
                                             asporto: th.state.isAsporto,
                                             message: th.state.note,
-                                            ip: getip(),
+                                            ip: this.ip,
                                             time: Math.floor(Date.now() / 1000)
                                         }
                                     )}
@@ -388,52 +438,45 @@ class Cassa extends React.Component {
                     {window.ctx.get("isLogged") &&
                     <Grid container spacing={24} className={this.props.classes.full}>
                         <Grid item xs={12} md={8}>
-                            <Scontrino
-                                path={scontrinoModel}
-                                elementi={this.getBillData()}
-                                kw={{
-                                    totale: this.state.usabuono ? this.state.faketotal : this.getTotal(),
-                                    pagato: parseFloat(this.state.payed).toFixed(2),
-                                    resto: (-Math.floor(((this.total[0] + this.total[1] / 100) - parseFloat(this.state.payed)) * 100) / 100).toFixed(2),
-                                    qrdata: JSON.stringify({
-                                        num: this.state.ordernum,
-                                        time: Math.floor(Date.now() / 1000)
-                                    }),
-                                    buono: this.state.usabuono ? `BUONO ${this.state.buonoDesc}` : " ",
-                                    ordnum: null
-                                }}
-                            />
+                            {this.scontrino}
 
                         </Grid>
                         <Grid item xs={12} md={4}>
                             <Button className={this.props.classes.bigb} fullWidth variant="contained" color="primary"
                                     onClick={() => {
-                                        let client = mqtt.connect(mqttServer);
-                                        client.on('connect', () => {
-
-                                            client.publish('order/official', JSON.stringify(
-                                                {
-                                                    cart: [...this.normalizeCart()].filter(e => {
-                                                        let x = false;
-                                                        this.images.forEach(cat => {x = x || (categorieCucina.includes(cat.title) && Cassa.isInCategory(e[0], cat))});
-                                                        return x;
-                                                    }),
-                                                    orderID: this.state.ordernum,
-                                                    asporto: this.state.isAsporto,
-                                                    message: this.state.note,
-                                                    ip: getip(),
-                                                    user: window.ctx.get("username"),
-                                                    buono: this.state.usabuono,
-                                                    buonoID: this.state.buonoId,
-                                                    time: Math.floor(Date.now() / 1000)
-                                                }));
-                                            document.getElementById("tobeprinted").postMessage({type: 'print'});
-                                            client.end();
+                                        let cucinaCart = [...this.normalizeCart()].filter(e => {
+                                            let x = false;
+                                            this.images.forEach(cat => {
+                                                x = x || (categorieCucina.includes(cat.title) && Cassa.isInCategory(e[0], cat))
+                                            });
+                                            return x;
                                         });
+
+                                        if (cucinaCart.length > 0) {
+                                            let client = mqtt.connect(mqttServer);
+                                            client.on('connect', () => {
+                                                client.publish('order/official', JSON.stringify(
+                                                    {
+                                                        cart: cucinaCart,
+                                                        orderID: this.state.ordernum,
+                                                        asporto: this.state.isAsporto,
+                                                        message: this.state.note,
+                                                        ip: this.ip,
+                                                        user: window.ctx.get("username"),
+                                                        buono: this.state.usabuono,
+                                                        buonoID: this.state.buonoId,
+                                                        time: Math.floor(Date.now() / 1000),
+                                                        ordnum: this.ordnum
+                                                    }));
+                                                client.end();
+                                            });
+                                        }
+                                        document.getElementById("tobeprinted").postMessage({type: 'print'});
                                     }
                                     }>stampa</Button>
                             <Button className={this.props.classes.bigb} fullWidth variant="contained" color="secondary"
                                     onClick={() => {
+                                        this.reloadList();
                                         this.setState({cart: [], currentState: this.status.category, step: 0})
                                     }}>NUOVO ORDINE</Button>
                             <Button className={this.props.classes.bigb} fullWidth variant="contained" color="secondary"
@@ -464,6 +507,7 @@ class Cassa extends React.Component {
                                 <Step key={2}>
                                     <StepButton onClick={() => {
                                         this.setState({step: 2, currentState: this.status.code})
+                                        this.genScontrino()
                                     }}>Completa l'ordine</StepButton>
                                 </Step>
                                 :
@@ -618,7 +662,7 @@ class Cassa extends React.Component {
                         </Button>
                         <Button disabled={this.state.buonoapplicabile} onClick={() => {
                             this.setState({buonoapplicabile: true, usabuono: true, buonoOpen: false})
-                            this.createScontrino()
+                            this.genScontrino()
                         }} color="primary">
                             Inserisci
                         </Button>

@@ -5,4 +5,5 @@ mkdir -p ./backend/sslcert
 openssl req -nodes -new -x509 -keyout ./backend/sslcert/server.key -out ./backend/sslcert/server.crt
 
 sudo npm i mosca -g
+sudo apt install cups-bsd
 yarn install

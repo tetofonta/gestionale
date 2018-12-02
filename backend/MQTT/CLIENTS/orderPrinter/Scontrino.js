@@ -3,10 +3,8 @@ global.navigator = {};
 global.btoa = () => {};
 global.atob = () => {};
 
-const {GETSync, GET} = require("./network");
 const jsPDF = require("jspdf");
 const cfg = require("../../../network.config");
-const QRCode = require("qrcode");
 
 
 Number.prototype.pad = function (size) {
@@ -53,7 +51,7 @@ class Scontrino {
         Object.keys(e).forEach(q => {
             this.map.set(this.kw[q], e[q]);
         });
-        this._parse(element, offset)
+        this._parse(JSON.parse(JSON.stringify(element)), offset)
     }
 
     _parse(element, offset = 0) {
@@ -61,11 +59,7 @@ class Scontrino {
                 let e = element[i];
                 switch (e.type) {
                     case "reference":
-                        if (e.path === "null") break;
-                        let obj = JSON.parse(GETSync(e.path));
-                        obj.x += e.x;
-                        obj.y += e.y;
-                        element.push(obj);
+                        console.error("YOU CANT USE QR IN THIS")
                         break;
                     case "image":
                         this.doc.addImage(e.data, e.format, e.x, e.y + offset, e.w, e.h);
@@ -110,11 +104,7 @@ class Scontrino {
     }
 
     createPaper() {
-        if (this.props.path)
-            GET(`https://${cfg.serverIP}:${cfg.serverPort}${this.props.path}`).then(res => {
-                this._generate(res)
-            });
-        else this._generate(JSON.parse(JSON.stringify(this.props.object)))
+        this._generate(JSON.parse(JSON.stringify(this.props.object)))
     }
 
 }

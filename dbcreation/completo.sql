@@ -39,7 +39,7 @@ CREATE TABLE `ads` (
 
 LOCK TABLES `ads` WRITE;
 /*!40000 ALTER TABLE `ads` DISABLE KEYS */;
-INSERT INTO `ads` VALUES (1,'sampa',2,2,'/ads/%sampa.png'),(3,'coin',1,1,'/ads/%coin.png'),(5,'bsfc',3,2,'/ads/%bsfc.png');
+INSERT INTO `ads` VALUES (1,'sampa',2,2,'/ads/%sampa.png'),(3,'coin',1,1,'/ads/%coin.png'),(5,'bsfc',3,1,'/ads/%bsfc.png');
 /*!40000 ALTER TABLE `ads` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -95,7 +95,7 @@ CREATE TABLE `cupons` (
 
 LOCK TABLES `cupons` WRITE;
 /*!40000 ALTER TABLE `cupons` DISABLE KEYS */;
-INSERT INTO `cupons` VALUES (12548,2,10,10,0),(35091,2,50,50,0),(45885,2,32,15.5,0),(46904,3,50,50,0),(52484,1,20,30,0);
+INSERT INTO `cupons` VALUES (12548,2,10,10,0),(35091,2,50,50,1543672733),(45885,2,32,15.5,0),(46904,3,50,50,0),(52484,1,20,30,0);
 /*!40000 ALTER TABLE `cupons` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -247,6 +247,67 @@ INSERT INTO `magazzino` VALUES (1,'Pane e salamella','Panino caldo con salamella
 UNLOCK TABLES;
 
 --
+-- Table structure for table `ordini_dettagli`
+--
+
+DROP TABLE IF EXISTS `ordini_dettagli`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ordini_dettagli` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `timestamp` int(11) NOT NULL,
+  `ordnum` varchar(10) NOT NULL,
+  `message` text,
+  `asporto` int(11) NOT NULL,
+  `client` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ordini_dettagli_id_uindex` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ordini_dettagli`
+--
+
+LOCK TABLES `ordini_dettagli` WRITE;
+/*!40000 ALTER TABLE `ordini_dettagli` DISABLE KEYS */;
+INSERT INTO `ordini_dettagli` VALUES (13,1543766464,'0001','',0,'192.168.178.23'),(15,1543766526,'0001','',0,'192.168.178.23');
+/*!40000 ALTER TABLE `ordini_dettagli` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ordini_prodotti`
+--
+
+DROP TABLE IF EXISTS `ordini_prodotti`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ordini_prodotti` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order` int(11) NOT NULL,
+  `product` int(11) NOT NULL,
+  `variant` text,
+  `qta` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ordini_prodotti_id_uindex` (`id`),
+  KEY `ordini_prodotti_ordini_dettagli_id_fk` (`order`),
+  KEY `ordini_prodotti_magazzino_id_fk` (`product`),
+  CONSTRAINT `ordini_prodotti_magazzino_id_fk` FOREIGN KEY (`product`) REFERENCES `magazzino` (`id`),
+  CONSTRAINT `ordini_prodotti_ordini_dettagli_id_fk` FOREIGN KEY (`order`) REFERENCES `ordini_dettagli` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ordini_prodotti`
+--
+
+LOCK TABLES `ordini_prodotti` WRITE;
+/*!40000 ALTER TABLE `ordini_prodotti` DISABLE KEYS */;
+INSERT INTO `ordini_prodotti` VALUES (13,13,1,'NULL',3),(15,15,1,'[{qta:3,var:{select:{values:[null,true,true],labels:[ketchup,senape,mayo]}}}]',3);
+/*!40000 ALTER TABLE `ordini_prodotti` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `previlegi`
 --
 
@@ -342,4 +403,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-30 23:09:16
+-- Dump completed on 2018-12-02 17:07:20
