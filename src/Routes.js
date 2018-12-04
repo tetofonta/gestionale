@@ -11,6 +11,7 @@ import Err500 from "./500";
 import Cassa from "./Cassa";
 import Editor from "./Editor";
 import Buoni from "./Buoni";
+import Storico from "./Storico";
 
 export default class Router extends React.Component {
     render() {
@@ -20,7 +21,8 @@ export default class Router extends React.Component {
         let operations = [
             <Route path='/users' component={Users}/>,
             <Route path='/editor' component={Editor}/>,
-            <Route path='/buoni' component={Buoni}/>
+            <Route path='/buoni' component={Buoni}/>,
+            <Route path='/storico' component={Storico}/>
         ];
 
         return (

@@ -22,7 +22,7 @@ function connect(host, user, password, db) {
 }
 
 function secure(str){
-    return str.replaceAll("'", "").replaceAll("`", "").replaceAll('"', "").replaceAll("--", "")
+    return str.replaceAll("'", "").replaceAll("`", "").replaceAll("--", "")
 }
 
 function getConnection() {

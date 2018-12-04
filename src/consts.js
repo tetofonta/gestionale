@@ -23,11 +23,14 @@ const apiCalls = {
     getOrdNum: "/api/new_order",
     buono: "/api/buono",
     buoni: "/api/buoni",
-    updbuoni: "/api/updateBuoni"
+    updbuoni: "/api/updateBuoni",
+    getStorico: "/api/getStorico"
 };
 
-// const mqttServer = `ws://${cfg.serverIP}:${cfg.mqtt.broker.ws.port}`;
-const mqttServer = `wss://${cfg.serverIP}:${cfg.mqtt.broker.ws.secure}`;
+let mqttServer;
+if (document.location.protocol === 'https:') mqttServer = `wss://${cfg.serverIP}:${cfg.mqtt.broker.ws.secure}`;
+else mqttServer = `ws://${cfg.serverIP}:${cfg.mqtt.broker.ws.port}`;
+
 const loginLogo =
         <img src={"/logo/drawing.svg.png"} width="76px"/>;
 

@@ -9,7 +9,7 @@ const {auth, auth_refresh} = require('./auth');
 const {usr_getList, usr_edit, usr_new, usr_del, usr_getAccessibleFunctions} = require('./users');
 const {get_most_suitable_ads} = require("./ads");
 const {get_products_list} = require("./magazzino");
-const {increment, get_buono_detail, get_buoni, upd_buoni} = require("./administration");
+const {increment, get_buono_detail, get_buoni, upd_buoni, get_old_orders} = require("./administration");
 const cfg = require("./network.config");
 const {logger_init} = require("./logger");
 logger_init("./log/express.error.log", "./log/express.log");
@@ -51,6 +51,7 @@ app.post('/api/products', (r, e) => get_products_list(r, e));
 app.post('/api/buono', (r, e) => get_buono_detail(r, e));
 app.post('/api/buoni', (r, e) => get_buoni(r, e));
 app.post('/api/updateBuoni', (r, e) => upd_buoni(r, e));
+app.post('/api/getStorico', (r, e) => get_old_orders(r, e));
 
 
 let httpsServer = https.createServer(credentials, app);

@@ -186,7 +186,7 @@ class Cassa extends React.Component {
     };
 
     reloadList(){
-        this.images = []
+        this.images = [];
         POST(apiCalls.productList, {}).then(res =>
             Object.keys(res.list).forEach(e => {
                 this.images.push({title: e, url: res.list[e].bg, prods: res.list[e].elements, width: CategoryWidth});
@@ -195,7 +195,7 @@ class Cassa extends React.Component {
     }
 
     componentDidMount() {
-        this.reloadList()
+        this.reloadList();
 
         let that = this;
 
@@ -226,14 +226,14 @@ class Cassa extends React.Component {
         let ret = "";
         for (let i = 0; i < bits; i++) {
             let myarray = isAVocale ? vocali : consonanti;
-            ret += myarray[Math.floor(Math.random() * myarray.length)]
+            ret += myarray[Math.floor(Math.random() * myarray.length)];
             isAVocale = !isAVocale
         }
         return ret;
     }
 
-    scontrino = <Typography variant='title'>Getting order Number...</Typography>
-    ordnum = -1
+    scontrino = <Typography variant='title'>Getting order Number...</Typography>;
+    ordnum = -1;
 
     genScontrino() {
         POST(apiCalls.getOrdNum, {
@@ -466,7 +466,8 @@ class Cassa extends React.Component {
                                                         buono: this.state.usabuono,
                                                         buonoID: this.state.buonoId,
                                                         time: Math.floor(Date.now() / 1000),
-                                                        ordnum: this.ordnum
+                                                        ordnum: this.ordnum,
+                                                        totale: this.total
                                                     }));
                                                 client.end();
                                             });

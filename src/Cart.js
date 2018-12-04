@@ -1,4 +1,4 @@
-import {Currency} from "./consts";
+import {categorieCucina, Currency} from "./consts";
 import Paper from "@material-ui/core/es/Paper/Paper";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import React from "react";
@@ -14,7 +14,8 @@ let normalizeCart = (cart) => {
             id: e.id,
             qta: e.qta,
             eur: e.eur,
-            cents: e.cents
+            cents: e.cents,
+            cat: e.cat
         });
         else if (typeof(e.variant) === "undefined") map.get(e.desc).qta = e.qta;
         else if (!map.has(e.desc)) map.set(e.desc, {
@@ -163,4 +164,18 @@ let getBillData = (cart) => {
     return elem;
 };
 
-export {getBillData, getCartLenght, getTotal, normalizeCart, renderCart}
+let getBillDataFromNormalized = (cart) => {
+    let elem = [];
+    cart.forEach(e => {
+        let k = e[0], v = e[1];
+        elem.push({qta: "" + v.qta, text: k, total: v.eur + "." + (v.cents > 9 ? v.cents : "0" + v.cents)});
+        // if(typeof(v.variants) !== 'undefined'){
+        //     v.variants.forEach(e => {
+        //         elem.push({qta: "  " + e.qta, text: e.var.choose !== null ? e.var.choose : e.var.select.labels.map((q, i) => (e.var.select.values[i] === true ? "CON " : "NO ") + q + ", "), total: ""});
+        //     })
+        // }
+    });
+    return elem;
+};
+
+export {getBillData, getCartLenght, getTotal, normalizeCart, renderCart, getBillDataFromNormalized}

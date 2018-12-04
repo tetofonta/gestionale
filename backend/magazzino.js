@@ -24,7 +24,8 @@ function get_product_list(req, res){
                     dispon: e.disponibile,
                     eur: e.eur,
                     cents: e.cents,
-                    details: json
+                    details: json,
+                    cat: e.gnome
                 };
                 if (!map.has(e.gnome)) map.set(e.gnome, {bg: e.gbg, elements: [obj]});
                 else map.get(e.gnome).elements.push(obj)
