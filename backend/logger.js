@@ -3,7 +3,7 @@ const util = require('util');
 const log_stdout = process.stdout;
 const log_stderr = process.stderr;
 
-function logger_init(err, log, debug=true){
+function logger_init(err, log, debug=false){
     const log_file = fs.createWriteStream(log, {flags : 'a'});
     const err_file = fs.createWriteStream(err, {flags : 'a'});
 
