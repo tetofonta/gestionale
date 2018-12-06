@@ -1,239 +1,339 @@
 {
   "width": 80,
-  "header": {
-    "height": 37,
-    "content": [
-      {
-        "type": "text",
-        "text": "S.Lorenzo",
-        "font": "helvetica",
-        "variant": "bold",
-        "size": 24,
-        "x": 35,
-        "y": 18,
-        "parse": true
-      },
-      {
-        "type": "text",
-        "text": "sagra - Capriolo",
-        "font": "helvetica",
-        "variant": "italic",
-        "size": 14,
-        "x": 41,
-        "y": 25,
-        "parse": true
-      },
-      {
-        "type": "line",
-        "coordsx": [
-          10,
-          70
-        ],
-        "coordsy": [
-          35,
-          35
-        ],
-        "width": 0
-      },
-      {
-        "type": "reference",
-        "path": "/TEMPLATES/image.json",
-        "x": 5,
-        "y": 5
-      }
-    ]
+  "main":{
+    "header": {
+      "height": 37,
+      "content": [
+        {
+          "type": "text",
+          "text": "S.Lorenzo",
+          "font": "helvetica",
+          "variant": "bold",
+          "size": 24,
+          "x": 35,
+          "y": 18,
+          "parse": true
+        },
+        {
+          "type": "text",
+          "text": "sagra - Capriolo",
+          "font": "helvetica",
+          "variant": "italic",
+          "size": 14,
+          "x": 41,
+          "y": 25,
+          "parse": true
+        },
+        {
+          "type": "line",
+          "coordsx": [
+            10,
+            70
+          ],
+          "coordsy": [
+            35,
+            35
+          ],
+          "width": 0
+        },
+        {
+          "type": "reference",
+          "path": "/TEMPLATES/image.json",
+          "x": 5,
+          "y": 5
+        }
+      ]
+    },
+    "element": {
+      "height": 5,
+      "content": [
+        {
+          "type": "text",
+          "text": "_product",
+          "font": "helvetica",
+          "variant": "normal",
+          "size": 11,
+          "x": 5,
+          "y": 4,
+          "parse": true
+        },
+        {
+          "type": "text",
+          "text": "EUR",
+          "font": "helvetica",
+          "variant": "bold",
+          "size": 11,
+          "x": 45,
+          "y": 4,
+          "parse": true
+        },
+        {
+          "type": "text",
+          "text": "_price",
+          "font": "helvetica",
+          "variant": "normal",
+          "size": 11,
+          "x": 54,
+          "y": 4,
+          "parse": true
+        },
+        {
+          "type": "text",
+          "text": "x _qta",
+          "font": "helvetica",
+          "variant": "italic",
+          "size": 11,
+          "x": 66,
+          "y": 4,
+          "parse": true
+        }
+      ]
+    },
+    "footer": {
+      "height": 68,
+      "content": [
+        {
+          "type": "text",
+          "text": "PAGATO",
+          "font": "helvetica",
+          "variant": "bold",
+          "size": 14,
+          "x": 5,
+          "y": 6,
+          "parse": true
+        },
+        {
+          "type": "line",
+          "coordsx": [
+            10,
+            70
+          ],
+          "coordsy": [
+            1,
+            1
+          ],
+          "width": 0
+        },
+        {
+          "type": "text",
+          "text": "E.",
+          "font": "helvetica",
+          "variant": "bold",
+          "size": 14,
+          "x": 45,
+          "y": 6,
+          "parse": true
+        },
+        {
+          "type": "text",
+          "text": "_pay",
+          "font": "helvetica",
+          "variant": "normal",
+          "size": 14,
+          "x": 52,
+          "y": 6,
+          "parse": true
+        },
+        {
+          "type": "text",
+          "text": "RESTO",
+          "font": "helvetica",
+          "variant": "bold",
+          "size": 14,
+          "x": 5,
+          "y": 12,
+          "parse": true
+        },
+        {
+          "type": "text",
+          "text": "E.",
+          "font": "helvetica",
+          "variant": "bold",
+          "size": 14,
+          "x": 45,
+          "y": 12,
+          "parse": true
+        },
+        {
+          "type": "text",
+          "text": "_rest",
+          "font": "helvetica",
+          "variant": "normal",
+          "size": 14,
+          "x": 52,
+          "y": 12,
+          "parse": true
+        },
+        {
+          "type": "text",
+          "text": "_buono",
+          "font": "helvetica",
+          "variant": "italic",
+          "size": 11,
+          "x": 5,
+          "y": 17,
+          "parse": true
+        },
+        {
+          "type": "text",
+          "text": "TOTALE",
+          "font": "helvetica",
+          "variant": "bold",
+          "size": 14,
+          "x": 5,
+          "y": 24,
+          "parse": true
+        },
+        {
+          "type": "rect",
+          "dofill": true,
+          "fill": [
+            255,
+            0,
+            32
+          ],
+          "border": [
+            255,
+            255,
+            255
+          ],
+          "x": 35,
+          "y": 16,
+          "w": 40,
+          "h": 10,
+          "round": 0
+        },
+        {
+          "type": "text",
+          "text": "E. _tot",
+          "font": "helvetica",
+          "variant": "bold",
+          "size": 22,
+          "x": 38,
+          "y": 24,
+          "parse": true
+        },
+        {
+          "type": "qr",
+          "data": "_qr",
+          "parse": true,
+          "bg": "white",
+          "fg": "black",
+          "correction": "H",
+          "size": 120,
+          "x": 8,
+          "y": 31
+        },
+        {
+          "type": "text",
+          "text": "_ord",
+          "font": "helvetica",
+          "variant": "bold",
+          "size": 30,
+          "x": 50,
+          "y": 50,
+          "parse": true
+        }
+      ]
+    }
   },
-  "element": {
-    "height": 5,
-    "content": [
-      {
-        "type": "text",
-        "text": "_product",
-        "font": "helvetica",
-        "variant": "normal",
-        "size": 11,
-        "x": 5,
-        "y": 4,
-        "parse": true
-      },
-      {
-        "type": "text",
-        "text": "EUR",
-        "font": "helvetica",
-        "variant": "bold",
-        "size": 11,
-        "x": 45,
-        "y": 4,
-        "parse": true
-      },
-      {
-        "type": "text",
-        "text": "_price",
-        "font": "helvetica",
-        "variant": "normal",
-        "size": 11,
-        "x": 54,
-        "y": 4,
-        "parse": true
-      },
-      {
-        "type": "text",
-        "text": "x _qta",
-        "font": "helvetica",
-        "variant": "italic",
-        "size": 11,
-        "x": 66,
-        "y": 4,
-        "parse": true
-      }
-    ]
-  },
-  "footer": {
-    "height": 68,
-    "content": [
-      {
-        "type": "text",
-        "text": "PAGATO",
-        "font": "helvetica",
-        "variant": "bold",
-        "size": 14,
-        "x": 5,
-        "y": 6,
-        "parse": true
-      },
-      {
-        "type": "line",
-        "coordsx": [
-          10,
-          70
-        ],
-        "coordsy": [
-          1,
-          1
-        ],
-        "width": 0
-      },
-      {
-        "type": "text",
-        "text": "E.",
-        "font": "helvetica",
-        "variant": "bold",
-        "size": 14,
-        "x": 45,
-        "y": 6,
-        "parse": true
-      },
-      {
-        "type": "text",
-        "text": "_pay",
-        "font": "helvetica",
-        "variant": "normal",
-        "size": 14,
-        "x": 52,
-        "y": 6,
-        "parse": true
-      },
-      {
-        "type": "text",
-        "text": "RESTO",
-        "font": "helvetica",
-        "variant": "bold",
-        "size": 14,
-        "x": 5,
-        "y": 12,
-        "parse": true
-      },
-      {
-        "type": "text",
-        "text": "E.",
-        "font": "helvetica",
-        "variant": "bold",
-        "size": 14,
-        "x": 45,
-        "y": 12,
-        "parse": true
-      },
-      {
-        "type": "text",
-        "text": "_rest",
-        "font": "helvetica",
-        "variant": "normal",
-        "size": 14,
-        "x": 52,
-        "y": 12,
-        "parse": true
-      },
-      {
-        "type": "text",
-        "text": "_buono",
-        "font": "helvetica",
-        "variant": "italic",
-        "size": 11,
-        "x": 5,
-        "y": 17,
-        "parse": true
-      },
-      {
-        "type": "text",
-        "text": "TOTALE",
-        "font": "helvetica",
-        "variant": "bold",
-        "size": 14,
-        "x": 5,
-        "y": 24,
-        "parse": true
-      },
-      {
-        "type": "rect",
-        "dofill": true,
-        "fill": [
-          255,
-          0,
-          32
-        ],
-        "border": [
-          255,
-          255,
-          255
-        ],
-        "x": 35,
-        "y": 16,
-        "w": 40,
-        "h": 10,
-        "round": 0
-      },
-      {
-        "type": "text",
-        "text": "E. _tot",
-        "font": "helvetica",
-        "variant": "bold",
-        "size": 22,
-        "x": 38,
-        "y": 24,
-        "parse": true
-      },
-      {
-        "type": "qr",
-        "data": "_qr",
-        "parse": true,
-        "bg": "white",
-        "fg": "black",
-        "correction": "H",
-        "size": 120,
-        "x": 8,
-        "y": 31
-      },
-      {
-        "type": "text",
-        "text": "_ord",
-        "font": "helvetica",
-        "variant": "bold",
-        "size": 30,
-        "x": 50,
-        "y": 50,
-        "parse": true
-      }
-    ]
+  "details":{
+    "header": {
+      "height": 37,
+      "content": [
+        {
+          "type": "text",
+          "text": "S.Lorenzo",
+          "font": "helvetica",
+          "variant": "bold",
+          "size": 24,
+          "x": 35,
+          "y": 18,
+          "parse": true
+        },
+        {
+          "type": "text",
+          "text": "sagra - Capriolo",
+          "font": "helvetica",
+          "variant": "italic",
+          "size": 14,
+          "x": 41,
+          "y": 25,
+          "parse": true
+        },
+        {
+          "type": "line",
+          "coordsx": [
+            10,
+            70
+          ],
+          "coordsy": [
+            35,
+            35
+          ],
+          "width": 0
+        },
+        {
+          "type": "reference",
+          "path": "/TEMPLATES/image.json",
+          "x": 5,
+          "y": 5
+        }
+      ]
+    },
+    "element": {
+      "height": 5,
+      "content": [
+        {
+          "type": "text",
+          "text": "_product",
+          "font": "helvetica",
+          "variant": "normal",
+          "size": 11,
+          "x": 5,
+          "y": 4,
+          "parse": true
+        }
+      ]
+    },
+    "footer": {
+      "height": 68,
+      "content": [
+        {
+          "type": "line",
+          "coordsx": [
+            10,
+            70
+          ],
+          "coordsy": [
+            1,
+            1
+          ],
+          "width": 0
+        },
+        {
+          "type": "qr",
+          "data": "_qr",
+          "parse": true,
+          "bg": "white",
+          "fg": "black",
+          "correction": "H",
+          "size": 120,
+          "x": 8,
+          "y": 10
+        },
+        {
+          "type": "text",
+          "text": "_ord",
+          "font": "helvetica",
+          "variant": "bold",
+          "size": 30,
+          "x": 50,
+          "y": 10,
+          "parse": true
+        }
+      ]
+    }
   },
   "kw": {
     "totale": "_tot",

@@ -103,20 +103,31 @@ class Scontrino extends React.Component {
         }
     }
 
+    _page(page, elem){
+        this._parse(page.header.content, 0);
+
+        if(elem !== undefined)
+            elem.forEach((e, i) => this._elem(page.element.content, e, page.header.height + i * page.element.height));
+
+        this._parse(page.footer.content, page.header.height + page.element.height * elem.length);
+    }
+
     _generate(res){
-        let height = res.header.height + res.element.height * this.props.elementi.length + res.footer.height;
+        let fullArr = [];
+        Object.keys(this.props.elementi).forEach(e => fullArr.push(...this.props.elementi[e]));
+
+        let height = res.main.header.height + res.main.element.height * fullArr.length + res.main.footer.height;
         this.doc = new jsPDF({
             orientation: height > res.width ? 'portait' : 'landscape',
             unit: 'mm',
             format: [res.width, height]
         });
         this._createMap(res.kw);
-        this._parse(res.header.content, 0);
+        this._page(res.main, fullArr);
 
-        if(this.props.elementi !== undefined)
-            this.props.elementi.forEach((e, i) => this._elem(res.element.content, e, res.header.height + i * res.element.height));
-
-        this._parse(res.footer.content, res.header.height + res.element.height * this.props.elementi.length);
+        Object.keys(this.props.elementi).forEach(e =>{
+            if(this.props.elementi[e].length > 0){this.doc.addPage(); this._page(res.details, this.props.elementi[e])};
+        });
 
         this._data = <embed id="tobeprinted" width="100%" height="99%"
                             src={"data:application/pdf;base64," + Base64.encode(this.doc.output())}

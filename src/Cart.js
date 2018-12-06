@@ -6,6 +6,7 @@ import Button from "@material-ui/core/es/Button/Button";
 import AddIcon from "@material-ui/icons/Add"
 import MinusIcon from "@material-ui/icons/Remove"
 import Typography from "@material-ui/core/es/Typography/Typography";
+import * as cfg from "./network.config"
 
 let normalizeCart = (cart) => {
     let map = new Map();
@@ -151,17 +152,15 @@ let renderCart = (cart, classes, classs) => {
 };
 
 let getBillData = (cart) => {
-    let elem = [];
-    [...normalizeCart(cart)].forEach(e => {
-        let k = e[0], v = e[1];
-        elem.push({qta: "" + v.qta, text: k, total: v.eur + "." + (v.cents > 9 ? v.cents : "0" + v.cents)});
-        // if(typeof(v.variants) !== 'undefined'){
-        //     v.variants.forEach(e => {
-        //         elem.push({qta: "  " + e.qta, text: e.var.choose !== null ? e.var.choose : e.var.select.labels.map((q, i) => (e.var.select.values[i] === true ? "CON " : "NO ") + q + ", "), total: ""});
-        //     })
-        // }
+    let obj = {};
+    Object.keys(cfg.react.scontrini).forEach(e => {
+        obj[e] = [...normalizeCart(cart)].filter(q => cfg.react.scontrini[e].includes(q[1].cat)).map(e => {
+            let k = e[0], v = e[1];
+            return({qta: "" + v.qta, text: k, total: v.eur + "." + (v.cents > 9 ? v.cents : "0" + v.cents)});
+        });
     });
-    return elem;
+    return obj;
+
 };
 
 let getBillDataFromNormalized = (cart) => {
@@ -169,13 +168,24 @@ let getBillDataFromNormalized = (cart) => {
     cart.forEach(e => {
         let k = e[0], v = e[1];
         elem.push({qta: "" + v.qta, text: k, total: v.eur + "." + (v.cents > 9 ? v.cents : "0" + v.cents)});
-        // if(typeof(v.variants) !== 'undefined'){
-        //     v.variants.forEach(e => {
-        //         elem.push({qta: "  " + e.qta, text: e.var.choose !== null ? e.var.choose : e.var.select.labels.map((q, i) => (e.var.select.values[i] === true ? "CON " : "NO ") + q + ", "), total: ""});
-        //     })
-        // }
     });
     return elem;
 };
 
-export {getBillData, getCartLenght, getTotal, normalizeCart, renderCart, getBillDataFromNormalized}
+let getCarts = (cart) => {
+    let obj = {};
+    Object.keys(cfg.react.scontrini).forEach(e => {
+        obj[e] = [...normalizeCart(cart)].filter(q => cfg.react.scontrini[e].includes(q[1].cat));
+    });
+    return obj;
+};
+
+let getCartsFromNormalized = (cart) => {
+    let obj = {};
+    Object.keys(cfg.react.scontrini).forEach(e => {
+        obj[e] = cart.filter(q => cfg.react.scontrini[e].includes(q[1].cat));
+    });
+    return obj;
+};
+
+export {getBillData, getCartLenght, getTotal, normalizeCart, renderCart, getBillDataFromNormalized, getCarts, getCartsFromNormalized}

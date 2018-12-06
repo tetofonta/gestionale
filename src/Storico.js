@@ -47,7 +47,7 @@ import CheckBox from "@material-ui/core/es/internal/svg-icons/CheckBox";
 import Checkbox from "@material-ui/core/es/Checkbox/Checkbox";
 import ListItemSecondaryAction from "@material-ui/core/es/ListItemSecondaryAction/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/es/IconButton/IconButton";
-import {getBillDataFromNormalized} from "./Cart";
+import {getBillDataFromNormalized, getCarts, getCartsFromNormalized} from "./Cart";
 import * as mqtt from "mqtt";
 
 
@@ -98,7 +98,9 @@ class Storico extends React.Component {
 
         this.client = mqtt.connect(mqttServer);
         this.client.on('connect', () => {
-            this.client.subscribe('order/official', (e) => {console.log(e)})
+            this.client.subscribe('order/official', (e) => {
+                console.log(e)
+            })
         });
 
         let that = this;
@@ -119,7 +121,7 @@ class Storico extends React.Component {
         })
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.client.end();
     }
 
@@ -146,7 +148,7 @@ class Storico extends React.Component {
                                         />
                                         <ListItemSecondaryAction>
                                             <Typography
-                                                variant='display1'>{Currency} {("0" + this.state.list[e].totale[0]).substr(-2)}.{("0" + this.state.list[e].totale[1]).substr(-2)}</Typography>
+                                                variant='display1'>{Currency && console.log([this.state.list, e])} {("0" + this.state.list[e].totale[0]).substr(-2)}.{("0" + this.state.list[e].totale[1]).substr(-2)}</Typography>
                                         </ListItemSecondaryAction>
                                     </ListItem>
                                 )}
@@ -196,23 +198,21 @@ class Storico extends React.Component {
                         </Button>
                         <Button onClick={() => {
                             if (this.state.sendAgain) {
-                                let nc = this.state.ord.cart.filter(e => categorieCucina.includes(e[1].cat));
+                                this.client.publish('order/official', JSON.stringify(
+                                    {
+                                        cart: getCartsFromNormalized(this.state.ord.cart),
+                                        orderID: this.state.ord.orderID + Date.now(),
+                                        asporto: this.state.ord.asporto,
+                                        message: " " + this.state.ord.message,
+                                        ip: this.state.ord.ip,
+                                        user: "reprint",
+                                        buono: false,
+                                        buonoID: null,
+                                        time: Math.floor(Date.now() / 1000),
+                                        ordnum: this.state.ord.ordnum,
+                                        totale: this.state.ord.totale
+                                    }));
 
-                                if (nc.length > 0) {
-                                    this.client.publish('order/official', JSON.stringify(
-                                        {
-                                            cart: nc,
-                                            orderID: this.state.ord.orderID + Date.now(),
-                                            asporto: this.state.ord.asporto,
-                                            message: " " + this.state.ord.message,
-                                            ip: this.state.ord.ip,
-                                            user: "reprint",
-                                            buono: false,
-                                            buonoID: null,
-                                            time: Math.floor(Date.now() / 1000),
-                                            ordnum: this.state.ord.ordnum
-                                        }));
-                                }
                             }
 
                             this.setState({open: false})

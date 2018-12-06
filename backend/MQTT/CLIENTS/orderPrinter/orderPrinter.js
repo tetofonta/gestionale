@@ -13,7 +13,7 @@ let client = mqtt.connect(`mqtt://${cfg.serverIP}:${cfg.mqtt.broker.port}`);
 client.on('connect', function () {
     client.subscribe('order/official', err => {
         if (err) {
-            console.log(err)
+            console.error(err)
         }
     })
 });
@@ -21,6 +21,10 @@ client.on('connect', function () {
 client.on('message', function (topic, message, packet) {
     if (topic === "order/official") {
         let cart = JSON.parse(message.toString());
+        console.log(cart);
+        let cartArray = [];
+        cfg.toPrinter.forEach(e => cartArray.push(...cart.cart[e]));
+
         let mymsg = cart.message;
         let msg = mymsg.length;
         let ourmsg = "";
@@ -37,7 +41,7 @@ client.on('message', function (topic, message, packet) {
                 time: cart.time,
                 ordnum: cart.ordnum
             },
-            flatten(cart.cart.map(v => {
+            flatten(cartArray.map(v => {
                 if (!v[1].variants)
                     return {text: v[0], qta: v[1].qta};
 

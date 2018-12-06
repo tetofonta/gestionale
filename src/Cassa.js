@@ -42,7 +42,7 @@ import Badge from "@material-ui/core/es/Badge/Badge";
 import mqtt from "mqtt"
 import QRCode from "qrcode.react"
 import Scontrino from "./components/Scontrino";
-import {getBillData, getCartLenght, getTotal, normalizeCart, renderCart} from "./Cart";
+import {getBillData, getCartLenght, getCarts, getTotal, normalizeCart, renderCart} from "./Cart";
 import DialogActions from "@material-ui/core/es/DialogActions/DialogActions";
 import DialogContentText from "@material-ui/core/es/DialogContentText/DialogContentText";
 
@@ -185,7 +185,7 @@ class Cassa extends React.Component {
         return getBillData(this.state.cart)
     };
 
-    reloadList(){
+    reloadList() {
         this.images = [];
         POST(apiCalls.productList, {}).then(res =>
             Object.keys(res.list).forEach(e => {
@@ -444,37 +444,28 @@ class Cassa extends React.Component {
                         <Grid item xs={12} md={4}>
                             <Button className={this.props.classes.bigb} fullWidth variant="contained" color="primary"
                                     onClick={() => {
-                                        let cucinaCart = [...this.normalizeCart()].filter(e => {
-                                            let x = false;
-                                            this.images.forEach(cat => {
-                                                x = x || (categorieCucina.includes(cat.title) && Cassa.isInCategory(e[0], cat))
-                                            });
-                                            return x;
+
+                                        let client = mqtt.connect(mqttServer);
+                                        client.on('connect', () => {
+                                            client.publish('order/official', JSON.stringify(
+                                                {
+                                                    cart: this.getCarts(),
+                                                    orderID: this.state.ordernum,
+                                                    asporto: this.state.isAsporto,
+                                                    message: this.state.note,
+                                                    ip: this.ip,
+                                                    user: window.ctx.get("username"),
+                                                    buono: this.state.usabuono,
+                                                    buonoID: this.state.buonoId,
+                                                    time: Math.floor(Date.now() / 1000),
+                                                    ordnum: this.ordnum,
+                                                    totale: this.total
+                                                }));
+                                            client.end();
                                         });
 
-                                        if (cucinaCart.length > 0) {
-                                            let client = mqtt.connect(mqttServer);
-                                            client.on('connect', () => {
-                                                client.publish('order/official', JSON.stringify(
-                                                    {
-                                                        cart: cucinaCart,
-                                                        orderID: this.state.ordernum,
-                                                        asporto: this.state.isAsporto,
-                                                        message: this.state.note,
-                                                        ip: this.ip,
-                                                        user: window.ctx.get("username"),
-                                                        buono: this.state.usabuono,
-                                                        buonoID: this.state.buonoId,
-                                                        time: Math.floor(Date.now() / 1000),
-                                                        ordnum: this.ordnum,
-                                                        totale: this.total
-                                                    }));
-                                                client.end();
-                                            });
-                                        }
                                         document.getElementById("tobeprinted").postMessage({type: 'print'});
-                                    }
-                                    }>stampa</Button>
+                                    }}>stampa</Button>
                             <Button className={this.props.classes.bigb} fullWidth variant="contained" color="secondary"
                                     onClick={() => {
                                         this.reloadList();
@@ -671,6 +662,10 @@ class Cassa extends React.Component {
                 </Dialog>
             </div>
         );
+    }
+
+    getCarts() {
+        return getCarts(this.state.cart)
     }
 }
 

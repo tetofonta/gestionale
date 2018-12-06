@@ -106,6 +106,8 @@ class Buoni extends React.Component {
         return rnd;
     }
 
+    update = null;
+
     render() {
         return (
             <div>
@@ -140,31 +142,37 @@ class Buoni extends React.Component {
                                                 }}><SaveIcon/></Button></Grid>
 
                                                 <Grid item xs={3}/>
-                                                <Grid item xs={2}><TextField onChange={e => {
-                                                    this.state.tipo = parseInt(e.target.value);
-                                                    this.forceUpdate()
-                                                }}/></Grid>
-                                                <Grid item xs={2}><TextField onChange={e => {
-                                                    this.state.valore = parseInt(e.target.value);
-                                                    this.forceUpdate()
-                                                }}/></Grid>
+                                                <Grid item xs={2}>
+                                                    <TextField onChange={e => {
+                                                        this.state.tipo = parseInt(e.target.value);
+                                                        this.forceUpdate()
+                                                    }}/>
+                                                </Grid>
+                                                <Grid item xs={2}>
+                                                    <TextField onChange={e => {
+                                                        this.state.valore = parseInt(e.target.value);
+                                                        this.forceUpdate()
+                                                    }}/>
+                                                </Grid>
                                                 <Grid item xs={2}><TextField onChange={e => {
                                                     this.state.minimo = parseInt(e.target.value);
                                                     this.forceUpdate()
                                                 }}/></Grid>
                                                 <Grid item xs={2}/>
-                                                <Grid item xs={1}><Button onClick={() => {
-                                                    if(!isNaN(this.state.tipo) && !isNaN(this.state.valore) && !isNaN(this.state.minimo));
-                                                    this.state.list.push({
-                                                        id: this.getRandomId(),
-                                                        tipo: this.state.tipo,
-                                                        valore: this.state.valore,
-                                                        minimo: this.state.minimo,
-                                                        usato: false,
-                                                        edited: true
-                                                    });
-                                                    this.forceUpdate()
-                                                }}><AddIcon/></Button></Grid>
+                                                <Grid item xs={1}>
+                                                    <Button onClick={() => {
+                                                        if (!isNaN(this.state.tipo) && !isNaN(this.state.valore) && !isNaN(this.state.minimo)) ;
+                                                        this.state.list.push({
+                                                            id: this.getRandomId(),
+                                                            tipo: this.state.tipo,
+                                                            valore: this.state.valore,
+                                                            minimo: this.state.minimo,
+                                                            usato: false,
+                                                            edited: true
+                                                        });
+                                                        this.forceUpdate()
+                                                    }}><AddIcon/></Button>
+                                                </Grid>
 
                                                 {this.state.list.map((e, i) => {
                                                     let infos =
@@ -172,25 +180,30 @@ class Buoni extends React.Component {
                                                             <Grid item xs={3}><Typography
                                                                 variant='subtitle'>{e.id}</Typography></Grid>
                                                             <Grid item xs={2}>
-                                                                <TextField value={e.tipo} onChange={e => {
+                                                                <TextField placeholder={e.tipo} onChange={e => {
                                                                     this.state.list[i].tipo = parseInt(e.target.value);
                                                                     this.state.list[i].edited = true;
-                                                                    this.forceUpdate()
+                                                                    if(this.update !== null)clearTimeout(this.update);
+                                                                    this.update = setTimeout(() => this.forceUpdate(), 1000)
                                                                 }}/>
                                                             </Grid>
                                                             <Grid item xs={2}>
                                                                 {e.tipo !== 1 &&
-                                                                <TextField value={e.valore} onChange={e => {
+                                                                <TextField placeholder={e.valore} onChange={e => {
                                                                     this.state.list[i].valore = parseInt(e.target.value);
                                                                     this.state.list[i].edited = true;
-                                                                    this.forceUpdate()
+
+                                                                    if(this.update !== null)clearTimeout(this.update);
+                                                                    this.update = setTimeout(() => this.forceUpdate(), 1000)
                                                                 }}/>}
                                                             </Grid>
                                                             <Grid item xs={2}>
-                                                                <TextField value={e.minimo} onChange={e => {
+                                                                <TextField placeholder={e.minimo} onChange={e => {
                                                                     this.state.list[i].minimo = parseInt(e.target.value);
                                                                     this.state.list[i].edited = true;
-                                                                    this.forceUpdate()
+
+                                                                    if(this.update !== null)clearTimeout(this.update);
+                                                                    this.update = setTimeout(() => this.forceUpdate(), 1000)
                                                                 }}/>
                                                             </Grid>
                                                             <Grid item xs={2}>

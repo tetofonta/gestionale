@@ -18,6 +18,10 @@ client.on('message', function (topic, message, packet) {
     if (topic === "order/official") {
 
         let cart = JSON.parse(message.toString());
+
+        let arr = [];
+        Object.keys(cart.cart).forEach(e => arr.push(...cart.cart[e]));
+        cart.cart = arr;
         if(cart.reprint) return;
         if(cart.buono)
             getConnection().query(`UPDATE cupons SET usato=${cart.time} WHERE id=${cart.buonoID}`, (e) => {if(e) console.error(e)});
