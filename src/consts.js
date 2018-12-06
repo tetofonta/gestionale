@@ -23,7 +23,11 @@ const apiCalls = {
     getOrdNum: "/api/new_order",
     buono: "/api/buono",
     buoni: "/api/buoni",
-    updbuoni: "/api/updateBuoni"
+    updbuoni: "/api/updateBuoni",
+    getGruppiCucina: "api/gruppiCucina",
+    getPopups: "api/popups",
+    getProducts: "api/getProducts",
+    addMeals: "api/addMeals",
 };
 
 const mqttServer = `ws://${cfg.serverIP}:${cfg.mqtt.broker.ws.port}`;
