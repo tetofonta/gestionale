@@ -1,16 +1,26 @@
 const mosca = require('mosca');
 const {getNW_st} = require("../network");
 const cfg = require("../network.config");
+const {logger_init} = require("../logger");
+logger_init("./log/broker.error.log", "./log/broker.log");
 
 let restrictedTopics = ["order/official"];
 
-function nop(){}
+function nop() {
+}
+
 mosca.Server.prototype.publish = function publish(packet, client, callback) {
 
     try {
-        if(restrictedTopics.includes(packet.topic))
-            if(!getNW_st(client.connection.stream.socket._socket.remoteAddress)) return;
-    } catch (e) {}
+        if (restrictedTopics.includes(packet.topic))
+            if (!getNW_st(client.connection.stream.socket._socket.remoteAddress)) {
+                console.log("Denied connection from " + client.connection.stream.socket._socket.remoteAddress)
+                return;
+            }
+        console.log(packet)
+    } catch (e) {
+        console.error(e)
+    }
 
 
     var that = this;
@@ -44,9 +54,9 @@ mosca.Server.prototype.publish = function publish(packet, client, callback) {
         opts.clientId = client.id;
     }
 
-    that.storePacket(newPacket, function() {
+    that.storePacket(newPacket, function () {
         if (that.closed) {
-            logger.debug({ packet: newPacket }, "not delivering because we are closed");
+            logger.debug({packet: newPacket}, "not delivering because we are closed");
             return;
         }
 
@@ -54,12 +64,12 @@ mosca.Server.prototype.publish = function publish(packet, client, callback) {
             newPacket.topic,
             newPacket.payload,
             opts,
-            function() {
-                that.published(newPacket, client, function() {
-                    if( newPacket.topic.indexOf( '$SYS' ) >= 0 ) {
-                        logger.trace({ packet: newPacket }, "published packet");
+            function () {
+                that.published(newPacket, client, function () {
+                    if (newPacket.topic.indexOf('$SYS') >= 0) {
+                        logger.trace({packet: newPacket}, "published packet");
                     } else {
-                        logger.debug({ packet: newPacket }, "published packet");
+                        logger.debug({packet: newPacket}, "published packet");
                     }
                     that.emit("published", newPacket, client);
                     callback(undefined, newPacket);
@@ -69,14 +79,34 @@ mosca.Server.prototype.publish = function publish(packet, client, callback) {
     });
 };
 
+// let settings = {
+//     http: {
+//         port: cfg.mqtt.broker.ws.port,
+//         bundle: true,
+//         static: './',
+//         host: cfg.mqtt.broker.ws.bind
+//     },
+//     port: cfg.mqtt.broker.port,
+//     host: cfg.mqtt.broker.bind
+// };
+
 let settings = {
-    http: {
-        port: cfg.mqtt.broker.ws.port,
-        bundle: true,
-        static: './',
-        host: cfg.mqtt.broker.ws.bind
-    },
-    port: cfg.mqtt.broker.port,
+    interfaces: [
+        {type: "mqtt", port: cfg.mqtt.broker.port},
+        {
+            type: "mqtts",
+            port: cfg.mqtt.broker.secure,
+            credentials: {keyPath: "./sslcert/server.key", certPath: "./sslcert/server.crt"}
+        },
+        {type: "http", port: cfg.mqtt.broker.ws.port, bundle: true},
+        {
+            type: "https",
+            port: cfg.mqtt.broker.ws.secure,
+            bundle: true,
+            credentials: {keyPath: "./sslcert/server.key", certPath: "./sslcert/server.crt"}
+        }
+    ],
+    secure: {keyPath: "./sslcert/server.key", certPath: "./sslcert/server.crt"},
     host: cfg.mqtt.broker.bind
 };
 

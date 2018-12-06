@@ -39,7 +39,7 @@ CREATE TABLE `ads` (
 
 LOCK TABLES `ads` WRITE;
 /*!40000 ALTER TABLE `ads` DISABLE KEYS */;
-INSERT INTO `ads` VALUES (1,'sampa',2,1,'/ads/%sampa.png'),(3,'coin',1,1,'/ads/%coin.png'),(5,'bsfc',3,0,'/ads/%bsfc.png');
+INSERT INTO `ads` VALUES (1,'sampa',2,2,'/ads/%sampa.png'),(3,'coin',1,1,'/ads/%coin.png'),(5,'bsfc',3,3,'/ads/%bsfc.png');
 /*!40000 ALTER TABLE `ads` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -65,7 +65,7 @@ CREATE TABLE `categoria` (
 
 LOCK TABLES `categoria` WRITE;
 /*!40000 ALTER TABLE `categoria` DISABLE KEYS */;
-INSERT INTO `categoria` VALUES (1,'Cassa',''),(3,'Risorse',''),(5,'Amministrazione',''),(7,'Macros','');
+INSERT INTO `categoria` VALUES (1,'Cassa',''),(3,'Risorse',''),(5,'Amministrazione',''),(7,'Analisi','');
 /*!40000 ALTER TABLE `categoria` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -95,7 +95,7 @@ CREATE TABLE `cupons` (
 
 LOCK TABLES `cupons` WRITE;
 /*!40000 ALTER TABLE `cupons` DISABLE KEYS */;
-INSERT INTO `cupons` VALUES (12548,2,10,10,0),(35091,2,50,50,0),(45885,2,32,15.5,0),(46904,3,50,50,0),(52484,1,20,30,0);
+INSERT INTO `cupons` VALUES (12548,2,10,10,0),(35091,2,50,50,1543672733),(45885,2,32,15.5,0),(46904,3,50,50,0),(52484,1,20,30,0);
 /*!40000 ALTER TABLE `cupons` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -172,7 +172,7 @@ CREATE TABLE `funzioni` (
   UNIQUE KEY `funzioni_titolo_uindex` (`titolo`),
   KEY `funzioni_categoria_id_fk` (`categoria`),
   CONSTRAINT `funzioni_categoria_id_fk` FOREIGN KEY (`categoria`) REFERENCES `categoria` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -181,7 +181,7 @@ CREATE TABLE `funzioni` (
 
 LOCK TABLES `funzioni` WRITE;
 /*!40000 ALTER TABLE `funzioni` DISABLE KEYS */;
-INSERT INTO `funzioni` VALUES (1,'Cassa','',1,'\'\'',1,'/newOrdine',NULL),(3,'Magazzino','Gestione magazzino e risorse',3,'\'\'',5,'/magazzino',NULL),(5,'Statistiche','Andamenti e incassi',3,'\'\'',7,'/stats',NULL),(7,'Editor','Editor modelli pdf',5,'\'\'',11,'/editor',NULL),(9,'Gestione Buoni','Gestisci e crea buoni',3,'\'\'',3,'/buoni',NULL);
+INSERT INTO `funzioni` VALUES (1,'Cassa','',1,'\'\'',1,'/newOrdine',NULL),(3,'Magazzino','Gestione magazzino e risorse',3,'\'\'',5,'/magazzino',NULL),(5,'Statistiche','Andamenti e incassi',7,'\'\'',7,'/stats',NULL),(7,'Editor','Editor modelli pdf',5,'\'\'',11,'/editor',NULL),(9,'Gestione Buoni','Gestisci e crea buoni',3,'\'\'',3,'/buoni',NULL),(11,'Storico','Storico e gestione ordini',7,'\'\'',7,'/storico',NULL);
 /*!40000 ALTER TABLE `funzioni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -247,6 +247,69 @@ INSERT INTO `magazzino` VALUES (1,'Pane e salamella','Panino caldo con salamella
 UNLOCK TABLES;
 
 --
+-- Table structure for table `ordini_dettagli`
+--
+
+DROP TABLE IF EXISTS `ordini_dettagli`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ordini_dettagli` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_distict` varchar(60) NOT NULL,
+  `ordnum` varchar(10) NOT NULL,
+  `message` text,
+  `asporto` int(11) NOT NULL,
+  `client` varchar(20) DEFAULT NULL,
+  `timestamp` int(11) NOT NULL,
+  `user` varchar(32) NOT NULL DEFAULT 'admin',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ordini_dettagli_id_uindex` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ordini_dettagli`
+--
+
+LOCK TABLES `ordini_dettagli` WRITE;
+/*!40000 ALTER TABLE `ordini_dettagli` DISABLE KEYS */;
+INSERT INTO `ordini_dettagli` VALUES (13,'gtyufog','0001','',0,'192.168.178.23',1543766464,'admin'),(15,'vdhjlkb','0002','',0,'192.168.178.23',1543766526,'admin'),(17,'bgfgb','0003','',0,'192.168.178.23',1543780495,'admin'),(19,'gferwgteh','0004','',0,'192.168.178.23',1543780497,'admin'),(23,'edoyutoguni','0000','',0,'192.168.178.23',1543847294,'admin'),(25,'gferwgteh','0004',' ',0,'192.168.178.23',1543871925,'admin'),(27,'gferwgteh1543872016286','0004',' ',0,'192.168.178.23',1543872016,'admin'),(37,'bgfgb1543873938639','0003',' ',0,'192.168.178.23',1543873938,'reprint'),(39,'bgfgb1543874034702','0003',' ',0,'192.168.178.23',1543874034,'reprint'),(41,'gferwgteh1543914727286','0004','  ',0,'192.168.178.23',1543914727,'reprint'),(43,'gferwgteh1543915010177','0004',' ',0,'192.168.178.23',1543915010,'reprint'),(45,'emilubibuqo','0000','',0,'192.168.43.52',1543915161,'stefano'),(47,'ajiruyacece','0000','',0,'192.168.43.52',1544002853,'stefano'),(49,'ajiruyacece1544002900867','0000',' ',0,'192.168.43.52',1544002900,'reprint'),(51,'ajiruyacece1544004141264','0000',' ',0,'192.168.43.52',1544004141,'reprint'),(53,'ugevufofive','0000','',0,'192.168.178.23',1544113839,'stefano'),(55,'ovoyacakegi','0000','',0,'192.168.178.23',1544114083,'stefano');
+/*!40000 ALTER TABLE `ordini_dettagli` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ordini_prodotti`
+--
+
+DROP TABLE IF EXISTS `ordini_prodotti`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ordini_prodotti` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order` int(11) NOT NULL,
+  `product` int(11) NOT NULL,
+  `variant` text,
+  `qta` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ordini_prodotti_id_uindex` (`id`),
+  KEY `ordini_prodotti_ordini_dettagli_id_fk` (`order`),
+  KEY `ordini_prodotti_magazzino_id_fk` (`product`),
+  CONSTRAINT `ordini_prodotti_magazzino_id_fk` FOREIGN KEY (`product`) REFERENCES `magazzino` (`id`),
+  CONSTRAINT `ordini_prodotti_ordini_dettagli_id_fk` FOREIGN KEY (`order`) REFERENCES `ordini_dettagli` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=119 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ordini_prodotti`
+--
+
+LOCK TABLES `ordini_prodotti` WRITE;
+/*!40000 ALTER TABLE `ordini_prodotti` DISABLE KEYS */;
+INSERT INTO `ordini_prodotti` VALUES (13,13,1,'NULL',3),(15,15,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',3),(17,17,3,'NULL',2),(19,19,3,'NULL',2),(21,19,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(23,23,5,'NULL',1),(25,23,1,'[{\"qta\":2,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(27,25,3,'NULL',2),(29,25,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(31,27,3,'NULL',2),(33,27,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(35,27,3,'NULL',2),(37,27,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(61,37,3,'NULL',2),(63,39,3,'NULL',2),(65,41,3,'NULL',2),(67,41,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(69,41,3,'NULL',2),(71,41,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(73,43,3,'NULL',2),(75,43,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(77,43,3,'NULL',2),(79,43,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(81,45,5,'NULL',2),(83,47,3,'NULL',2),(85,47,7,'NULL',2),(87,47,27,'NULL',2),(89,51,3,'NULL',2),(91,51,7,'NULL',2),(93,51,27,'NULL',2),(95,53,5,'NULL',2),(97,53,7,'NULL',2),(99,53,9,'NULL',1),(101,53,25,'NULL',2),(103,53,27,'NULL',2),(105,53,29,'NULL',1),(107,53,31,'NULL',1),(109,53,11,'NULL',3),(111,55,7,'NULL',2),(113,55,25,'NULL',2),(115,55,31,'NULL',2),(117,55,11,'NULL',2);
+/*!40000 ALTER TABLE `ordini_prodotti` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `previlegi`
 --
 
@@ -299,7 +362,7 @@ CREATE TABLE `utenti` (
 
 LOCK TABLES `utenti` WRITE;
 /*!40000 ALTER TABLE `utenti` DISABLE KEYS */;
-INSERT INTO `utenti` VALUES (1,'stefano','2866093772d6f50c923fb6a19f976bb22e87124c','Stefano',1,1,1),(3,'giovanni','d033e22ae348aeb5660fc2140aec35850c4da997','Enrichetto',1,1,0),(4,'luucaa','d033e22ae348aeb5660fc2140aec35850c4da997','Luca',0,1,1),(5,'luca','d033e22ae348aeb5660fc2140aec35850c4da997','Luca',0,1,0),(7,'matteo','b1b3773a05c0ed0176787a4f1574ff0075f7521e','cipo',0,1,0),(11,'pier','c44386c0d8a91e6dd5ec8dcc9120c23ad83cf827','Pierangelo',1,1,1);
+INSERT INTO `utenti` VALUES (1,'stefano','2866093772d6f50c923fb6a19f976bb22e87124c','Stefano',1,1,1),(3,'giovanni','d033e22ae348aeb5660fc2140aec35850c4da997','Enrichetto',1,1,0),(4,'luucaa','d033e22ae348aeb5660fc2140aec35850c4da997','Luca',0,1,1),(5,'luca','f9c0f8b91180c7d93028c79ef4993e4d5a5b3e59','Luca',1,1,1),(7,'matteo','b1b3773a05c0ed0176787a4f1574ff0075f7521e','cipo',0,1,0),(11,'pier','c44386c0d8a91e6dd5ec8dcc9120c23ad83cf827','Pierangelo',1,1,1);
 /*!40000 ALTER TABLE `utenti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -320,7 +383,7 @@ CREATE TABLE `utenti_previlegi_assoc` (
   KEY `utenti_previlegi_assoc_previlegi_id_fk` (`previlegi_FOREGIN`),
   CONSTRAINT `utenti_previlegi_assoc_abilities_id_fk` FOREIGN KEY (`utenti_FOREGIN`) REFERENCES `previlegi` (`id`),
   CONSTRAINT `utenti_previlegi_assoc_previlegi_id_fk` FOREIGN KEY (`previlegi_FOREGIN`) REFERENCES `previlegi` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=106 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -329,7 +392,7 @@ CREATE TABLE `utenti_previlegi_assoc` (
 
 LOCK TABLES `utenti_previlegi_assoc` WRITE;
 /*!40000 ALTER TABLE `utenti_previlegi_assoc` DISABLE KEYS */;
-INSERT INTO `utenti_previlegi_assoc` VALUES (51,3,1),(53,3,3),(55,3,5),(57,3,7),(59,3,11),(63,1,1),(65,1,3),(67,1,5),(69,1,7),(71,1,9),(73,1,11),(75,1,13),(77,5,1),(85,11,1),(87,11,7),(89,11,13),(91,7,1);
+INSERT INTO `utenti_previlegi_assoc` VALUES (51,3,1),(53,3,3),(55,3,5),(57,3,7),(59,3,11),(63,1,1),(65,1,3),(67,1,5),(69,1,7),(71,1,9),(73,1,11),(75,1,13),(85,11,1),(87,11,7),(89,11,13),(91,7,1),(93,5,9),(95,5,3),(97,5,1),(99,5,11),(101,5,5),(103,5,13),(105,5,7);
 /*!40000 ALTER TABLE `utenti_previlegi_assoc` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -342,4 +405,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-30 11:00:16
+-- Dump completed on 2018-12-06 17:36:06

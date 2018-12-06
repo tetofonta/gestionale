@@ -1,4 +1,4 @@
-import {Currency} from "./consts";
+import {categorieCucina, Currency} from "./consts";
 import Paper from "@material-ui/core/es/Paper/Paper";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import React from "react";
@@ -6,17 +6,21 @@ import Button from "@material-ui/core/es/Button/Button";
 import AddIcon from "@material-ui/icons/Add"
 import MinusIcon from "@material-ui/icons/Remove"
 import Typography from "@material-ui/core/es/Typography/Typography";
+import * as cfg from "./network.config"
 
 let normalizeCart = (cart) => {
     let map = new Map();
     cart.forEach(e => {
         if (typeof(e.variant) === "undefined" && !map.has(e.desc)) map.set(e.desc, {
+            id: e.id,
             qta: e.qta,
             eur: e.eur,
-            cents: e.cents
+            cents: e.cents,
+            cat: e.cat
         });
         else if (typeof(e.variant) === "undefined") map.get(e.desc).qta = e.qta;
         else if (!map.has(e.desc)) map.set(e.desc, {
+            id: e.id,
             qta: e.qta,
             eur: e.eur,
             cents: e.cents,
@@ -65,10 +69,14 @@ let renderCart = (cart, classes, classs) => {
     return (
         <Paper className={classes.paper}>
             <Grid container spacing={24}>
-                {[...normalizeCart(cart)].map(e => {
+                {[...normalizeCart(cart)].map((e, idx) => {
                     let k = e[0], v = e[1];
                     tote += parseInt(v.eur) * v.qta;
                     totc += parseInt(v.cents) * v.qta;
+                    if(v.qta < 1){
+                        cart.splice(idx, 1);
+                        classs.forceUpdate()
+                    }
                     return (
                         <Grid item xs={12}>
                             <Grid container spacing={24}>
@@ -97,7 +105,7 @@ let renderCart = (cart, classes, classs) => {
                                         <Button onClick={() => {
                                             for (let i = 0; i < cart.length; i++)
                                                 if (cart[i].desc === k) {
-                                                    cart[i].qta > 0 ? cart[i].qta-- : console.log("Coglione non si va sotto zero =)");
+                                                    cart[i].qta > 0 ? cart[i].qta-- : cart.splice(i, 1);
                                                     break;
                                                 }
                                             classs.forceUpdate()
@@ -127,7 +135,7 @@ let renderCart = (cart, classes, classs) => {
                                             <Grid item xs={2}>
                                                 <Button onClick={() => {
                                                     for (let i = 0; i < cart.length; i++)
-                                                        if (cart[i].desc === k && cart[i].variant === e.var) cart[i].qta > 0 ? cart[i].qta-- : console.log("Coglione non si va sotto zero =)");
+                                                        if (cart[i].desc === k && cart[i].variant === e.var) cart[i].qta > 0 ? cart[i].qta-- : cart.splice(i, 1);
                                                     classs.forceUpdate()
                                                 }} variant="contained" color="secondary"><MinusIcon/></Button>
                                             </Grid>
@@ -144,17 +152,40 @@ let renderCart = (cart, classes, classs) => {
 };
 
 let getBillData = (cart) => {
+    let obj = {};
+    Object.keys(cfg.react.scontrini).forEach(e => {
+        obj[e] = [...normalizeCart(cart)].filter(q => cfg.react.scontrini[e].includes(q[1].cat)).map(e => {
+            let k = e[0], v = e[1];
+            return({qta: "" + v.qta, text: k, total: v.eur + "." + (v.cents > 9 ? v.cents : "0" + v.cents)});
+        });
+    });
+    return obj;
+
+};
+
+let getBillDataFromNormalized = (cart) => {
     let elem = [];
-    [...normalizeCart(cart)].forEach(e => {
+    cart.forEach(e => {
         let k = e[0], v = e[1];
         elem.push({qta: "" + v.qta, text: k, total: v.eur + "." + (v.cents > 9 ? v.cents : "0" + v.cents)});
-        // if(typeof(v.variants) !== 'undefined'){
-        //     v.variants.forEach(e => {
-        //         elem.push({qta: "  " + e.qta, text: e.var.choose !== null ? e.var.choose : e.var.select.labels.map((q, i) => (e.var.select.values[i] === true ? "CON " : "NO ") + q + ", "), total: ""});
-        //     })
-        // }
     });
     return elem;
 };
 
-export {getBillData, getCartLenght, getTotal, normalizeCart, renderCart}
+let getCarts = (cart) => {
+    let obj = {};
+    Object.keys(cfg.react.scontrini).forEach(e => {
+        obj[e] = [...normalizeCart(cart)].filter(q => cfg.react.scontrini[e].includes(q[1].cat));
+    });
+    return obj;
+};
+
+let getCartsFromNormalized = (cart) => {
+    let obj = {};
+    Object.keys(cfg.react.scontrini).forEach(e => {
+        obj[e] = cart.filter(q => cfg.react.scontrini[e].includes(q[1].cat));
+    });
+    return obj;
+};
+
+export {getBillData, getCartLenght, getTotal, normalizeCart, renderCart, getBillDataFromNormalized, getCarts, getCartsFromNormalized}

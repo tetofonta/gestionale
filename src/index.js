@@ -6,6 +6,11 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import {POST} from "./network";
 import {apiCalls} from "./consts";
+import * as cfg from "./network.config";
+
+// if (document.location.protocol !== 'https:') {
+//     // document.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+// }
 
 let timeoutInMiliseconds = 15 * 60000;
 let timeoutId;

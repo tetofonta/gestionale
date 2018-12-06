@@ -7,6 +7,8 @@ scripts/flow/*/.flowconfig
 _SpecRunner.html
 __benchmarks__
 build/
+output/
+*.pdf
 remote-repo/
 coverage/
 .module-cache
@@ -22,3 +24,5 @@ chrome-user-data
 .vscode
 *.swp
 *.swo
+
+network.config.json

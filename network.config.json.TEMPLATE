@@ -25,5 +25,20 @@
     }
   },
 
-  "serverIP": "192.168.1.1"
+  "react": {
+    "categoryWidth": "25%",
+    "categoryHeight": 200,
+    "productsHeight": 110,
+    "productsWidth": {"360": 6, "768": 4, "1024": 3, "1920": 2, "over": 2},
+    "tileWidth": 270,
+    "currency": "EUR",
+    "orderCifres": 4,
+    "scontrino": "/TEMPLATES/scontrino.json",
+    "categorieCucina": ["PRIMI PIATTI", "SECONDI PIATTI", "ALL IN ONE"]
+  },
+
+  "serverIP": "192.168.178.23",
+  "serverPort": 5000,
+  "sagraName": "Sagra San Lorenzo",
+  "printerName": "Samsung-C460-Series"
 }

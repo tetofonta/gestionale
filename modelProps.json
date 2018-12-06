@@ -1,0 +1,31 @@
+{
+  "scontrino": {
+    "totale": "TOTALE SCONTRINO",
+    "resto": "RESTO DOVUTO",
+    "pagato": "TOTALE PAGATO",
+    "buono": "DESCRIZIONE BUONO, '' SE NON UTILIZZATO",
+    "ordnum": "NUMERO DI ORDINE",
+    "qrdata": "DATA DEL CODICE QR",
+
+    "qta": "QUANTITÁ DELL'ELEMENTO",
+    "text": "DESCRIZIONE DELL'ELEMENTO",
+    "total": "PREZZO UNITARIO DELL'ELEMENTO"
+  },
+
+  "buono": {
+    "descrizione": "DESCRIZIONE",
+    "importo": "IMPORTO DEL BUONO (%, EUR OPPURE 'SERVIZIO GRATUITO''",
+    "minimo": "MINIMO SPESA",
+    "emesso": "DATA DI EMISSIONE (TIMESTAMP)"
+  },
+
+  "ordineCucina":{
+    "asporto": "ASPORTO o ' '",
+    "message": "NOTE PER LA CUCINA",
+    "id": "ID ORDINE",
+    "time": "DATA DI AVVIO",
+    "ordnum": "NUMERO DI ORDINE",
+    "qta": "QUANTITA ELEMENTO",
+    "text": "TESTO ELEMENTO"
+  }
+}

@@ -33,7 +33,7 @@ function getNW_st(ip) {
     ip = ip.split(".");
     ip.map(e => parseInt(e));
 
-    return isInNetwork(hwip, createIP({ip: ip, sub: opNetwork.sub}));
+    return isInNetwork(allowed_ip, createIP({ip: ip, sub: opNetwork.sub}));
 }
 
 module.exports.getNW = getNW;

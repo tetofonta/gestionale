@@ -9,7 +9,7 @@ const {onUserAuthenticated} = require("./auth");
  * @return JSON, {state: bool} in caso di errore, {state: bool, list: {<CATEGORIA>: {bg: String, elements: [{desc: String, info: String, dispon: bool, eur: Number, cents: Number, details: {display: bool, title: String, dialog: {select: [vals...], choose: [vals...]}}]}, <...>:{...}}}
  */
 function get_product_list(req, res){
-    getConnection().query(`SELECT magazzino.descrizione as descrizione, magazzino.info as info, magazzino.giacenza > 10 as disponibile, magazzino.prezzoEur as eur, magazzino.prezzoCents as cents, gruppi_cucina.nome as gnome, gruppi_cucina.bg as gbg, details.json as json FROM magazzino, gruppi_cucina, details WHERE magazzino.gruppo = gruppi_cucina.id AND magazzino.details = details.id`, (e, r, f) => {
+    getConnection().query(`SELECT magazzino.id as id, magazzino.descrizione as descrizione, magazzino.info as info, magazzino.giacenza > 10 as disponibile, magazzino.prezzoEur as eur, magazzino.prezzoCents as cents, gruppi_cucina.nome as gnome, gruppi_cucina.bg as gbg, details.json as json FROM magazzino, gruppi_cucina, details WHERE magazzino.gruppo = gruppi_cucina.id AND magazzino.details = details.id`, (e, r, f) => {
         if (r && !e) {
             let map = new Map();
             r.forEach(e => {
@@ -19,12 +19,14 @@ function get_product_list(req, res){
                 } catch (e) {
                 }
                 let obj = {
+                    id: e.id,
                     desc: e.descrizione,
                     info: e.info,
                     dispon: e.disponibile,
                     eur: e.eur,
                     cents: e.cents,
-                    details: json
+                    details: json,
+                    cat: e.gnome
                 };
                 if (!map.has(e.gnome)) map.set(e.gnome, {bg: e.gbg, elements: [obj]});
                 else map.get(e.gnome).elements.push(obj)
