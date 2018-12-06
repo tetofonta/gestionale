@@ -1,4 +1,4 @@
-import {categorieCucina, Currency} from "./consts";
+import {Currency} from "./consts";
 import Paper from "@material-ui/core/es/Paper/Paper";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import React from "react";
@@ -24,6 +24,7 @@ let normalizeCart = (cart) => {
             qta: e.qta,
             eur: e.eur,
             cents: e.cents,
+            cat: e.cat,
             variants: [{qta: e.qta, var: e.variant}]
         });
         else if (typeof(map.get(e.desc).variants) === "undefined") {
@@ -34,7 +35,7 @@ let normalizeCart = (cart) => {
             map.get(e.desc).qta += e.qta
         }
         else {
-            map.get(e.desc).variants.push({qta: e.qta, eur: e.eur, cents: e.cents, var: e.variant})
+            map.get(e.desc).variants.push({qta: e.qta, eur: e.eur, cents: e.cents, var: e.variant});
             map.get(e.desc).qta += e.qta
         }
     });
@@ -73,7 +74,7 @@ let renderCart = (cart, classes, classs) => {
                     let k = e[0], v = e[1];
                     tote += parseInt(v.eur) * v.qta;
                     totc += parseInt(v.cents) * v.qta;
-                    if(v.qta < 1){
+                    if (v.qta < 1) {
                         cart.splice(idx, 1);
                         classs.forceUpdate()
                     }
@@ -119,7 +120,8 @@ let renderCart = (cart, classes, classs) => {
                                             <Grid item xs={1}/>,
                                             <Grid item xs={4}>
                                                 {e.var.choose !== null && <Typography>{e.var.choose}</Typography>}
-                                                {typeof(e.var.select.labels) !== 'undefined' && <Typography>{e.var.select.labels.map((q, i) => (e.var.select.values[i] === true ? "CON " : "NO ") + q + ", ")}</Typography>}
+                                                {typeof(e.var.select.labels) !== 'undefined' &&
+                                                <Typography>{e.var.select.labels.map((q, i) => (e.var.select.values[i] === true ? "CON " : "NO ") + q + ", ")}</Typography>}
                                             </Grid>,
                                             <Grid item xs={1}>
                                                 <Typography>{e.qta}</Typography>
@@ -152,24 +154,27 @@ let renderCart = (cart, classes, classs) => {
 };
 
 let getBillData = (cart) => {
-    let obj = {};
+    let o = {};
     Object.keys(cfg.react.scontrini).forEach(e => {
-        obj[e] = [...normalizeCart(cart)].filter(q => cfg.react.scontrini[e].includes(q[1].cat)).map(e => {
+        let m = [...normalizeCart(cart)].filter(q => cfg.react.scontrini[e].includes(q[1].cat));
+        o[e] = m.map(e => {
             let k = e[0], v = e[1];
-            return({qta: "" + v.qta, text: k, total: v.eur + "." + (v.cents > 9 ? v.cents : "0" + v.cents)});
+            return ({qta: "" + v.qta, text: k, total: v.eur + "." + (v.cents > 9 ? v.cents : "0" + v.cents)});
         });
     });
-    return obj;
-
+    return o;
 };
 
 let getBillDataFromNormalized = (cart) => {
-    let elem = [];
-    cart.forEach(e => {
-        let k = e[0], v = e[1];
-        elem.push({qta: "" + v.qta, text: k, total: v.eur + "." + (v.cents > 9 ? v.cents : "0" + v.cents)});
+    let o = {};
+    Object.keys(cfg.react.scontrini).forEach(e => {
+        let m = cart.filter(q => cfg.react.scontrini[e].includes(q[1].cat));
+        o[e] = m.map(e => {
+            let k = e[0], v = e[1];
+            return ({qta: "" + v.qta, text: k, total: v.eur + "." + (v.cents > 9 ? v.cents : "0" + v.cents)});
+        });
     });
-    return elem;
+    return o;
 };
 
 let getCarts = (cart) => {
@@ -188,4 +193,13 @@ let getCartsFromNormalized = (cart) => {
     return obj;
 };
 
-export {getBillData, getCartLenght, getTotal, normalizeCart, renderCart, getBillDataFromNormalized, getCarts, getCartsFromNormalized}
+export {
+    getBillData,
+    getCartLenght,
+    getTotal,
+    normalizeCart,
+    renderCart,
+    getBillDataFromNormalized,
+    getCarts,
+    getCartsFromNormalized
+}

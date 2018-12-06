@@ -11,16 +11,16 @@ const GET = async (path) => {
 
 const GETSync = (path) => {
     let xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", path, false );
-    xmlHttp.send( null );
+    xmlHttp.open("GET", path, false);
+    xmlHttp.send(null);
     return xmlHttp.responseText;
 };
 
 const getOperationMode = () => {
-    try{
+    try {
         let hello = this.GETSync(apiCalls.hello);
         return connection_status[JSON.parse(hello).kind];
-    }catch (e) {
+    } catch (e) {
         console.log(e);
         return connection_status.noapi;
     }
@@ -42,4 +42,4 @@ let POST = async (path, form) => {
     return body;
 };
 
-export {GET, GETSync, getOperationMode, POST}
+export {GET, GETSync, POST}

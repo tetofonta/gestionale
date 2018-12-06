@@ -14,7 +14,7 @@ mosca.Server.prototype.publish = function publish(packet, client, callback) {
     try {
         if (restrictedTopics.includes(packet.topic))
             if (!getNW_st(client.connection.stream.socket._socket.remoteAddress)) {
-                console.log("Denied connection from " + client.connection.stream.socket._socket.remoteAddress)
+                console.log("Denied connection from " + client.connection.stream.socket._socket.remoteAddress);
                 return;
             }
         console.log(packet)
@@ -23,8 +23,8 @@ mosca.Server.prototype.publish = function publish(packet, client, callback) {
     }
 
 
-    var that = this;
-    var logger = this.logger;
+    const that = this;
+    let logger = this.logger;
 
     if (typeof client === 'function') {
         callback = client;
@@ -37,7 +37,7 @@ mosca.Server.prototype.publish = function publish(packet, client, callback) {
         callback = nop;
     }
 
-    var newPacket = {
+    const newPacket = {
         topic: packet.topic,
         payload: packet.payload,
         messageId: this.generateUniqueId(),
@@ -45,7 +45,7 @@ mosca.Server.prototype.publish = function publish(packet, client, callback) {
         retain: packet.retain
     };
 
-    var opts = {
+    const opts = {
         qos: packet.qos,
         messageId: newPacket.messageId
     };

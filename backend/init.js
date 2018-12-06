@@ -1,4 +1,3 @@
-
 const express = require('express');
 const {getNW} = require('./network');
 const fs = require('fs');
@@ -15,13 +14,13 @@ const cfg = require("./network.config");
 const {logger_init} = require("./logger");
 logger_init("./log/express.error.log", "./log/express.log");
 
-let privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
+let privateKey = fs.readFileSync('sslcert/server.key', 'utf8');
 let certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
 let credentials = {key: privateKey, cert: certificate};
 const app = express();
 app.use(require('cors')());
 app.use(bodyParser.json()); // support json encoded bodies
-app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+app.use(bodyParser.urlencoded({extended: true})); // support encoded bodies
 app.use(express.static('static'));
 
 const GUEST = "guest";
@@ -29,14 +28,14 @@ const OP = "client";
 const debug = false;
 
 app.get('/api/hello', (req, res) => {
-    if(debug) {
+    if (debug) {
         console.log("Conn type: ");
         console.log(getNW(req) ? OP : GUEST);
         console.log((req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress).split(",")[0]);
     }
     res.send({express: true, kind: getNW(req) ? OP : GUEST});
 });
-app.post('/api/new_order', (r, e) => increment(r,e)); //Ritorna il numero di ordine incrementale
+app.post('/api/new_order', (r, e) => increment(r, e)); //Ritorna il numero di ordine incrementale
 app.post('/api/rst_counter'); //TODO
 app.post('/api/shutdown'); //TODO
 app.post('/api/stats'); //TODO

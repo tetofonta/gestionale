@@ -2,11 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import NavBar from "./components/NavBar";
 import {POST} from "./network";
 import ListItem from "@material-ui/core/es/ListItem/ListItem";
@@ -20,7 +17,6 @@ import Grid from "@material-ui/core/es/Grid/Grid";
 import Paper from "@material-ui/core/es/Paper/Paper";
 import FormControlLabel from "@material-ui/core/es/FormControlLabel/FormControlLabel";
 import Checkbox from "@material-ui/core/es/Checkbox/Checkbox";
-import TextField from "@material-ui/core/es/TextField/TextField";
 import Button from "@material-ui/core/es/Button/Button";
 import FormControl from "@material-ui/core/es/FormControl/FormControl";
 import InputLabel from "@material-ui/core/es/InputLabel/InputLabel";
@@ -30,10 +26,8 @@ import IconButton from "@material-ui/core/es/IconButton/IconButton";
 import Dialog from "@material-ui/core/es/Dialog/Dialog";
 import DialogTitle from "@material-ui/core/es/DialogTitle/DialogTitle";
 import DialogContent from "@material-ui/core/es/DialogContent/DialogContent";
-import DialogContentText from "@material-ui/core/es/DialogContentText/DialogContentText";
 import DialogActions from "@material-ui/core/es/DialogActions/DialogActions";
 import Hidden from "@material-ui/core/es/Hidden/Hidden";
-import {auth} from "./auth";
 import {apiCalls} from "./consts";
 
 
@@ -91,6 +85,10 @@ class Users extends React.Component {
         snacktext: "COOOOS",
         DialogOpen: false
     };
+    newUsername = "";
+    newPassword = "";
+    newName = "";
+    newAdmin = false;
 
     componentDidMount() {
         POST(apiCalls.userList, {user: window.ctx.get("username"), token: window.ctx.get("token")}).then(res => {
@@ -155,11 +153,6 @@ class Users extends React.Component {
             }
         });
     }
-
-    newUsername = "";
-    newPassword = "";
-    newName = "";
-    newAdmin = false;
 
     render() {
 

@@ -3,8 +3,8 @@ const cfg = require('./network.config');
 
 let connection = undefined;
 
-String.prototype.replaceAll = function(search, replacement) {
-    var target = this;
+String.prototype.replaceAll = function (search, replacement) {
+    const target = this;
     return target.replace(new RegExp(search, 'g'), replacement);
 };
 
@@ -21,7 +21,7 @@ function connect(host, user, password, db) {
 
 }
 
-function secure(str){
+function secure(str) {
     return str.replaceAll("'", "").replaceAll("`", "").replaceAll("--", "")
 }
 

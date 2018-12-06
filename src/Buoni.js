@@ -2,48 +2,20 @@ import React from 'react'
 import {withStyles} from '@material-ui/core/styles';
 import NavBar from "./components/NavBar";
 import Paper from "@material-ui/core/es/Paper/Paper";
-import Drawer from "@material-ui/core/es/Drawer/Drawer";
-import List from "@material-ui/core/es/List/List";
-import ListItem from "@material-ui/core/es/ListItem/ListItem";
-import ListItemIcon from "@material-ui/core/es/ListItemIcon/ListItemIcon";
-import ListItemText from "@material-ui/core/es/ListItemText/ListItemText";
-import TextIcon from '@material-ui/icons/TextFields';
-import ImageIcon from '@material-ui/icons/Image';
-import CodeIcon from '@material-ui/icons/Code';
-import LinkIcon from '@material-ui/icons/Link';
-import PreviewIcon from '@material-ui/icons/Slideshow';
 import SaveIcon from '@material-ui/icons/Save';
-import LineIcon from '@material-ui/icons/LineStyle';
-import RectIcon from '@material-ui/icons/CropSquare';
-import Divider from "@material-ui/core/es/Divider/Divider";
 import Scontrino from "./components/Scontrino";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import Button from "@material-ui/core/es/Button/Button";
-import FullScreenDialog from "./components/FullScreenDialog";
 import TextField from "@material-ui/core/es/TextField/TextField";
 import AddIcon from "@material-ui/icons/Add"
 import PrintIcon from "@material-ui/icons/Print"
 import Dialog from "@material-ui/core/es/Dialog/Dialog";
 import DialogTitle from "@material-ui/core/es/DialogTitle/DialogTitle";
 import DialogContent from "@material-ui/core/es/DialogContent/DialogContent";
-import DialogContentText from "@material-ui/core/es/DialogContentText/DialogContentText";
-import FormControl from "@material-ui/core/es/FormControl/FormControl";
-import InputLabel from "@material-ui/core/es/InputLabel/InputLabel";
-import Select from "@material-ui/core/es/Select/Select";
-import MenuItem from "@material-ui/core/es/MenuItem/MenuItem";
-import * as jsPDF from 'jspdf'
 import DialogActions from "@material-ui/core/es/DialogActions/DialogActions";
-import FormLabel from "@material-ui/core/es/FormLabel/FormLabel";
-import RadioGroup from "@material-ui/core/es/RadioGroup/RadioGroup";
-import FormControlLabel from "@material-ui/core/es/FormControlLabel/FormControlLabel";
-import Radio from "@material-ui/core/es/Radio/Radio";
-import ListItemAvatar from "@material-ui/core/es/ListItemAvatar/ListItemAvatar";
-import Avatar from "@material-ui/core/es/Avatar/Avatar";
-import Hidden from "@material-ui/core/es/Hidden/Hidden";
 import {POST} from "./network";
 import {apiCalls} from "./consts";
 import Typography from "@material-ui/core/es/Typography/Typography";
-import CheckBox from "@material-ui/core/es/internal/svg-icons/CheckBox";
 import Checkbox from "@material-ui/core/es/Checkbox/Checkbox";
 
 
@@ -73,6 +45,7 @@ class Buoni extends React.Component {
     state = {
         list: []
     };
+    update = null;
 
     componentDidMount() {
         POST(apiCalls.buoni, {user: window.ctx.get("username"), token: window.ctx.get("token")}).then(res => {
@@ -106,8 +79,6 @@ class Buoni extends React.Component {
         return rnd;
     }
 
-    update = null;
-
     render() {
         return (
             <div>
@@ -134,6 +105,7 @@ class Buoni extends React.Component {
                                                 <Grid item xs={2}><Typography variant='title'>Minimo spesa</Typography></Grid>
                                                 <Grid item xs={2}><Typography variant='title'>Usato</Typography></Grid>
                                                 <Grid item xs={1}><Button onClick={() => {
+                                                    // noinspection JSIgnoredPromiseFromCall
                                                     POST(apiCalls.updbuoni, {
                                                         user: window.ctx.get("username"),
                                                         token: window.ctx.get("token"),
@@ -161,15 +133,15 @@ class Buoni extends React.Component {
                                                 <Grid item xs={2}/>
                                                 <Grid item xs={1}>
                                                     <Button onClick={() => {
-                                                        if (!isNaN(this.state.tipo) && !isNaN(this.state.valore) && !isNaN(this.state.minimo)) ;
-                                                        this.state.list.push({
-                                                            id: this.getRandomId(),
-                                                            tipo: this.state.tipo,
-                                                            valore: this.state.valore,
-                                                            minimo: this.state.minimo,
-                                                            usato: false,
-                                                            edited: true
-                                                        });
+                                                        if (!isNaN(this.state.tipo) && !isNaN(this.state.valore) && !isNaN(this.state.minimo))
+                                                            this.state.list.push({
+                                                                id: this.getRandomId(),
+                                                                tipo: this.state.tipo,
+                                                                valore: this.state.valore,
+                                                                minimo: this.state.minimo,
+                                                                usato: false,
+                                                                edited: true
+                                                            });
                                                         this.forceUpdate()
                                                     }}><AddIcon/></Button>
                                                 </Grid>
@@ -183,7 +155,7 @@ class Buoni extends React.Component {
                                                                 <TextField placeholder={e.tipo} onChange={e => {
                                                                     this.state.list[i].tipo = parseInt(e.target.value);
                                                                     this.state.list[i].edited = true;
-                                                                    if(this.update !== null)clearTimeout(this.update);
+                                                                    if (this.update !== null) clearTimeout(this.update);
                                                                     this.update = setTimeout(() => this.forceUpdate(), 1000)
                                                                 }}/>
                                                             </Grid>
@@ -193,7 +165,7 @@ class Buoni extends React.Component {
                                                                     this.state.list[i].valore = parseInt(e.target.value);
                                                                     this.state.list[i].edited = true;
 
-                                                                    if(this.update !== null)clearTimeout(this.update);
+                                                                    if (this.update !== null) clearTimeout(this.update);
                                                                     this.update = setTimeout(() => this.forceUpdate(), 1000)
                                                                 }}/>}
                                                             </Grid>
@@ -202,7 +174,7 @@ class Buoni extends React.Component {
                                                                     this.state.list[i].minimo = parseInt(e.target.value);
                                                                     this.state.list[i].edited = true;
 
-                                                                    if(this.update !== null)clearTimeout(this.update);
+                                                                    if (this.update !== null) clearTimeout(this.update);
                                                                     this.update = setTimeout(() => this.forceUpdate(), 1000)
                                                                 }}/>
                                                             </Grid>

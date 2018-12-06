@@ -8,7 +8,7 @@ const {onUserAuthenticated} = require("./auth");
  * @requires POST/GET
  * @return JSON, {state: bool} in caso di errore, {state: bool, list: {<CATEGORIA>: {bg: String, elements: [{desc: String, info: String, dispon: bool, eur: Number, cents: Number, details: {display: bool, title: String, dialog: {select: [vals...], choose: [vals...]}}]}, <...>:{...}}}
  */
-function get_product_list(req, res){
+function get_product_list(req, res) {
     getConnection().query(`SELECT magazzino.id as id, magazzino.descrizione as descrizione, magazzino.info as info, magazzino.giacenza > 10 as disponibile, magazzino.prezzoEur as eur, magazzino.prezzoCents as cents, gruppi_cucina.nome as gnome, gruppi_cucina.bg as gbg, details.json as json FROM magazzino, gruppi_cucina, details WHERE magazzino.gruppo = gruppi_cucina.id AND magazzino.details = details.id`, (e, r, f) => {
         if (r && !e) {
             let map = new Map();
@@ -43,7 +43,7 @@ function get_product_list(req, res){
     })
 }
 
-function get_products(req, res){
+function get_products(req, res) {
     getConnection().query(`SELECT magazzino.descrizione as descrizione, magazzino.info as info, magazzino.giacenza as giacenza, magazzino.prezzoEur as eur, magazzino.prezzoCents as cents, gruppi_cucina.nome as gnome, gruppi_cucina.bg as gbg, details.json as json FROM magazzino, gruppi_cucina, details WHERE magazzino.gruppo = gruppi_cucina.id AND magazzino.details = details.id ORDER BY giacenza ASC`, (e, r, f) => {
         if (r && !e) {
             let map = new Map();
@@ -80,12 +80,12 @@ function get_products(req, res){
 function get_gruppi_cucina(req, res) {
     onUserAuthenticated(req, res, (data) => {
         getConnection().query(`SELECT id, nome FROM gruppi_cucina WHERE 1 ORDER BY id ASC`, (e, r, f) => {
-            if(r.length < 1){
+            if (r.length < 1) {
                 res.send({state: false, err: ""});
                 return;
             }
-            if(r && !e){
-                res.send({state: true, list:r});
+            if (r && !e) {
+                res.send({state: true, list: r});
                 return;
             }
             res.send({state: false, err: ""})
@@ -96,12 +96,12 @@ function get_gruppi_cucina(req, res) {
 function get_popups(req, res) {
     onUserAuthenticated(req, res, (data) => {
         getConnection().query(`SELECT id, json FROM details WHERE 1 ORDER BY id ASC`, (e, r, f) => {
-            if(r.length < 1){
+            if (r.length < 1) {
                 res.send({state: false, err: ""});
                 return;
             }
-            if(r && !e){
-                res.send({state: true, list:r});
+            if (r && !e) {
+                res.send({state: true, list: r});
                 return;
             }
             res.send({state: false, err: ""})
@@ -109,9 +109,9 @@ function get_popups(req, res) {
     });
 }
 
-function add_meals(req, res){
+function add_meals(req, res) {
     onUserAuthenticated(req, res, (data) => {
-        if(data.modified)
+        if (data.modified)
             data.modified.forEach(e => {
                 e.eur = e.costo.split(".")[0];
                 e.cents = e.costo.split(".")[1];

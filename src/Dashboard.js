@@ -1,10 +1,9 @@
 import React from "react";
 import NavBar from './components/NavBar'
-import {apiCalls, sagraName, staticServer} from "./consts";
+import {apiCalls, sagraName} from "./consts";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import Hidden from "@material-ui/core/es/Hidden/Hidden";
 import {withStyles} from '@material-ui/core/styles';
-import WarningIcon from "@material-ui/icons/Warning"
 import {POST} from "./network";
 import Typography from "@material-ui/core/es/Typography/Typography";
 import FunctionTile from "./components/FunctionTile";

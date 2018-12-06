@@ -36,7 +36,7 @@ if (document.location.protocol === 'https:') mqttServer = `wss://${cfg.serverIP}
 else mqttServer = `ws://${cfg.serverIP}:${cfg.mqtt.broker.ws.port}`;
 
 const loginLogo =
-        <img src={"/logo/drawing.svg.png"} width="76px"/>;
+    <img src={"/logo/drawing.svg.png"} width="76px"/>;
 
 const CategoryWidth = cfg.react.categoryWidth;
 const CategoryHeight = cfg.react.categoryHeight;
@@ -54,4 +54,19 @@ const scontrinoModel = cfg.react.scontrino;
 const categorieCucina = cfg.react.categorieCucina;
 
 
-export {orderCifres, mqttServer, connection_status, sagraName, apiCalls, loginLogo, CategoryWidth, CategoryHeight, ProductsWidth, Currency, productsHeight,tileWidth, scontrinoModel, categorieCucina};
+export {
+    orderCifres,
+    mqttServer,
+    connection_status,
+    sagraName,
+    apiCalls,
+    loginLogo,
+    CategoryWidth,
+    CategoryHeight,
+    ProductsWidth,
+    Currency,
+    productsHeight,
+    tileWidth,
+    scontrinoModel,
+    categorieCucina
+};

@@ -1,4 +1,4 @@
-const {getNW}  = require("./network");
+const {getNW} = require("./network");
 const crypto = require('crypto');
 const {getUsers, onUserAuthenticated} = require("./auth");
 const {getConnection} = require("./mysql");
@@ -16,7 +16,7 @@ let accessing = false;
  */
 function increment(req, res) {
     onUserAuthenticated(req, res, () => {
-        while(accessing);
+        while (accessing) ;
         accessing = true;
         let no = currentno++;
         accessing = false;
@@ -35,11 +35,11 @@ function increment(req, res) {
 function get_buono_detail(req, res) {
     onUserAuthenticated(req, res, (data) => {
         getConnection().query(`SELECT tipo, valore, minimo FROM cupons WHERE usato = 0 AND id = ${data.id}`, (e, r, f) => {
-            if(r.length < 1){
+            if (r.length < 1) {
                 res.send({state: false, err: ""});
                 return;
             }
-            if(r && !e){
+            if (r && !e) {
                 res.send({state: true, tipo: r[0].tipo, valore: r[0].valore, minimo: r[0].minimo});
                 return;
             }
@@ -57,15 +57,15 @@ function get_buono_detail(req, res) {
  * @requires POST, {user: String, token: String}
  * @return JSON, {state: bool, [state = false] err: String / [state = true] list: [{id: Number, tipo: Number, valore: Number, minimo: Number, usato: Number}, ...]}
  */
-function get_buoni(req, res){
+function get_buoni(req, res) {
     onUserAuthenticated(req, res, (data) => {
         getConnection().query(`SELECT id, tipo, valore, minimo, usato FROM cupons WHERE 1 ORDER BY id ASC`, (e, r, f) => {
-            if(r.length < 1){
+            if (r.length < 1) {
                 res.send({state: false, err: ""});
                 return;
             }
-            if(r && !e){
-                res.send({state: true, list:r});
+            if (r && !e) {
+                res.send({state: true, list: r});
                 return;
             }
             res.send({state: false, err: ""})
@@ -81,16 +81,16 @@ function get_buoni(req, res){
  * @requires POST, {user: String, token: String, modified: [{id: Number, tipo: Number, valore: Number, minimo: Number, usato: bool}, ...]}
  * @return 402
  */
-function upd_buoni(req, res){
+function upd_buoni(req, res) {
     onUserAuthenticated(req, res, (data) => {
-        if(data.modified)
+        if (data.modified)
             data.modified.forEach(e => {
                 getConnection().query(`INSERT INTO cupons(id, tipo, valore, minimo, usato) VALUES (${e.id}, ${e.tipo}, ${e.valore}, ${e.minimo}, ${e.usato ? 1 : 0}) ON DUPLICATE KEY UPDATE id=${e.id}, tipo=${e.tipo}, valore=${e.valore}, minimo=${e.minimo}, usato=${e.usato ? 1 : 0}`);
             });
     });
 }
 
-function get_old_orders(req, res){
+function get_old_orders(req, res) {
     onUserAuthenticated(req, res, (data) => {
         getConnection().query(`select 
                                   ordini_dettagli.timestamp as time,
@@ -111,7 +111,7 @@ function get_old_orders(req, res){
                               inner join magazzino on ordini_prodotti.product = magazzino.id
                               inner join gruppi_cucina on magazzino.gruppo = gruppi_cucina.id
                             where ordini_dettagli.id = ordini_prodotti.\`order\` ORDER BY ordini_dettagli.timestamp ASC`, (e, r) => {
-            if(!res || e){
+            if (!res || e) {
                 console.error(e);
                 res.send({state: false, err: e.toString()});
                 return;
@@ -119,7 +119,7 @@ function get_old_orders(req, res){
 
             let orders = {};
             r.forEach(e => {
-                if(!orders[e.id]){
+                if (!orders[e.id]) {
                     orders[e.id] = {};
                     orders[e.id].cart = [];
                     orders[e.id].time = e.time;
@@ -132,11 +132,11 @@ function get_old_orders(req, res){
                     orders[e.id].user = e.user;
                 }
                 let prod = {qta: e.qta, id: e.idp, cents: e.cents, eur: e.eur, cat: e.grp};
-                if(e.variants !== 'NULL')  prod.variants = JSON.parse(e.variants);
+                if (e.variants !== 'NULL') prod.variants = JSON.parse(e.variants);
                 orders[e.id].cart.push([e.desc, JSON.parse(JSON.stringify(prod))]);
                 orders[e.id].totale[1] += e.cents;
-                orders[e.id].totale[0] += e.eur + Math.floor(orders[e.id].totale[1]/100);
-                orders[e.id].totale[1] = Math.floor(orders[e.id].totale[1]/100);
+                orders[e.id].totale[0] += e.eur + Math.floor(orders[e.id].totale[1] / 100);
+                orders[e.id].totale[1] = Math.floor(orders[e.id].totale[1] / 100);
             });
 
             res.send({state: true, list: orders})

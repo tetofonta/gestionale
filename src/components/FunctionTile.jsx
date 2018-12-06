@@ -1,16 +1,10 @@
 import React from "react"
 import {withStyles} from '@material-ui/core/styles';
-import {CategoryHeight, Currency, productsHeight, tileWidth} from "../consts";
 import ButtonBase from "@material-ui/core/es/ButtonBase/ButtonBase";
 import Typography from "@material-ui/core/es/Typography/Typography";
 import Paper from "@material-ui/core/es/Paper/Paper";
-import Grid from "@material-ui/core/es/Grid/Grid";
-import Button from "@material-ui/core/es/Button/Button";
 import Tooltip from "@material-ui/core/es/Tooltip/Tooltip";
 import InfoIcon from "@material-ui/icons/Info"
-import AddIcon from "@material-ui/icons/Add"
-import EditIcon from "@material-ui/icons/Edit"
-import MinusIcon from "@material-ui/icons/Remove"
 
 const styles = theme => ({
     paper: {
@@ -47,7 +41,7 @@ class FunctionTile extends React.Component {
 
                     <i className={this.props.classes.icon + " " + this.props.icon}/>
 
-                    { this.props.tooltip != null && <Tooltip title= { this.props.tooltip }>
+                    {this.props.tooltip != null && <Tooltip title={this.props.tooltip}>
                         <InfoIcon className={this.props.classes.info}/>
                     </Tooltip>}
                 </Paper>

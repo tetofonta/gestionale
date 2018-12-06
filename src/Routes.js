@@ -1,5 +1,5 @@
 import React from 'react';
-import {Switch, Route} from 'react-router-dom'
+import {Route, Switch} from 'react-router-dom'
 import {connection_status} from "./consts"
 
 
@@ -16,7 +16,7 @@ import Storico from "./Storico";
 
 export default class Router extends React.Component {
     render() {
-        if(this.props.isGuest === connection_status.noapi)
+        if (this.props.isGuest === connection_status.noapi)
             return (<main><Err500/></main>);
 
         let operations = [
@@ -37,10 +37,10 @@ export default class Router extends React.Component {
                         this.props.isGuest === connection_status.client ? Login : Dashboard
                     }/>
                     <Route path='/dashboard' component={Dashboard}/>
-                    {this.props.isGuest === connection_status.client && operations }
+                    {this.props.isGuest === connection_status.client && operations}
 
                     <Route path='/newOrdine' component={Cassa}/>
-                    <Route component={Err404} />
+                    <Route component={Err404}/>
                 </Switch>
             </main>
         );

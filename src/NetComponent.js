@@ -2,7 +2,7 @@ import React from "react";
 import {apiCalls, connection_status} from "./consts";
 
 
-export default class NetComponent extends React.Component{
+export default class NetComponent extends React.Component {
     GET = async (path) => {
         const response = await fetch(path);
         const body = await response.json();
@@ -14,16 +14,16 @@ export default class NetComponent extends React.Component{
 
     GETSync = (path) => {
         let xmlHttp = new XMLHttpRequest();
-        xmlHttp.open( "GET", path, false );
-        xmlHttp.send( null );
+        xmlHttp.open("GET", path, false);
+        xmlHttp.send(null);
         return xmlHttp.responseText;
     };
 
     getOperationMode = () => {
-        try{
+        try {
             let hello = this.GETSync(apiCalls.hello);
             return connection_status[JSON.parse(hello).kind];
-        }catch (e) {
+        } catch (e) {
             console.log(e);
             return connection_status.noapi;
         }

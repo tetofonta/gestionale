@@ -1,29 +1,16 @@
 import React from "react";
 import NavBar from './components/NavBar'
-import {
-    apiCalls,
-    CategoryHeight,
-    CategoryWidth,
-    Currency,
-    ProductsWidth,
-    sagraName,
-    staticServer,
-    productsHeight, tileWidth, mqttServer, scontrinoModel, categorieCucina, orderCifres
-} from "./consts";
+import {apiCalls, CategoryWidth, Currency, mqttServer, orderCifres, ProductsWidth, scontrinoModel} from "./consts";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import {withStyles} from '@material-ui/core/styles';
 import {POST} from "./network";
 import Typography from "@material-ui/core/es/Typography/Typography";
-import ButtonBase from "@material-ui/core/es/ButtonBase/ButtonBase";
 import Paper from "@material-ui/core/es/Paper/Paper";
 import Button from "@material-ui/core/es/Button/Button";
-import InfoIcon from "@material-ui/icons/Info"
 import AddIcon from "@material-ui/icons/Add"
 import SendIcon from "@material-ui/icons/Send"
-import EditIcon from "@material-ui/icons/Edit"
 import CartIcon from "@material-ui/icons/ShoppingCart"
 import MinusIcon from "@material-ui/icons/Remove"
-import Tooltip from "@material-ui/core/es/Tooltip/Tooltip";
 import Dialog from "@material-ui/core/es/Dialog/Dialog";
 import DialogTitle from "@material-ui/core/es/DialogTitle/DialogTitle";
 import DialogContent from "@material-ui/core/es/DialogContent/DialogContent";
@@ -39,6 +26,7 @@ import ImageButton from "./components/imageButton"
 import ProductTile from "./components/ProductTile";
 import IconButton from "@material-ui/core/es/IconButton/IconButton";
 import Badge from "@material-ui/core/es/Badge/Badge";
+// noinspection ES6CheckImport
 import mqtt from "mqtt"
 import QRCode from "qrcode.react"
 import Scontrino from "./components/Scontrino";
@@ -184,6 +172,21 @@ class Cassa extends React.Component {
     getBillData = () => {
         return getBillData(this.state.cart)
     };
+    scontrino = <Typography variant='title'>Getting order Number...</Typography>;
+    ordnum = -1;
+
+    static generateRandom(bits) {
+        let vocali = "aeiou";
+        let consonanti = "bcdfghjklmnpqrstvyz";
+        let isAVocale = true;
+        let ret = "";
+        for (let i = 0; i < bits; i++) {
+            let myarray = isAVocale ? vocali : consonanti;
+            ret += myarray[Math.floor(Math.random() * myarray.length)];
+            isAVocale = !isAVocale
+        }
+        return ret;
+    }
 
     reloadList() {
         this.images = [];
@@ -203,7 +206,8 @@ class Cassa extends React.Component {
         let pc = new RTCPeerConnection({iceServers: []}), noop = function () {
         };
         pc.createDataChannel('');//create a bogus data channel
-        pc.createOffer(pc.setLocalDescription.bind(pc), noop);// create offer and set local description
+        // noinspection JSIgnoredPromiseFromCall
+        pc.createOffer(pc.setLocalDescription.bind(pc));// create offer and set local description
         pc.onicecandidate = function (ice) {
             if (ice && ice.candidate && ice.candidate.candidate) {
                 that.ip = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
@@ -211,29 +215,6 @@ class Cassa extends React.Component {
             }
         };
     };
-
-    static isInCategory(ename, cat) {
-        for (let i = 0; i < cat.prods.length; i++) {
-            if (cat.prods[i].desc === ename) return true;
-        }
-        return false;
-    }
-
-    static generateRandom(bits) {
-        let vocali = "aeiou";
-        let consonanti = "bcdfghjklmnpqrstvyz";
-        let isAVocale = true;
-        let ret = "";
-        for (let i = 0; i < bits; i++) {
-            let myarray = isAVocale ? vocali : consonanti;
-            ret += myarray[Math.floor(Math.random() * myarray.length)];
-            isAVocale = !isAVocale
-        }
-        return ret;
-    }
-
-    scontrino = <Typography variant='title'>Getting order Number...</Typography>;
-    ordnum = -1;
 
     genScontrino() {
         POST(apiCalls.getOrdNum, {
@@ -402,19 +383,22 @@ class Cassa extends React.Component {
                 <Paper className={this.props.classes.marginTopNoX}>
                     {!window.ctx.get("isLogged") && (function (th) {
                         let client = mqtt.connect(mqttServer);
+                        let that = this;
                         client.on('connect', () => {
+                            // noinspection JSPotentiallyInvalidUsageOfClassThis
                             client.publish('order/guest', JSON.stringify(
                                 {
                                     cart: [...th.normalizeCart()],
                                     orderID: th.state.ordernum,
                                     asporto: th.state.isAsporto,
                                     message: th.state.note,
-                                    ip: this.ip,
+                                    ip: that.ip,
                                     time: Math.floor(Date.now() / 1000)
                                 }));
                             client.end();
                         });
 
+                        // noinspection JSPotentiallyInvalidUsageOfClassThis
                         return <Grid container>
                             <Grid item xs={12}>
                                 <QRCode
@@ -498,7 +482,7 @@ class Cassa extends React.Component {
                             {window.ctx.get("isLogged") ?
                                 <Step key={2}>
                                     <StepButton onClick={() => {
-                                        this.setState({step: 2, currentState: this.status.code})
+                                        this.setState({step: 2, currentState: this.status.code});
                                         this.genScontrino()
                                     }}>Completa l'ordine</StepButton>
                                 </Step>
@@ -521,7 +505,7 @@ class Cassa extends React.Component {
                         </div>
                     </Grid>
                 </Grid>
-                <Dialog open={this.state.isAddOpen} onClose={() => this.setState({isAddOpen: false})}
+                <Dialog open={this.state.isAddOpen}
                         aria-labelledby="simple-dialog-title">
                     <DialogTitle id="simple-dialog-title"><Typography
                         variant='title'>{this.state.currentDetail.title}</Typography></DialogTitle>
@@ -653,7 +637,7 @@ class Cassa extends React.Component {
                             Annulla
                         </Button>
                         <Button disabled={this.state.buonoapplicabile} onClick={() => {
-                            this.setState({buonoapplicabile: true, usabuono: true, buonoOpen: false})
+                            this.setState({buonoapplicabile: true, usabuono: true, buonoOpen: false});
                             this.genScontrino()
                         }} color="primary">
                             Inserisci

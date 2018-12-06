@@ -15,7 +15,7 @@ function getNewToken() {
  *
  * @return {Map<String, String>}, Mappa di associazione utenti/token
  */
-function getUsers(){
+function getUsers() {
     return user_association
 }
 
@@ -28,7 +28,7 @@ function getUsers(){
  * @requires POST, {user: String, token: String, <key>: <value>, ..., ...}
  * @return JSON, {state: bool, err: String} in caso di errore, altrimenti é compito di cb(data) scrivere sull'oggetto res.
  */
-function onUserAuthenticated(req, res, cb, permitGuest = false){
+function onUserAuthenticated(req, res, cb, permitGuest = false) {
     if (getNW(req) || permitGuest) {
 
         let data = req.body;
@@ -45,7 +45,7 @@ function onUserAuthenticated(req, res, cb, permitGuest = false){
             return;
         }
 
-        if(cb) cb(data);
+        if (cb) cb(data);
         return;
     }
     res.send({state: false, err: "Access denied from guest network."})
@@ -65,15 +65,23 @@ function auth(req, res) {
         data.user = secure(data.user);
         let shasum = crypto.createHash('sha1');
         shasum.update(data.psw);
-        let hpsw =  shasum.digest('hex');
+        // noinspection JSCheckFunctionSignatures
+        let hpsw = shasum.digest('hex');
 
         getConnection().query(`SELECT name AS nome, secure AS sec, admin FROM utenti WHERE username='${data.user}' AND password='${hpsw}' AND enabled=1;`, function (error, results, fields) {
-            if(results && results.length === 1 && !error){
+            if (results && results.length === 1 && !error) {
                 let finalstate = results[0].sec;
-                if(data.user === data.psw || data.psw === "admin" || data.user === "root") finalstate = 1; //TODO: LE PASSWORD SONO IN SHA1 COGLIONE!!!
+                if (data.user === data.psw || data.psw === "admin" || data.user === "root") finalstate = 1; //TODO: LE PASSWORD SONO IN SHA1 COGLIONE!!!
                 let tok = getNewToken();
                 user_association.set(data.user, tok);
-                res.send({state: true, token: tok, username: data.user, name: results[0].nome, secure: results[0].sec, isAdmin: results[0].admin});
+                res.send({
+                    state: true,
+                    token: tok,
+                    username: data.user,
+                    name: results[0].nome,
+                    secure: results[0].sec,
+                    isAdmin: results[0].admin
+                });
                 return;
             }
             error && console.log(error);
@@ -111,4 +119,4 @@ function auth_refresh(req, res) {
 module.exports.auth = auth;
 module.exports.onUserAuthenticated = onUserAuthenticated;
 module.exports.auth_refresh = auth_refresh;
-module.exports.getUsers = getUsers
+module.exports.getUsers = getUsers;

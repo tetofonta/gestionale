@@ -1,11 +1,10 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Routes from "./Routes";
 import NetComponent from "./NetComponent";
-import {connection_status} from "./consts"
 
 class App extends NetComponent {
 
-    componentDidMount(){
+    componentDidMount() {
         this.forceUpdate()
     }
 

@@ -1,13 +1,13 @@
-const cfg = require('./network.config')
+const cfg = require('./network.config');
 
 const opNetwork = {ip: cfg.network.opNetwork.ip, sub: cfg.network.opNetwork.subnet};
 
 let hwip = undefined; //DO NOT EDIT
 
 function createIP(confs) {
-    let hwip = {ip: 0, sub:0};
-    confs.ip.forEach((e, i) => hwip.ip |= ((e & 0xFF) << (3 - i)*8));
-    for(let i = 0; i<confs.sub; i++) hwip.sub |= 1 << (31-i);
+    let hwip = {ip: 0, sub: 0};
+    confs.ip.forEach((e, i) => hwip.ip |= ((e & 0xFF) << (3 - i) * 8));
+    for (let i = 0; i < confs.sub; i++) hwip.sub |= 1 << (31 - i);
     return hwip;
 }
 
@@ -17,7 +17,7 @@ function isInNetwork(hwip, netw) {
 }
 
 function getNW(req) {
-    if(!hwip)
+    if (!hwip)
         hwip = createIP(opNetwork);
 
     let ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress).split(",")[0];

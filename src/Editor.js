@@ -2,7 +2,6 @@ import React from 'react'
 import {withStyles} from '@material-ui/core/styles';
 import NavBar from "./components/NavBar";
 import Paper from "@material-ui/core/es/Paper/Paper";
-import Drawer from "@material-ui/core/es/Drawer/Drawer";
 import List from "@material-ui/core/es/List/List";
 import ListItem from "@material-ui/core/es/ListItem/ListItem";
 import ListItemIcon from "@material-ui/core/es/ListItemIcon/ListItemIcon";
@@ -11,7 +10,6 @@ import TextIcon from '@material-ui/icons/TextFields';
 import ImageIcon from '@material-ui/icons/Image';
 import CodeIcon from '@material-ui/icons/Code';
 import LinkIcon from '@material-ui/icons/Link';
-import PreviewIcon from '@material-ui/icons/Slideshow';
 import SaveIcon from '@material-ui/icons/Save';
 import LineIcon from '@material-ui/icons/LineStyle';
 import RectIcon from '@material-ui/icons/CropSquare';
@@ -25,14 +23,12 @@ import AddIcon from "@material-ui/icons/Add"
 import Dialog from "@material-ui/core/es/Dialog/Dialog";
 import DialogTitle from "@material-ui/core/es/DialogTitle/DialogTitle";
 import DialogContent from "@material-ui/core/es/DialogContent/DialogContent";
-import DialogContentText from "@material-ui/core/es/DialogContentText/DialogContentText";
 import FormControl from "@material-ui/core/es/FormControl/FormControl";
 import InputLabel from "@material-ui/core/es/InputLabel/InputLabel";
 import Select from "@material-ui/core/es/Select/Select";
 import MenuItem from "@material-ui/core/es/MenuItem/MenuItem";
 import * as jsPDF from 'jspdf'
 import DialogActions from "@material-ui/core/es/DialogActions/DialogActions";
-import FormLabel from "@material-ui/core/es/FormLabel/FormLabel";
 import RadioGroup from "@material-ui/core/es/RadioGroup/RadioGroup";
 import FormControlLabel from "@material-ui/core/es/FormControlLabel/FormControlLabel";
 import Radio from "@material-ui/core/es/Radio/Radio";
@@ -82,6 +78,7 @@ class Editor extends React.Component {
             footer: {height: 0, content: []}
         }
     };
+    foo = false;
 
     getKeywords() {
         let o = {};
@@ -94,6 +91,7 @@ class Editor extends React.Component {
     }
 
     render() {
+        // noinspection JSPotentiallyInvalidConstructorUsage
         return (
             <div>
                 <NavBar titleText='Editor PDF' history={this.props.history} showHome={true}/>
@@ -762,7 +760,7 @@ class Editor extends React.Component {
                             </ListItem>
                             <ListItem button onClick={() => {
                                 let w = window.open(null, '_blank', 'width=335,height=330,resizable=1');
-                                this.state.json.kw = this.getKeywords()[0]
+                                this.state.json.kw = this.getKeywords()[0];
                                 w.document.write(JSON.stringify(this.state.json));
                                 this.setState({saveDialog: false})
                             }
@@ -781,8 +779,6 @@ class Editor extends React.Component {
 
             </div>);
     }
-
-    foo = false;
 }
 
 export default withStyles(styles)(Editor)

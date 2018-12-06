@@ -2,7 +2,6 @@ import React from 'react'
 import {withStyles} from '@material-ui/core/styles';
 import NavBar from "./components/NavBar";
 import Paper from "@material-ui/core/es/Paper/Paper";
-import Grid from "@material-ui/core/es/Grid/Grid";
 import Button from "@material-ui/core/es/Button/Button";
 import TextField from "@material-ui/core/es/TextField/TextField";
 import AddIcon from "@material-ui/icons/Add"
@@ -119,6 +118,31 @@ function getPopup(json) {
 
 class Magazzino extends React.Component {
     update = null;
+    state = {
+        gruppo: {value: 'primi piatti', label: 'Primi piatti'},
+        gruppi: [],
+        popup: {value: JSON.parse('{"display": false}'), label: getPopup('{"display": false}')},
+        popups: [],
+        list: [],
+        productlist: [],
+        productlistCpy: [],
+        openDeleteDialog: false,
+        openPopupDialog: false,
+        openGruppoDialog: false,
+        product: null,
+        popupItems: [],
+        buttonsPopup: ["Select", "Choose"],
+        buttonsDisplay: ["Si", "No"],
+        display: false,
+        buttonsPopupSelected: [true, false],
+        buttonsDisplaySelected: [false, true],
+        okGroupDisabled: true,
+        okPopDisabled: false,
+        popNavValue: 'add',
+        grpNavValue: 'add',
+        anchorEl: null,
+        modify: false,
+    };
 
     componentDidMount() {
         gruppi = [];
@@ -171,32 +195,6 @@ class Magazzino extends React.Component {
             } else console.log(res);
         });
     }
-
-    state = {
-        gruppo: {value: 'primi piatti', label: 'Primi piatti'},
-        gruppi: [],
-        popup: {value: JSON.parse('{"display": false}'), label: getPopup('{"display": false}')},
-        popups: [],
-        list: [],
-        productlist: [],
-        productlistCpy: [],
-        openDeleteDialog: false,
-        openPopupDialog: false,
-        openGruppoDialog: false,
-        product: null,
-        popupItems: [],
-        buttonsPopup: ["Select", "Choose"],
-        buttonsDisplay: ["Si", "No"],
-        display: false,
-        buttonsPopupSelected: [true, false],
-        buttonsDisplaySelected: [false, true],
-        okGroupDisabled: true,
-        okPopDisabled: false,
-        popNavValue: 'add',
-        grpNavValue: 'add',
-        anchorEl: null,
-        modify: false,
-    };
 
     render() {
         const {classes} = this.props;
@@ -302,7 +300,7 @@ class Magazzino extends React.Component {
                                                 this.state.productlist[i].info = e.target.value;
                                                 this.state.productlist[i].edited = true;
 
-                                                console.log(this.state.productlistCpy)
+                                                console.log(this.state.productlistCpy);
 
                                                 if (this.update !== null)
                                                     clearTimeout(this.update);
@@ -564,7 +562,7 @@ class Magazzino extends React.Component {
                                 this.state.buttonsDisplaySelected = [false, true];
                                 this.state.buttonsPopupSelected = [true, false];
 
-                                console.log(json)
+                                console.log(json);
 
                                 this.forceUpdate();
                             }} color="primary" autoFocus>
@@ -635,7 +633,7 @@ class Magazzino extends React.Component {
                             onClick={() => {
                                 this.state.openGruppoDialog = false;
 
-                                console.log(this.state.newGruppo)
+                                console.log(this.state.newGruppo);
 
                                 this.forceUpdate();
                             }} color="primary" autoFocus>
