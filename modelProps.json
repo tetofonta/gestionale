@@ -8,7 +8,8 @@
     "qrdata": "DATA DEL CODICE QR",
     "qta": "QUANTITÁ DELL'ELEMENTO",
     "text": "DESCRIZIONE DELL'ELEMENTO",
-    "total": "PREZZO UNITARIO DELL'ELEMENTO"
+    "total": "PREZZO UNITARIO DELL'ELEMENTO",
+    "category": "CATEGORIA"
   },
   "buono": {
     "descrizione": "DESCRIZIONE",

@@ -253,7 +253,7 @@
         },
         {
           "type": "text",
-          "text": "sagra - Capriolo",
+          "text": "_catg",
           "font": "helvetica",
           "variant": "italic",
           "size": 14,
@@ -344,6 +344,7 @@
     "qrdata": "_qr",
     "qta": "_qta",
     "text": "_product",
-    "total": "_price"
+    "total": "_price",
+    "category": "_catg"
   }
 }

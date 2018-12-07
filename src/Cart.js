@@ -65,12 +65,15 @@ let getTotal = (cart) => {
     return [total[0] + "." + (total[1] > 9 ? total[1] : "0" + total[1]), total];
 };
 
-let renderCart = (cart, classes, classs) => {
+let renderCart = (cart, classes, classs, normalized=false, withButtons=true) => {
+    if(!cart) return {};
+    let mc = JSON.parse(JSON.stringify(cart));
+    if(!normalized) mc = [...normalizeCart(mc)];
     let tote = 0, totc = 0;
     return (
         <Paper className={classes.paper}>
             <Grid container spacing={24}>
-                {[...normalizeCart(cart)].map((e, idx) => {
+                {mc.map((e, idx) => {
                     let k = e[0], v = e[1];
                     tote += parseInt(v.eur) * v.qta;
                     totc += parseInt(v.cents) * v.qta;
@@ -93,24 +96,24 @@ let renderCart = (cart, classes, classs) => {
                                 {typeof(v.variants) === 'undefined' &&
                                 [
                                     <Grid item xs={2}>
-                                        <Button onClick={() => {
+                                        {withButtons && <Button onClick={() => {
                                             for (let i = 0; i < cart.length; i++)
                                                 if (cart[i].desc === k) {
                                                     cart[i].qta++;
                                                     break;
                                                 }
                                             classs.forceUpdate()
-                                        }} variant="contained" color="primary"><AddIcon/></Button>
+                                        }} variant="contained" color="primary"><AddIcon/></Button>}
                                     </Grid>,
                                     <Grid item xs={2}>
-                                        <Button onClick={() => {
+                                        {withButtons && <Button onClick={() => {
                                             for (let i = 0; i < cart.length; i++)
                                                 if (cart[i].desc === k) {
                                                     cart[i].qta > 0 ? cart[i].qta-- : cart.splice(i, 1);
                                                     break;
                                                 }
                                             classs.forceUpdate()
-                                        }} variant="contained" color="secondary"><MinusIcon/></Button>
+                                        }} variant="contained" color="secondary"><MinusIcon/></Button>}
                                     </Grid>
                                 ]}
                                 {!typeof(v.variants) === 'undefined' && <Grid item xs={4}/>}
@@ -128,18 +131,18 @@ let renderCart = (cart, classes, classs) => {
                                             </Grid>,
                                             <Grid item xs={2}/>,
                                             <Grid item xs={2}>
-                                                <Button onClick={() => {
+                                                {withButtons && <Button onClick={() => {
                                                     for (let i = 0; i < cart.length; i++)
                                                         if (cart[i].desc === k && cart[i].variant === e.var) cart[i].qta++;
                                                     classs.forceUpdate()
-                                                }} variant="contained" color="primary"><AddIcon/></Button>
+                                                }} variant="contained" color="primary"><AddIcon/></Button>}
                                             </Grid>,
                                             <Grid item xs={2}>
-                                                <Button onClick={() => {
+                                                {withButtons && <Button onClick={() => {
                                                     for (let i = 0; i < cart.length; i++)
                                                         if (cart[i].desc === k && cart[i].variant === e.var) cart[i].qta > 0 ? cart[i].qta-- : cart.splice(i, 1);
                                                     classs.forceUpdate()
-                                                }} variant="contained" color="secondary"><MinusIcon/></Button>
+                                                }} variant="contained" color="secondary"><MinusIcon/></Button>}
                                             </Grid>
                                         ]
                                 })}
@@ -153,10 +156,13 @@ let renderCart = (cart, classes, classs) => {
     )
 };
 
-let getBillData = (cart) => {
+let getBillData = (cart, normalized=true) => {
+    if(!cart) return {};
+    let mc = JSON.parse(JSON.stringify(cart));
+    if(!normalized) mc = [...normalizeCart(mc)];
     let o = {};
     Object.keys(cfg.react.scontrini).forEach(e => {
-        let m = [...normalizeCart(cart)].filter(q => cfg.react.scontrini[e].includes(q[1].cat));
+        let m = mc.filter(q => cfg.react.scontrini[e].includes(q[1].cat));
         o[e] = m.map(e => {
             let k = e[0], v = e[1];
             return ({qta: "" + v.qta, text: k, total: v.eur + "." + (v.cents > 9 ? v.cents : "0" + v.cents)});
@@ -165,30 +171,14 @@ let getBillData = (cart) => {
     return o;
 };
 
-let getBillDataFromNormalized = (cart) => {
-    let o = {};
-    Object.keys(cfg.react.scontrini).forEach(e => {
-        let m = cart.filter(q => cfg.react.scontrini[e].includes(q[1].cat));
-        o[e] = m.map(e => {
-            let k = e[0], v = e[1];
-            return ({qta: "" + v.qta, text: k, total: v.eur + "." + (v.cents > 9 ? v.cents : "0" + v.cents)});
-        });
-    });
-    return o;
-};
 
-let getCarts = (cart) => {
+let getCarts = (cart, normalized=true) => {
+    if(!cart) return {};
+    let mc = JSON.parse(JSON.stringify(cart));
+    if(!normalized) mc = [...normalizeCart(mc)];
     let obj = {};
     Object.keys(cfg.react.scontrini).forEach(e => {
-        obj[e] = [...normalizeCart(cart)].filter(q => cfg.react.scontrini[e].includes(q[1].cat));
-    });
-    return obj;
-};
-
-let getCartsFromNormalized = (cart) => {
-    let obj = {};
-    Object.keys(cfg.react.scontrini).forEach(e => {
-        obj[e] = cart.filter(q => cfg.react.scontrini[e].includes(q[1].cat));
+        obj[e] = mc.filter(q => cfg.react.scontrini[e].includes(q[1].cat));
     });
     return obj;
 };
@@ -199,7 +189,5 @@ export {
     getTotal,
     normalizeCart,
     renderCart,
-    getBillDataFromNormalized,
-    getCarts,
-    getCartsFromNormalized
+    getCarts
 }

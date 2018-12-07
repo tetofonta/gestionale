@@ -3,3 +3,23 @@ body {
     padding: 0;
     font-family: sans-serif;
 }
+
+/* width */
+::-webkit-scrollbar {
+     width: 5px;
+ }
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgba(180, 180, 180, 20);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(80, 80, 80, 20);
+}

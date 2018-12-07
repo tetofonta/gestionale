@@ -80,8 +80,8 @@ class Scontrino extends React.Component {
                         this.doc.line(e.coordsx[0], e.coordsy[0] + offset, e.coordsx[1] + offset, e.coordsy[1] + offset);
                         break;
                     case "rect":
-                        this.doc.setDrawColor(e.border[0], e.border[1], e.border[2], 255);
-                        this.doc.setFillColor(e.fill[0], e.fill[1], e.fill[2], 255);
+                        this.doc.setDrawColor(e.border[0], e.border[1], e.border[2], 0);
+                        this.doc.setFillColor(e.fill[0], e.fill[1], e.fill[2], 0);
                         this.doc.roundedRect(e.x, e.y + offset, e.w, e.h, e.round, e.round, e.dofill ? 'FD' : 'D');
                         break;
                     default:
@@ -132,6 +132,7 @@ class Scontrino extends React.Component {
         this._page(res.main, fullArr);
 
         Object.keys(this.props.elementi).forEach(e => {
+            this.map.set(this.kw["category"], e);
             if (this.props.elementi[e].length > 0) {
                 this.doc.addPage();
                 this._page(res.details, this.props.elementi[e])

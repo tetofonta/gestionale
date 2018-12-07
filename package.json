@@ -39,7 +39,7 @@
     "start-order-printer": "cd backend/MQTT/CLIENTS/orderPrinter && nodemon orderPrinter.js",
     "start-order-processor": "cd backend/MQTT/CLIENTS/orderProcessor && nodemon orderProcessor.js",
     "start": "HTTPS=true && react-scripts start",
-    "dev": "concurrently --kill-others-on-fail \"yarn start-server\" \"yarn start\" \"yarn start-mqtt\" \"yarn start-order-printer\" \"yarn start-order-processor\"",
+    "dev": "yarn concurrently --kill-others-on-fail \"yarn start-server\" \"yarn start\" \"yarn start-mqtt\" \"yarn start-order-printer\" \"yarn start-order-processor\"",
     "build": "react-scripts build",
     "deploy": "sh deploy.sh"
   },

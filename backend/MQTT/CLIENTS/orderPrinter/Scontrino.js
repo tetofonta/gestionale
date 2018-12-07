@@ -76,8 +76,8 @@ class Scontrino {
                         this.doc.line(e.coordsx[0], e.coordsy[0] + offset, e.coordsx[1] + offset, e.coordsy[1] + offset);
                         break;
                     case "rect":
-                        this.doc.setDrawColor(e.border[0], e.border[1], e.border[2], 255);
-                        this.doc.setFillColor(e.fill[0], e.fill[1], e.fill[2], 255);
+                        this.doc.setDrawColor(e.border[0], e.border[1], e.border[2], 0);
+                        this.doc.setFillColor(e.fill[0], e.fill[1], e.fill[2], 0.24);
                         this.doc.roundedRect(e.x, e.y + offset, e.w, e.h, e.round, e.round, e.dofill ? 'FD' : 'D');
                         break;
                     default:

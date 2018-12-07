@@ -10,8 +10,11 @@ import FunctionTile from "./components/FunctionTile";
 
 const styles = theme => ({
     marginTop: {
-        marginTop: 70,
-        width: "99vw"
+        marginTop: 66,
+        height: "calc(100vh - 66px)",
+        width: "100%",
+        overflowY: "auto",
+        overflowX: "hidden"
     },
     imageV: {
         overflow: 'hidden',
