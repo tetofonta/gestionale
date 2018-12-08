@@ -2,6 +2,8 @@ const mysql = require('mysql');
 const cfg = require('./network.config');
 
 let connection = undefined;
+let status = false;
+let error = undefined;
 
 String.prototype.replaceAll = function (search, replacement) {
     const target = this;
@@ -16,9 +18,6 @@ function connect(host, user, password, db) {
         password: password,
         database: db
     });
-
-    connection.connect();
-
 }
 
 function secure(str) {

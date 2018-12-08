@@ -22,7 +22,7 @@ function increment(req, res) {
         accessing = false;
 
         res.send({state: true, ordnum: no});
-    });
+    }, ["CASSA"]);
 }
 
 /**
@@ -46,7 +46,7 @@ function get_buono_detail(req, res) {
             res.send({state: false, err: ""})
         });
 
-    });
+    }, ["CASSA"]);
 }
 
 /**
@@ -70,7 +70,7 @@ function get_buoni(req, res) {
             }
             res.send({state: false, err: ""})
         });
-    });
+    }, ["BUONI"]);
 }
 
 /**
@@ -87,7 +87,7 @@ function upd_buoni(req, res) {
             data.modified.forEach(e => {
                 getConnection().query(`INSERT INTO cupons(id, tipo, valore, minimo, usato) VALUES (${e.id}, ${e.tipo}, ${e.valore}, ${e.minimo}, ${e.usato ? 1 : 0}) ON DUPLICATE KEY UPDATE id=${e.id}, tipo=${e.tipo}, valore=${e.valore}, minimo=${e.minimo}, usato=${e.usato ? 1 : 0}`);
             });
-    });
+    }, ["BUONI"]);
 }
 
 function get_old_orders(req, res) {
@@ -141,7 +141,7 @@ function get_old_orders(req, res) {
 
             res.send({state: true, list: orders})
         })
-    })
+    }, ["STORICO"])
 }
 
 module.exports.get_old_orders = get_old_orders;

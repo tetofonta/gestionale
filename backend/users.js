@@ -26,7 +26,7 @@ function usr_getList(req, res) {
                 res.send({state: false, err: "500"})
             });
         });
-    });
+    }, ["UTENTI"]);
 }
 
 function usr_edit(req, res) {
@@ -67,7 +67,7 @@ function usr_edit(req, res) {
             console.log(e);
             res.send({state: false, err: "500"});
         });
-    });
+    }, ["UTENTI"]);
 }
 
 function usr_new(req, res) {
@@ -97,7 +97,7 @@ function usr_new(req, res) {
             console.log(e);
             res.send({state: false, err: "500"});
         });
-    });
+    }, ["UTENTI"]);
 }
 
 function usr_del(req, res) {
@@ -117,7 +117,7 @@ function usr_del(req, res) {
             console.log(e);
             res.send({state: false, err: "500"});
         });
-    });
+    }, ["UTENTI"]);
 }
 
 function usr_getAccessibleFunctions(req, res) {

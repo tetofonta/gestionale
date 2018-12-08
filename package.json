@@ -31,7 +31,10 @@
   },
   "devDependencies": {
     "pkg": "^4.3.5",
-    "concurrently": "^4.1.0"
+    "concurrently": "^4.1.0",
+    "mocha": "^5.2.0",
+    "rewire": "^4.0.1",
+    "istanbul": "^0.4.5"
   },
   "scripts": {
     "start-server": "cd backend && nodemon init.js",
@@ -41,7 +44,8 @@
     "start": "HTTPS=true && react-scripts start",
     "dev": "yarn concurrently --kill-others-on-fail \"yarn start-server\" \"yarn start\" \"yarn start-mqtt\" \"yarn start-order-printer\" \"yarn start-order-processor\"",
     "build": "react-scripts build",
-    "deploy": "sh deploy.sh"
+    "deploy": "sh deploy.sh",
+    "test": "yarn mocha TEST/maketest.js"
   },
   "browserslist": [
     ">0.2%",

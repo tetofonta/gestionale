@@ -90,7 +90,7 @@ function get_gruppi_cucina(req, res) {
             }
             res.send({state: false, err: ""})
         });
-    });
+    }, ["MAGAZZINO"]);
 }
 
 function get_popups(req, res) {
@@ -106,7 +106,7 @@ function get_popups(req, res) {
             }
             res.send({state: false, err: ""})
         });
-    });
+    }, ["MAGAZZINO"]);
 }
 
 function add_meals(req, res) {
@@ -117,7 +117,7 @@ function add_meals(req, res) {
                 e.cents = e.costo.split(".")[1];
                 getConnection().query(`INSERT INTO magazzino(id, descrizione, info, giacenza, prezzoEur, prezzoCents, gruppo, details) VALUES (${e.id}, ${e.desc}, ${e.info}, ${e.giacenza}, ${e.eur}, ${e.cents}, 1, 1) ON DUPLICATE KEY UPDATE id=${e.id}, descrizione="${e.desc}", info="${e.info}", giacenza=${e.giacenza}, prezzoEur=${e.eur}, prezzoCents=${e.cents}, gruppo=1, details=1`);
             });
-    });
+    }, ["MAGAZZINO"]);
 }
 
 module.exports.get_products_list = get_product_list;

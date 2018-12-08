@@ -27,6 +27,11 @@ const GUEST = "guest";
 const OP = "client";
 const debug = false;
 
+function POSTOnly(req, res, callback){
+    if(req.method !== "POST") res.send({state: false, err: "wrong method"});
+    else callback(req, res);
+}
+
 app.get('/api/hello', (req, res) => {
     if (debug) {
         console.log("Conn type: ");
@@ -35,27 +40,28 @@ app.get('/api/hello', (req, res) => {
     }
     res.send({express: true, kind: getNW(req) ? OP : GUEST});
 });
-app.post('/api/new_order', (r, e) => increment(r, e)); //Ritorna il numero di ordine incrementale
+
+app.post('/api/new_order', (r, e) => POSTOnly(r, e, increment)); //Ritorna il numero di ordine incrementale
 app.post('/api/rst_counter'); //TODO
 app.post('/api/shutdown'); //TODO
 app.post('/api/stats'); //TODO
-app.post('/api/auth', (r, e) => auth(r, e));
-app.post('/api/refresh', (r, e) => auth_refresh(r, e));
-app.post('/api/userList', (r, e) => usr_getList(r, e));
-app.post('/api/editUser', (r, e) => usr_edit(r, e));
-app.post('/api/newUser', (r, e) => usr_new(r, e));
-app.post('/api/delUser', (r, e) => usr_del(r, e));
-app.post('/api/getfunctions', (r, e) => usr_getAccessibleFunctions(r, e));
-app.post('/api/ads', (r, e) => get_most_suitable_ads(r, e));
-app.post('/api/products', (r, e) => get_products_list(r, e));
-app.post('/api/buono', (r, e) => get_buono_detail(r, e));
-app.post('/api/buoni', (r, e) => get_buoni(r, e));
-app.post('/api/updateBuoni', (r, e) => upd_buoni(r, e));
-app.post('/api/gruppiCucina', (r, e) => get_gruppi_cucina(r, e));
-app.post('/api/popups', (r, e) => get_popups(r, e));
-app.post('/api/getProducts', (r, e) => get_products(r, e));
-app.post('/api/addMeals', (r, e) => add_meals(r, e));
-app.post('/api/getStorico', (r, e) => get_old_orders(r, e));
+app.post('/api/auth', (r, e) => POSTOnly(r, e, auth));
+app.post('/api/refresh', (r, e) => POSTOnly(r, e, auth_refresh));
+app.post('/api/userList', (r, e) => POSTOnly(r, e, usr_getList));
+app.post('/api/editUser', (r, e) => POSTOnly(r, e, usr_edit));
+app.post('/api/newUser', (r, e) => POSTOnly(r, e, usr_new));
+app.post('/api/delUser', (r, e) => POSTOnly(r, e, usr_del));
+app.post('/api/getfunctions', (r, e) => POSTOnly(r, e, usr_getAccessibleFunctions));
+app.post('/api/ads', (r, e) => POSTOnly(r, e, get_most_suitable_ads));
+app.post('/api/products', (r, e) => POSTOnly(r, e, get_products_list));
+app.post('/api/buono', (r, e) => POSTOnly(r, e, get_buono_detail));
+app.post('/api/buoni', (r, e) => POSTOnly(r, e, get_buoni));
+app.post('/api/updateBuoni', (r, e) => POSTOnly(r, e, upd_buoni));
+app.post('/api/gruppiCucina', (r, e) => POSTOnly(r, e, get_gruppi_cucina));
+app.post('/api/popups', (r, e) => POSTOnly(r, e, get_popups));
+app.post('/api/getProducts', (r, e) => POSTOnly(r, e, get_products));
+app.post('/api/addMeals', (r, e) => POSTOnly(r, e, add_meals));
+app.post('/api/getStorico', (r, e) => POSTOnly(r, e, get_old_orders));
 
 let httpsServer = https.createServer(credentials, app);
 httpsServer.listen(cfg.serverPort, () => console.log(`Listening on port ${cfg.serverPort}`));
