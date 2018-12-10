@@ -28,7 +28,8 @@ const apiCalls = {
     getPopups: "api/popups",
     getProducts: "api/getProducts",
     addMeals: "api/addMeals",
-    getStorico: "/api/getStorico"
+    getStorico: "/api/getStorico",
+    ip: "/api/ip"
 };
 
 let mqttServer;

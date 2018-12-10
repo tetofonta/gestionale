@@ -59,6 +59,7 @@ class NavBar extends React.Component {
                     {window.ctx.get("isLogged") && (
 
                         <div>
+                            {this.props.elements}
                             {this.props.showHome &&
                             <IconButton
                                 aria-owns={open ? 'menu-appbar' : null}

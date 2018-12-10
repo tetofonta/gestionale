@@ -13,6 +13,7 @@ import Editor from "./Editor";
 import Buoni from "./Buoni";
 import Magazzino from "./Magazzino";
 import Storico from "./Storico";
+import Self from "./Self";
 
 export default class Router extends React.Component {
     render() {
@@ -25,6 +26,7 @@ export default class Router extends React.Component {
             <Route path='/buoni' component={Buoni}/>,
             <Route path='/magazzino' component={Magazzino}/>,
             <Route path='/storico' component={Storico}/>,
+            <Route path='/self' component={Self}/>,
         ];
 
         return (

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-buildTargets="node6-linux-x64,node6-linux-x86"
+buildTargets="node6-linux-x64"
 
 #build skeleton
 mkdir -p output
@@ -9,6 +9,7 @@ mkdir -p output/MQTT/broker/sslcert
 mkdir -p output/MQTT/orderPrinter/log
 mkdir -p output/MQTT/orderPrinter/orders
 mkdir -p output/MQTT/orderProcessor/log
+mkdir -p output/MQTT/guestTracker/log
 mkdir -p output/SERVER/log
 mkdir -p output/SERVER/sslcert
 mkdir -p output/SERVER/static
@@ -18,6 +19,7 @@ mkdir -p output/SERVER/static
 yarn pkg --targets "$buildTargets" --out-path output/MQTT/broker backend/MQTT/broker.js
 yarn pkg --targets "$buildTargets" --out-path output/MQTT/orderPrinter backend/MQTT/CLIENTS/orderPrinter/orderPrinter.js
 yarn pkg --targets "$buildTargets" --out-path output/MQTT/orderProcessor backend/MQTT/CLIENTS/orderProcessor/orderProcessor.js
+yarn pkg --targets "$buildTargets" --out-path output/MQTT/orderProcessor backend/MQTT/CLIENTS/guestTracker/guestTracker.js
 
 #package express
 yarn pkg --targets "$buildTargets" --out-path output/SERVER backend/init.js

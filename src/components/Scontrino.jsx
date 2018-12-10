@@ -6,6 +6,8 @@ import Typography from "@material-ui/core/es/Typography/Typography";
 import {GET, GETSync, POST} from "../network";
 import {apiCalls, orderCifres} from "../consts";
 import Snackbar from "@material-ui/core/es/Snackbar/Snackbar";
+import CircularProgress from "@material-ui/core/es/CircularProgress/CircularProgress";
+import Grid from "@material-ui/core/es/Grid/Grid";
 
 Number.prototype.pad = function (size) {
     let s = String(this);
@@ -24,7 +26,7 @@ let write = (doc, font, variant, size, x, y, text) => {
 
 class Scontrino extends React.Component {
 
-    _data = <Typography variant="title">Caricamento...</Typography>;
+    _data = <Grid container spacing={0} alignItems="center" justify="center"><Grid item xs={12}><Typography variant="title">Caricamento...</Typography></Grid><Grid item xs={12}><CircularProgress disableShrink/></Grid></Grid>;
 
     map = new Map();
     kw = null;
@@ -80,8 +82,8 @@ class Scontrino extends React.Component {
                         this.doc.line(e.coordsx[0], e.coordsy[0] + offset, e.coordsx[1] + offset, e.coordsy[1] + offset);
                         break;
                     case "rect":
-                        this.doc.setDrawColor(e.border[0], e.border[1], e.border[2], 0);
-                        this.doc.setFillColor(e.fill[0], e.fill[1], e.fill[2], 0);
+                        this.doc.setDrawColor(e.border[0], e.border[1], e.border[2]);
+                        this.doc.setFillColor(e.fill[0], e.fill[1], e.fill[2]);
                         this.doc.roundedRect(e.x, e.y + offset, e.w, e.h, e.round, e.round, e.dofill ? 'FD' : 'D');
                         break;
                     default:
@@ -106,7 +108,7 @@ class Scontrino extends React.Component {
     }
 
     _page(page, elem) {
-        this._parse(page.header.content, 0);
+        this._parse(JSON.parse(JSON.stringify(page.header.content)), 0);
 
         if (elem !== undefined)
             elem.forEach((e, i) => this._elem(page.element.content, e, page.header.height + i * page.element.height));
@@ -132,7 +134,7 @@ class Scontrino extends React.Component {
         this._page(res.main, fullArr);
 
         Object.keys(this.props.elementi).forEach(e => {
-            this.map.set(this.kw["category"], e);
+            this.map.set(this.kw["category"], `${e}`);
             if (this.props.elementi[e].length > 0) {
                 this.doc.addPage();
                 this._page(res.details, this.props.elementi[e])

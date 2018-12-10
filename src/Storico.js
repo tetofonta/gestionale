@@ -16,6 +16,23 @@ import Checkbox from "@material-ui/core/es/Checkbox/Checkbox";
 import {getBillData, getCarts, renderCart} from "./Cart";
 import * as mqtt from "mqtt";
 import Button from "@material-ui/core/es/Button/Button";
+import AppBar from "@material-ui/core/es/AppBar/AppBar";
+import Toolbar from "@material-ui/core/es/Toolbar/Toolbar";
+import IconButton from "@material-ui/core/es/IconButton/IconButton";
+import SearchIcon from "@material-ui/icons/Search"
+import CloseIcon from "@material-ui/icons/Close"
+import SearchProgressIcon from "@material-ui/icons/Settings"
+import QrIcon from "@material-ui/icons/Camera"
+import DialogTitle from "@material-ui/core/es/DialogTitle/DialogTitle";
+import DialogContent from "@material-ui/core/es/DialogContent/DialogContent";
+import DialogContentText from "@material-ui/core/es/DialogContentText/DialogContentText";
+import TextField from "@material-ui/core/es/TextField/TextField";
+import DialogActions from "@material-ui/core/es/DialogActions/DialogActions";
+import Dialog from "@material-ui/core/es/Dialog/Dialog";
+import QrReader from "react-qr-reader";
+import Snackbar from "@material-ui/core/es/Snackbar/Snackbar";
+import OrderListItem from "./components/OrderListItem";
+import * as cfg from "./network.config"
 
 
 const styles = theme => ({
@@ -44,21 +61,19 @@ const styles = theme => ({
     paper: {
         padding: 10
     },
-    scr:{
+    scr: {
         height: 500
     },
-    foo: {}
+    foo: {},
+    appBar: {
+        top: 'auto',
+        bottom: 0,
+    },
+    toolbar: {
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
 });
-
-function getDate(unix_timestamp) {
-    let date = new Date(unix_timestamp * 1000);
-    let hours = date.getHours();
-    let minutes = "0" + date.getMinutes();
-    let seconds = "0" + date.getSeconds();
-    let day = "0" + date.getDate();
-    let month = "0" + (date.getMonth() + 1);
-    return hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2) + " - " + day.substr(-2) + "/" + month.substr(-2);
-}
 
 class Storico extends React.Component {
 
@@ -81,7 +96,7 @@ class Storico extends React.Component {
 
         this.client = mqtt.connect(mqttServer);
         this.client.on('connect', () => {
-            this.client.subscribe('order/official', (e) => {
+            this.client.subscribe(cfg.mqtt["order-official"], (e) => {
                 console.log(e)
             })
         });
@@ -111,25 +126,25 @@ class Storico extends React.Component {
     render() {
         return (
             <div>
-                <NavBar titleText='Storico ordini' history={this.props.history} showHome={true}/>
+                <NavBar elements={[
+                    <IconButton color="inherit" onClick={() => this.setState({search: true})}>
+                    {this.state.doSearch ? <SearchProgressIcon/> : <SearchIcon/>}
+                </IconButton>
+                ]} titleText='Storico ordini' history={this.props.history} showHome={true}/>
 
                 <Paper className={this.props.classes.marginTop}>
                     <Grid container spacing={0}>
                         <Grid item xs={12} lg={3}>
                             <Paper className={this.props.classes.container}>
                                 <List>
-                                    {Object.keys(this.state.list).reverse().map(e =>
-                                        <ListItem button onClick={() => {
+                                    {Object.keys(this.state.list).reverse().filter(e => {
+                                        if (!this.state.doSearch) return true;
+                                        if (this.state.id) return e === this.state.id;
+                                        if (this.state.num) return this.state.list[e].ordnum === this.state.num;
+                                    }).map(e =>
+                                        <OrderListItem id={e} onClick={() => {
                                             this.setState({ord: this.state.list[e], open: true})
-                                        }}>
-                                            <ListItemAvatar>
-                                                <Typography variant='display2'>{this.state.list[e].ordnum}</Typography>
-                                            </ListItemAvatar>
-                                            <ListItemText
-                                                primary={e.substr(0, 16) + (e.length > 16 ? "..." : "")}
-                                                secondary={this.state.list[e].user + " @ " + getDate(this.state.list[e].time)}
-                                            />
-                                        </ListItem>
+                                        }} ordnum={this.state.list[e].ordnum} user={this.state.list[e].user} time={this.state.list[e].time}/>
                                     )}
                                 </List>
                             </Paper>
@@ -197,6 +212,94 @@ class Storico extends React.Component {
                         </Grid>
                     </Grid>
                 </Paper>
+
+                <Dialog
+                    open={this.state.search}
+                    onClose={() => this.setState({search: false})}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="form-dialog-title">Ricerca Ordine</DialogTitle>
+                    {!this.state.camera && <DialogContent>
+
+                        <DialogContentText>
+                            Ricerca per numero di ordine
+                        </DialogContentText>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="name"
+                            label="OrderNumber"
+                            fullWidth
+                            onChange={(e) => this.setState({num: e.target.value, id: undefined, doSearch: false})}
+                        />
+                        <DialogContentText>
+                            Ricerca per id
+                        </DialogContentText>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="name"
+                            label="ID"
+                            fullWidth
+                            onChange={(e) => this.setState({id: e.target.value, num: undefined, doSearch: false})}
+                        />
+                        <IconButton onClick={() => this.setState({camera: true})}><QrIcon/></IconButton>
+                    </DialogContent>}
+                    {this.state.camera && <DialogContent>
+
+                        <DialogContentText>
+                            Scannerizza il codice sullo scontrino
+                        </DialogContentText>
+                        <QrReader
+                            delay={500}
+                            onError={(e) => this.setState({err: e})}
+                            onScan={(e) => {
+                                if(e){
+                                    try {
+                                        let data = JSON.parse(e);
+                                        if(data.num) this.setState({id: data.num, camera: false, doSearch: true, search: false, num: undefined});
+                                        else this.setState({err: "Cos'é sta merda?"});
+                                    } catch (e) {
+                                        this.setState({err: "Impossibile capire cosa c'é scritto =("})
+                                    }
+                                }
+                            }}
+                            style={{width: "100%"}}
+                        />
+                    </DialogContent>}
+                    <DialogActions>
+                        <Button onClick={() => this.setState({doSearch: false, search: false})} color="primary">
+                            Cancel
+                        </Button>
+                        <Button onClick={() => this.setState({doSearch: true, search: false})} color="primary">
+                            CERCA!
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={this.state.err}
+                    autoHideDuration={6000}
+                    onClose={() => this.setState({err: undefined})}
+                    ContentProps={{
+                        'aria-describedby': 'message-id',
+                    }}
+                    message={<span id="message-id">{this.state.err}</span>}
+                    action={[
+                        <IconButton
+                            key="close"
+                            aria-label="Close"
+                            color="inherit"
+                            onClick={() => this.setState({err: undefined})}
+                        >
+                            <CloseIcon />
+                        </IconButton>,
+                    ]}
+                />
 
             </div>)
             ;

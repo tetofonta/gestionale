@@ -7,7 +7,7 @@ logger_init("./log/processor.error.log", "./log/processor.log");
 let client = mqtt.connect(`mqtt://${cfg.serverIP}:${cfg.mqtt.broker.port}`);
 
 client.on('connect', function () {
-    client.subscribe('order/official', err => {
+    client.subscribe(cfg.mqtt["order-official"], err => {
         if (err) {
             console.log(err)
         }
@@ -15,7 +15,7 @@ client.on('connect', function () {
 });
 
 client.on('message', function (topic, message, packet) {
-    if (topic === "order/official") {
+    if (topic === cfg.mqtt["order-official"]) {
 
         let cart = JSON.parse(message.toString());
 
@@ -37,6 +37,7 @@ client.on('message', function (topic, message, packet) {
                     let hasErrored = false;
                     cart.cart.forEach(elem => {
                         if(!hasErrored) getConnection().query(`INSERT INTO ordini_prodotti(\`order\`, product, variant, qta) VALUES (${oid}, ${elem[1].id}, '${secure(elem[1].variants ? JSON.stringify(elem[1].variants) : "NULL")}', ${elem[1].qta})`, (e) => {if(e){console.error(e); hasErrored = true}});
+                        if(!hasErrored) getConnection().query(`UPDATE magazzino SET giacenza = giacenza - ${elem[1].qta} WHERE id = ${elem[1].id}`, (e) => {if(e){console.error(e); hasErrored = true}});
                     })
                 })
             }

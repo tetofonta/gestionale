@@ -65,10 +65,10 @@ let getTotal = (cart) => {
     return [total[0] + "." + (total[1] > 9 ? total[1] : "0" + total[1]), total];
 };
 
-let renderCart = (cart, classes, classs, normalized=false, withButtons=true) => {
-    if(!cart) return {};
+let renderCart = (cart, classes, classs, normalized = false, withButtons = true) => {
+    if (!cart) return {};
     let mc = JSON.parse(JSON.stringify(cart));
-    if(!normalized) mc = [...normalizeCart(mc)];
+    if (!normalized) mc = [...normalizeCart(mc)];
     let tote = 0, totc = 0;
     return (
         <Paper className={classes.paper}>
@@ -133,14 +133,18 @@ let renderCart = (cart, classes, classs, normalized=false, withButtons=true) => 
                                             <Grid item xs={2}>
                                                 {withButtons && <Button onClick={() => {
                                                     for (let i = 0; i < cart.length; i++)
-                                                        if (cart[i].desc === k && cart[i].variant === e.var) cart[i].qta++;
+                                                        if (cart[i].desc === k && JSON.stringify(cart[i].variant) === JSON.stringify(e.var)) {
+                                                            cart[i].qta++;
+                                                        }
                                                     classs.forceUpdate()
                                                 }} variant="contained" color="primary"><AddIcon/></Button>}
                                             </Grid>,
                                             <Grid item xs={2}>
                                                 {withButtons && <Button onClick={() => {
                                                     for (let i = 0; i < cart.length; i++)
-                                                        if (cart[i].desc === k && cart[i].variant === e.var) cart[i].qta > 0 ? cart[i].qta-- : cart.splice(i, 1);
+                                                        if (cart[i].desc === k && JSON.stringify(cart[i].variant) === JSON.stringify(e.var)) {
+                                                            cart[i].qta > 0 ? cart[i].qta-- : cart.splice(i, 1);
+                                                        }
                                                     classs.forceUpdate()
                                                 }} variant="contained" color="secondary"><MinusIcon/></Button>}
                                             </Grid>
@@ -156,10 +160,10 @@ let renderCart = (cart, classes, classs, normalized=false, withButtons=true) => 
     )
 };
 
-let getBillData = (cart, normalized=true) => {
-    if(!cart) return {};
+let getBillData = (cart, normalized = false) => {
+    if (!cart) return {};
     let mc = JSON.parse(JSON.stringify(cart));
-    if(!normalized) mc = [...normalizeCart(mc)];
+    if (!normalized) mc = [...normalizeCart(mc)];
     let o = {};
     Object.keys(cfg.react.scontrini).forEach(e => {
         let m = mc.filter(q => cfg.react.scontrini[e].includes(q[1].cat));
@@ -172,10 +176,10 @@ let getBillData = (cart, normalized=true) => {
 };
 
 
-let getCarts = (cart, normalized=true) => {
-    if(!cart) return {};
+let getCarts = (cart, normalized = false) => {
+    if (!cart) return {};
     let mc = JSON.parse(JSON.stringify(cart));
-    if(!normalized) mc = [...normalizeCart(mc)];
+    if (!normalized) mc = [...normalizeCart(mc)];
     let obj = {};
     Object.keys(cfg.react.scontrini).forEach(e => {
         obj[e] = mc.filter(q => cfg.react.scontrini[e].includes(q[1].cat));

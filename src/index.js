@@ -7,9 +7,12 @@ import registerServiceWorker from './registerServiceWorker';
 import {POST} from "./network";
 import {apiCalls} from "./consts";
 
-// if (document.location.protocol !== 'https:') {
-//     // document.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
-// }
+
+if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'development'){
+    console.log = function(o){};
+    console.warn = function(o){};
+    console.error = function(o){};
+}
 
 let timeoutInMiliseconds = 15 * 60000;
 let timeoutId;

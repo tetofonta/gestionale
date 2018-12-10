@@ -11,7 +11,7 @@ logger_init("./log/printer.error.log", "./log/printer.log");
 let client = mqtt.connect(`mqtt://${cfg.serverIP}:${cfg.mqtt.broker.port}`);
 
 client.on('connect', function () {
-    client.subscribe('order/official', err => {
+    client.subscribe(cfg.mqtt["order-official"], err => {
         if (err) {
             console.error(err)
         }
@@ -19,7 +19,7 @@ client.on('connect', function () {
 });
 
 client.on('message', function (topic, message, packet) {
-    if (topic === "order/official") {
+    if (topic === cfg.mqtt["order-official"]) {
         let cart = JSON.parse(message.toString());
         console.log(cart);
         let cartArray = [];
@@ -47,7 +47,7 @@ client.on('message', function (topic, message, packet) {
 
                 return v[1].variants.map(e => {
                     let text = v[0] + " ";
-                    if (e.var.select)
+                    if (e.var.select && e.var.select.values && e.var.select.labels)
                         e.var.select.labels.forEach((q, i) => text += (e.var.select.values[i] ? "CON " : "NO ") + q + ", ");
                     else
                         text += e.var.choose;

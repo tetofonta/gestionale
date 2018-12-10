@@ -23,7 +23,7 @@ function getNewToken() {
  * @return JSON, {state: bool, err: String} in caso di errore, altrimenti é compito di cb(data) scrivere sull'oggetto res.
  */
 function onUserAuthenticated(req, res, cb, neededPrivs, permitGuest = false) {
-    if (getNW(req) || permitGuest) {
+    if (getNW(req)) {
 
         let data = req.body;
         try {

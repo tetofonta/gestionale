@@ -3,7 +3,7 @@ import NavBar from './components/NavBar'
 import {apiCalls, CategoryWidth, Currency, mqttServer, orderCifres, ProductsWidth, scontrinoModel} from "./consts";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import {withStyles} from '@material-ui/core/styles';
-import {POST} from "./network";
+import {GETSync, POST} from "./network";
 import Typography from "@material-ui/core/es/Typography/Typography";
 import Paper from "@material-ui/core/es/Paper/Paper";
 import Button from "@material-ui/core/es/Button/Button";
@@ -33,6 +33,7 @@ import Scontrino from "./components/Scontrino";
 import {getBillData, getCartLenght, getCarts, getTotal, normalizeCart, renderCart} from "./Cart";
 import DialogActions from "@material-ui/core/es/DialogActions/DialogActions";
 import DialogContentText from "@material-ui/core/es/DialogContentText/DialogContentText";
+import * as cfg from "./network.config"
 
 const styles = theme => ({
     marginTop: {
@@ -202,18 +203,7 @@ class Cassa extends React.Component {
 
         let that = this;
 
-        window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;//compatibility for Firefox and chrome
-        let pc = new RTCPeerConnection({iceServers: []}), noop = function () {
-        };
-        pc.createDataChannel('');//create a bogus data channel
-        // noinspection JSIgnoredPromiseFromCall
-        pc.createOffer(pc.setLocalDescription.bind(pc));// create offer and set local description
-        pc.onicecandidate = function (ice) {
-            if (ice && ice.candidate && ice.candidate.candidate) {
-                that.ip = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
-                pc.onicecandidate = noop;
-            }
-        };
+        this.ip = /*GETSync(apiCalls.ip)*/ "12222";
     };
 
     genScontrino() {
@@ -369,8 +359,13 @@ class Cassa extends React.Component {
                             />
                             {this.getCartLenght() > 0 && <Button variant="extendedFab" color='green' aria-label="Delete"
                                                                  className={this.props.classes.button} onClick={() => {
-                                this.genScontrino();
-                                this.setState({step: 2, currentState: this.status.code});
+                                if (window.ctx.get("isLogged")) this.genScontrino();
+                                this.setState({
+                                    step: 2,
+                                    currentState: this.status.code,
+                                    ordernum: Cassa.generateRandom(11),
+                                    started: false
+                                });
                             }}>
                                 <SendIcon className={this.props.classes.extendedIcon}/>
                                 Invia
@@ -382,39 +377,73 @@ class Cassa extends React.Component {
                 {this.state.currentState === this.status.code &&
                 <Paper className={this.props.classes.marginTopNoX}>
                     {!window.ctx.get("isLogged") && (function (th) {
-                        let client = mqtt.connect(mqttServer);
-                        let that = this;
-                        client.on('connect', () => {
-                            // noinspection JSPotentiallyInvalidUsageOfClassThis
-                            client.publish('order/guest', JSON.stringify(
-                                {
-                                    cart: [...th.normalizeCart()],
-                                    orderID: th.state.ordernum,
-                                    asporto: th.state.isAsporto,
-                                    message: th.state.note,
-                                    ip: that.ip,
-                                    time: Math.floor(Date.now() / 1000)
-                                }));
-                            client.end();
-                        });
+                        if (!th.state.started) {
+                            let client = mqtt.connect(mqttServer);
+                            let that = this;
+                            client.on('connect', () => {
+                                // noinspection JSPotentiallyInvalidUsageOfClassThis
+                                client.publish(cfg.mqtt["order-guest"], JSON.stringify(
+                                    {
+                                        cart: th.getCarts(),
+                                        orderID: th.state.ordernum,
+                                        asporto: th.state.isAsporto,
+                                        message: th.state.note,
+                                        ip: th.ip,
+                                        time: Math.floor(Date.now() / 1000)
+                                    }));
+                                client.end();
+                            });
+
+
+                            th.state.started = true;
+                            th.state.time = Math.floor(Date.now() / 1000);
+
+                            th.state.mins = Math.floor(cfg.guest.timeout / 60);
+                            th.state.secs = cfg.guest.timeout - th.state.mins * 60;
+
+                            clearInterval(th.counterFnc);
+                            th.counterFnc = setInterval(function () {
+                                if (th.state.mins === 0 && th.state.secs === 0) {
+                                    th.props.history.push("/");
+                                    return;
+                                }
+
+                                if (th.state.secs === 0) {
+                                    th.state.mins--;
+                                    th.state.secs = 59;
+                                    th.forceUpdate();
+                                    return;
+                                }
+
+                                th.state.secs--;
+                                th.forceUpdate();
+
+                            }, 1000);
+                        }
 
                         // noinspection JSPotentiallyInvalidUsageOfClassThis
-                        return <Grid container>
+                        return <Grid container justify="center" alignItems="center">
                             <Grid item xs={12}>
                                 <QRCode
                                     value={JSON.stringify(
                                         {
-                                            cart: [...th.normalizeCart()],
                                             orderID: th.state.ordernum,
-                                            asporto: th.state.isAsporto,
-                                            message: th.state.note,
-                                            ip: this.ip,
-                                            time: Math.floor(Date.now() / 1000)
+                                            ip: th.ip,
+                                            time: th.state.time
                                         }
                                     )}
                                     className={th.props.classes.centred}/>
+
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={12} className={th.props.classes.centred}>
+                                <Typography variant={"subheading"}>Svelto! Mancano solo pochi minuti alla
+                                    scadenza!</Typography>
+                            </Grid>
+                            <Grid item xs={12} className={th.props.classes.centred}>
+                                <Typography
+                                    variant={"display2"}>{("0" + th.state.mins).substr(-2)}:{("0" + th.state.secs).substr(-2)}</Typography>
+                            </Grid>
+                            <Grid item xs={12} className={th.props.classes.centred}>
                                 <Typography>ID: {th.state.ordernum}</Typography>
                             </Grid>
                         </Grid>
@@ -431,7 +460,7 @@ class Cassa extends React.Component {
 
                                         let client = mqtt.connect(mqttServer);
                                         client.on('connect', () => {
-                                            client.publish('order/official', JSON.stringify(
+                                            client.publish(cfg.mqtt["order-official"], JSON.stringify(
                                                 {
                                                     cart: this.getCarts(),
                                                     orderID: this.state.ordernum,

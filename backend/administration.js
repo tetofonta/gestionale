@@ -46,7 +46,7 @@ function get_buono_detail(req, res) {
             res.send({state: false, err: ""})
         });
 
-    }, ["CASSA"]);
+    });
 }
 
 /**

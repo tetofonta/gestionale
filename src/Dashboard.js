@@ -73,8 +73,6 @@ class Dashboard extends React.Component {
                         </Grid>
                     );
                 });
-            else
-                this.props.history.push("/");
             this.forceUpdate()
         });
 

@@ -40,6 +40,9 @@ app.get('/api/hello', (req, res) => {
     }
     res.send({express: true, kind: getNW(req) ? OP : GUEST});
 });
+app.get('/api/ip', (req, res) => {
+   return (req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress).split(",")[0];
+});
 
 app.post('/api/new_order', (r, e) => POSTOnly(r, e, increment)); //Ritorna il numero di ordine incrementale
 app.post('/api/rst_counter'); //TODO
@@ -67,6 +70,6 @@ let httpsServer = https.createServer(credentials, app);
 httpsServer.listen(cfg.serverPort, () => console.log(`Listening on port ${cfg.serverPort}`));
 
 const redirect_app = express();
-app.get('*', (req, res) => res.redirect('https://' + req.headers.host + ":" + cfg.serverPort + req.url));
+redirect_app.get('*', (req, res) => res.redirect('https://' + req.headers.host + ":" + cfg.serverPort + req.url));
 let httpServer = http.createServer(redirect_app);
-httpServer.listen(cfg.serverPort + 1, () => console.log(`Listening on port ${cfg.serverPort + 1}`));
+httpServer.listen(cfg.serverPortHttp, () => console.log(`Listening on port ${cfg.serverPortHttp}`));
