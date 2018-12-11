@@ -1,16 +1,16 @@
 {
   "mysql": {
     "user": "user",
-    "host": "host-ip",
+    "host": "host",
     "password": "password",
-    "database": "database"
+    "database": "GSagrav2"
   },
   "network": {
     "opNetwork": {
       "ip": [
         192,
         168,
-        178,
+        1,
         0
       ],
       "subnet": 24
@@ -26,7 +26,12 @@
         "port": 1886,
         "secure": 1846
       }
-    }
+    },
+    "order-official": "order/official",
+    "order-guest": "order/guest",
+    "order-listmsg": "order/msg",
+    "order-listch": "order/channel",
+    "listSendTimeout": 2
   },
   "react": {
     "categoryWidth": "25%",
@@ -52,7 +57,7 @@
       "categorieBar": [
         "BAR"
       ],
-      "categoriaBirre":[
+      "categoriaBirre": [
         "BIRRE"
       ],
       "categorieAlcolici": [
@@ -64,9 +69,16 @@
       ]
     }
   },
-  "toPrinter": ["categorieCucina", "categorieAlcolici"],
-  "serverIP": "192.168.178.23",
+  "toPrinter": [
+    "categorieCucina",
+    "categorieAlcolici"
+  ],
+  "guest": {
+    "timeout": 900
+  },
+  "serverIP": "192.168.1.46",
   "serverPort": 5000,
+  "serverPortHttp": 6000,
   "sagraName": "Sagra San Lorenzo",
   "printerName": "Samsung-C460-Series"
 }
