@@ -13,7 +13,7 @@ if [ ! -f ./network.config.json ]; then
 fi
 
 ln -s "$PWD/network.config.json" ./backend/
-ln -s "$PWD/network.config.json" ./src/
+ln -s "$PWD/network.config.json" ./src/configs/
 
 sudo apt install cups-bsd
 yarn install

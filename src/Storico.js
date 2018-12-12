@@ -32,7 +32,7 @@ import Dialog from "@material-ui/core/es/Dialog/Dialog";
 import QrReader from "react-qr-reader";
 import Snackbar from "@material-ui/core/es/Snackbar/Snackbar";
 import OrderListItem from "./components/OrderListItem";
-import * as cfg from "./network.config"
+import * as cfg from "./configs/network.config"
 
 
 const styles = theme => ({

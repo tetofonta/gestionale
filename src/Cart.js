@@ -6,7 +6,7 @@ import Button from "@material-ui/core/es/Button/Button";
 import AddIcon from "@material-ui/icons/Add"
 import MinusIcon from "@material-ui/icons/Remove"
 import Typography from "@material-ui/core/es/Typography/Typography";
-import * as cfg from "./network.config"
+import * as cfg from "./configs/network.config"
 
 let normalizeCart = (cart) => {
     let map = new Map();

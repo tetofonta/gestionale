@@ -33,7 +33,7 @@ import Scontrino from "./components/Scontrino";
 import {getBillData, getCartLenght, getCarts, getTotal, normalizeCart, renderCart} from "./Cart";
 import DialogActions from "@material-ui/core/es/DialogActions/DialogActions";
 import DialogContentText from "@material-ui/core/es/DialogContentText/DialogContentText";
-import * as cfg from "./network.config"
+import * as cfg from "./configs/network.config"
 
 const styles = theme => ({
     marginTop: {
@@ -246,7 +246,7 @@ class Cassa extends React.Component {
         }
 
         return (
-            <div className={this.props.history.root}>
+            <div className={this.props.classes.root}>
                 <NavBar titleText='Cassa' history={this.props.history} showHome={true}
                         detailsText={this.state.ordernum}/>
 

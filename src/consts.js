@@ -1,5 +1,5 @@
 import React from "react";
-import * as cfg from './network.config'
+import * as cfg from './configs/network.config'
 
 const connection_status = Object.freeze({
     guest: "guest",

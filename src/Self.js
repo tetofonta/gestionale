@@ -4,7 +4,7 @@ import List from "@material-ui/core/es/List/List";
 import {apiCalls, Currency, mqttServer, orderCifres, scontrinoModel} from "./consts";
 import {withStyles} from '@material-ui/core/styles';
 import * as mqtt from "mqtt";
-import * as cfg from "./network.config"
+import * as cfg from "./configs/network.config"
 import Drawer from "@material-ui/core/es/Drawer/Drawer";
 import OrderListItem from "./components/OrderListItem";
 import MenuIcon from "@material-ui/icons/Menu"
