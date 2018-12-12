@@ -3,7 +3,7 @@ import NavBar from './components/NavBar'
 import {apiCalls, CategoryWidth, Currency, mqttServer, orderCifres, ProductsWidth, scontrinoModel} from "./consts";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import {withStyles} from '@material-ui/core/styles';
-import {GETSync, POST} from "./network";
+import {GET, GETSync, POST} from "./network";
 import Typography from "@material-ui/core/es/Typography/Typography";
 import Paper from "@material-ui/core/es/Paper/Paper";
 import Button from "@material-ui/core/es/Button/Button";
@@ -191,7 +191,7 @@ class Cassa extends React.Component {
 
     reloadList() {
         this.images = [];
-        POST(apiCalls.productList, {}).then(res =>
+        GET(apiCalls.productList).then(res =>
             Object.keys(res.list).forEach(e => {
                 this.images.push({title: e, url: res.list[e].bg, prods: res.list[e].elements, width: CategoryWidth});
                 this.setState({ordernum: Cassa.generateRandom(11)})
@@ -682,4 +682,6 @@ class Cassa extends React.Component {
     }
 }
 
+let classe = withStyles(styles)(Cassa);
+export {classe}
 export default withStyles(styles)(Cassa);

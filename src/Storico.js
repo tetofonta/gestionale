@@ -306,4 +306,6 @@ class Storico extends React.Component {
     }
 }
 
+let classe = withStyles(styles)(Storico);
+export {classe}
 export default withStyles(styles)(Storico)

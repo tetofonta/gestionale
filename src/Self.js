@@ -12,7 +12,7 @@ import IconButton from "@material-ui/core/es/IconButton/IconButton";
 import AddIcon from "@material-ui/icons/Add";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import Button from "@material-ui/core/es/Button/Button";
-import {POST} from "./network";
+import {GET, POST} from "./network";
 import Scontrino from "./components/Scontrino";
 import {getBillData, renderCart} from "./Cart";
 import Typography from "@material-ui/core/es/Typography/Typography";
@@ -114,7 +114,7 @@ class Self extends React.Component {
 
     componentDidMount() {
         this.clientid = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2)
-        POST(apiCalls.productList, {}).then(res => {
+        GET(apiCalls.productList).then(res => {
             Object.keys(res.list).forEach(e => {
                 let o = res.list[e];
                 o.elements.forEach(k => this.state.prodotti[k.id] = {eur: k.eur, cents: k.cents, desc: k.desc})
@@ -372,4 +372,6 @@ class Self extends React.Component {
     }
 }
 
+let classe = withStyles(styles)(Self);
+export {classe}
 export default withStyles(styles)(Self)

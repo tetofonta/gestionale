@@ -9,7 +9,7 @@ const {auth, auth_refresh} = require('./auth');
 const {usr_getList, usr_edit, usr_new, usr_del, usr_getAccessibleFunctions} = require('./users');
 const {get_most_suitable_ads} = require("./ads");
 const {get_products_list, get_gruppi_cucina, get_popups, get_products, add_meals} = require("./magazzino");
-const {increment, get_buono_detail, get_buoni, upd_buoni, get_old_orders} = require("./administration");
+const {increment, get_buono_detail, get_buoni, upd_buoni, get_old_orders, get_all_fncs} = require("./administration");
 const cfg = require("./network.config");
 const {logger_init} = require("./logger");
 logger_init("./log/express.error.log", "./log/express.log");
@@ -43,6 +43,10 @@ app.get('/api/hello', (req, res) => {
 app.get('/api/ip', (req, res) => {
    return (req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress).split(",")[0];
 });
+app.get('/api/ads', (r, e) => get_most_suitable_ads(r, e));
+app.get('/api/products', (r, e) => get_products_list(r, e));
+app.get('/api/getAllFncs', (r, e) => get_all_fncs(r, e));
+
 
 app.post('/api/new_order', (r, e) => POSTOnly(r, e, increment)); //Ritorna il numero di ordine incrementale
 app.post('/api/rst_counter'); //TODO
@@ -55,8 +59,6 @@ app.post('/api/editUser', (r, e) => POSTOnly(r, e, usr_edit));
 app.post('/api/newUser', (r, e) => POSTOnly(r, e, usr_new));
 app.post('/api/delUser', (r, e) => POSTOnly(r, e, usr_del));
 app.post('/api/getfunctions', (r, e) => POSTOnly(r, e, usr_getAccessibleFunctions));
-app.post('/api/ads', (r, e) => POSTOnly(r, e, get_most_suitable_ads));
-app.post('/api/products', (r, e) => POSTOnly(r, e, get_products_list));
 app.post('/api/buono', (r, e) => POSTOnly(r, e, get_buono_detail));
 app.post('/api/buoni', (r, e) => POSTOnly(r, e, get_buoni));
 app.post('/api/updateBuoni', (r, e) => POSTOnly(r, e, upd_buoni));

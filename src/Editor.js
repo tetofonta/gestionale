@@ -781,4 +781,6 @@ class Editor extends React.Component {
     }
 }
 
+let classe = withStyles(styles)(Editor);
+export {classe}
 export default withStyles(styles)(Editor)

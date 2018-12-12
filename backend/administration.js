@@ -111,7 +111,7 @@ function get_old_orders(req, res) {
                               inner join magazzino on ordini_prodotti.product = magazzino.id
                               inner join gruppi_cucina on magazzino.gruppo = gruppi_cucina.id
                             where ordini_dettagli.id = ordini_prodotti.\`order\` ORDER BY ordini_dettagli.timestamp ASC`, (e, r) => {
-            if (!res || e) {
+            if (!r || e) {
                 console.error(e);
                 res.send({state: false, err: e.toString()});
                 return;
@@ -144,8 +144,29 @@ function get_old_orders(req, res) {
     }, ["STORICO"])
 }
 
+function get_all_fncs(req, res) {
+    getConnection().query(`SELECT moduleName, \`to\` as too, isPublic, isPrivate FROM funzioni WHERE 1`, (e, r) => {
+        if (!r || e) {
+            console.error(e);
+            res.send({state: false, err: e.toString()});
+            return;
+        }
+
+        let privates = [];
+        let publics = [];
+
+        r.forEach(e => {
+            if(e.isPublic) publics.push(e);
+            else if(e.isPrivate) privates.push(e);
+        });
+
+        res.send({state: true, publics: publics, privates: privates})
+    })
+}
+
 module.exports.get_old_orders = get_old_orders;
 module.exports.increment = increment;
 module.exports.get_buono_detail = get_buono_detail;
 module.exports.get_buoni = get_buoni;
 module.exports.upd_buoni = upd_buoni;
+module.exports.get_all_fncs = get_all_fncs;

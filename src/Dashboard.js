@@ -4,7 +4,7 @@ import {apiCalls, sagraName} from "./consts";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import Hidden from "@material-ui/core/es/Hidden/Hidden";
 import {withStyles} from '@material-ui/core/styles';
-import {POST} from "./network";
+import {GET, POST} from "./network";
 import Typography from "@material-ui/core/es/Typography/Typography";
 import FunctionTile from "./components/FunctionTile";
 
@@ -46,7 +46,7 @@ class Dashboard extends React.Component {
 
     componentDidMount() {
         if (!window.ctx.get("isLogged"))
-            POST(apiCalls.ads, {}).then(res => {
+            GET(apiCalls.ads).then(res => {
                 if (res.state) {
                     this.setState({pub1: res.ads[0], pub2: res.ads[1]})
                 } else {

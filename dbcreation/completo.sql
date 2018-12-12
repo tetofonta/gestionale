@@ -39,7 +39,7 @@ CREATE TABLE `ads` (
 
 LOCK TABLES `ads` WRITE;
 /*!40000 ALTER TABLE `ads` DISABLE KEYS */;
-INSERT INTO `ads` VALUES (1,'sampa',2,1,'/ads/%sampa.png'),(3,'coin',1,1,'/ads/%coin.png'),(5,'bsfc',3,0,'/ads/%bsfc.png');
+INSERT INTO `ads` VALUES (1,'sampa',2,2,'/ads/%sampa.png'),(3,'coin',1,1,'/ads/%coin.png'),(5,'bsfc',3,1,'/ads/%bsfc.png');
 /*!40000 ALTER TABLE `ads` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -163,16 +163,19 @@ CREATE TABLE `funzioni` (
   `titolo` varchar(64) NOT NULL,
   `descrizione` varchar(64) NOT NULL DEFAULT '',
   `categoria` int(11) DEFAULT NULL,
-  `icona` varchar(16) NOT NULL,
+  `icona` varchar(48) NOT NULL,
   `req_prev` int(11) NOT NULL DEFAULT '0',
   `to` varchar(32) NOT NULL,
   `tooltip` varchar(64) DEFAULT NULL,
+  `isPrivate` int(11) NOT NULL DEFAULT '1',
+  `isPublic` int(11) NOT NULL DEFAULT '0',
+  `moduleName` varchar(64) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `funzioni_id_uindex` (`id`),
   UNIQUE KEY `funzioni_titolo_uindex` (`titolo`),
   KEY `funzioni_categoria_id_fk` (`categoria`),
   CONSTRAINT `funzioni_categoria_id_fk` FOREIGN KEY (`categoria`) REFERENCES `categoria` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -181,7 +184,7 @@ CREATE TABLE `funzioni` (
 
 LOCK TABLES `funzioni` WRITE;
 /*!40000 ALTER TABLE `funzioni` DISABLE KEYS */;
-INSERT INTO `funzioni` VALUES (1,'Cassa','',1,'\'\'',1,'/newOrdine',NULL),(3,'Magazzino','Gestione magazzino e risorse',3,'\'\'',5,'/magazzino',NULL),(5,'Statistiche','Andamenti e incassi',7,'\'\'',7,'/stats',NULL),(7,'Editor','Editor modelli pdf',5,'\'\'',11,'/editor',NULL),(9,'Gestione Buoni','Gestisci e crea buoni',3,'\'\'',3,'/buoni',NULL),(11,'Storico','Storico e gestione ordini',7,'\'\'',9,'/storico',NULL),(13,'Cassa Self','',1,'\'\'',1,'/self',NULL);
+INSERT INTO `funzioni` VALUES (1,'Cassa','Crea il tuo ordine',1,'fas fa-money-bill-alt',1,'/newOrdine','Crea il tuo ordine personalizzandolo come vuoi',1,1,'cassa'),(3,'Magazzino','Gestione magazzino e risorse',3,'\'\'',5,'/magazzino',NULL,1,0,'magazzino'),(5,'Statistiche','Andamenti e incassi',7,'\'\'',7,'/stats',NULL,1,0,'statistica'),(7,'Editor','Editor modelli pdf',5,'\'\'',11,'/editor',NULL,1,0,'editor'),(9,'Gestione Buoni','Gestisci e crea buoni',3,'\'\'',3,'/buoni',NULL,1,0,'buoni'),(11,'Storico','Storico e gestione ordini',7,'\'\'',9,'/storico',NULL,1,0,'storico'),(13,'Cassa Self','',1,'\'\'',1,'/self',NULL,1,0,'cassa_self'),(15,'Feedback','Dicci cosa ne pensi',1,'fas fa-comments',1,'/guestFeedback',NULL,0,1,'feedback');
 /*!40000 ALTER TABLE `funzioni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -405,4 +408,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-10 21:46:49
+-- Dump completed on 2018-12-12 11:23:57

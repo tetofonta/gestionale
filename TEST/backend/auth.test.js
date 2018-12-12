@@ -110,11 +110,7 @@ describe('AUTH Backend', function () {
             makePOST("10.16.25.14", {user: "maria", token: " "}, (r, e) => onUserAuthenticated(r, e, () => e.send({state: true})), (obj) => {
                 assert.ok(!obj.state);
                 assert.equal(obj.err, "Access denied from guest network.");
-                makePOST("10.16.25.14", {user: "maria", token: " "}, (r, e) => onUserAuthenticated(r, e, () => e.send({state: true}), undefined, true), (obj) => {
-                    assert.ok(!obj.state);
-                    assert.notEqual(obj.err, "Access denied from guest network.");
-                    setImmediate(done)
-                })
+                setImmediate(done)
             })
         });
         it('should return state: true on user correctly logged', function (done) {

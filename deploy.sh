@@ -29,6 +29,11 @@ yarn build
 
 cp -R build/* output/SERVER/static/
 cp -R backend/static/* output/SERVER/static/
+rm -rf output/*/.github/
+rm -rf output/*.md
+rm -rf output/*.txt
+rm -rf output/*/less/
+rm -rf output/*/scss/
 
 openssl req -nodes -new -x509 -keyout output/SERVER/sslcert/server.key -out output/SERVER/sslcert/server.crt
 cp output/SERVER/sslcert/* output/MQTT/broker/sslcert/

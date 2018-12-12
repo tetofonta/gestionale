@@ -27,6 +27,17 @@ function createStream(path){
     return fs.createWriteStream(path, {flags: 'a'})
 }
 
+function log_my_data(data, file, type, debug){
+    let md = data;
+    if(typeof data === "object"){
+        try{
+            md = JSOn.stringify(data)
+        } catch (e){ md = data}
+    }
+    file.write(util.format(`[${new Date().toString()}][${type}][${process.pid}]\t\t${util.format(md)}`) + "\n");
+    if (debug) log_stdout.write(util.format(`[${Date.toString()}][${type}][${process.pid}]\t\t${util.format(md)}`) + "\n");
+}
+
 function logger_init(err, log, debug = false) {
 
     const log_file = createStream(log);
@@ -38,15 +49,10 @@ function logger_init(err, log, debug = false) {
         return;
     }
 
-    console.log = function (d) {
-        log_file.write(util.format("[" + Date.now() + "]" + "\t\t" + JSON.stringify(d)) + '\n');
-        if (debug) log_stdout.write(util.format(d) + '\n');
-    };
+    console.log = (d) => log_my_data(d, log_file, "LOG", debug);
+    console.warn = (d) => log_my_data(d, log_file, "WARNING", debug);
+    console.error = (d) => log_my_data(d, err_file, "ERROR", debug);
 
-    console.error = function (d) { //
-        err_file.write(util.format("[" + Date.now() + "]" + "\t\t" + d) + '\n');
-        if (debug) log_stderr.write(util.format(d) + '\n');
-    };
 }
 
 module.exports.logger_init = logger_init;

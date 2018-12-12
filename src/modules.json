@@ -1,0 +1,40 @@
+{
+  "modules": {
+    "users":{
+      "modulePath": "default",
+      "enabled": true
+    },
+    "magazzino": {
+      "modulePath": "./Magazzino",
+      "enabled": true
+    },
+    "cassa": {
+      "modulePath": "./Cassa",
+      "enabled": true
+    },
+    "statistica": {
+      "modulePath": "./Statistiche",
+      "enabled": false
+    },
+    "editor": {
+      "modulePath": "./Editor",
+      "enabled": true
+    },
+    "buoni": {
+      "modulePath": "./Buoni",
+      "enabled": true
+    },
+    "storico": {
+      "modulePath": "./Storico",
+      "enabled": true
+    },
+    "cassa_self": {
+      "modulePath": "./Self",
+      "enabled": true
+    },
+    "feedback": {
+      "modulePath": "./Feedback",
+      "enabled": false
+    }
+  }
+}

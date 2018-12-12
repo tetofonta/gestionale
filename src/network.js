@@ -35,7 +35,10 @@ let POST = async (path, form) => {
         },
         body: JSON.stringify(form)
     });
-    const body = await response.json();
+    let body;
+    try {
+        body = await response.json();
+    }catch(e){throw Error(`JSON ERROR requiring ${path}: ${JSON.stringify(response.body, true)}`)}
 
     if (response.status !== 200) throw Error(body.message);
 

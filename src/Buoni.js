@@ -250,5 +250,6 @@ class Buoni extends React.Component {
             ;
     }
 }
-
+let classe = withStyles(styles)(Buoni);
+export {classe}
 export default withStyles(styles)(Buoni)

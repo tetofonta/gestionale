@@ -656,4 +656,6 @@ class Magazzino extends React.Component {
     }
 }
 
+let classe = withStyles(styles)(Magazzino);
+export {classe}
 export default withStyles(styles)(Magazzino);
