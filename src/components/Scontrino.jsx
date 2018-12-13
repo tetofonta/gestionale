@@ -110,10 +110,18 @@ class Scontrino extends React.Component {
     _page(page, elem) {
         this._parse(JSON.parse(JSON.stringify(page.header.content)), 0);
 
+        let completed = false;
         if (elem !== undefined)
-            elem.forEach((e, i) => this._elem(page.element.content, e, page.header.height + i * page.element.height));
+            elem.forEach((e, i) => {
+                if(this.props.fixedHeight && page.header.height + i * page.element.height + page.footer.height > this.props.fixedHeight){
+                    this._parse(page.footer.content, this.props.fixedHeight - page.footer.height);
+                    this.doc.addPage();
+                    this._page(page, elem.slice(i, elem.length));
+                    completed = true;
+                } else this._elem(page.element.content, e, page.header.height + i * page.element.height);
+            });
 
-        this._parse(page.footer.content, page.header.height + page.element.height * elem.length);
+        if(!completed) this._parse(page.footer.content, page.header.height + page.element.height * elem.length);
     }
 
     _generate(res) {
@@ -124,6 +132,7 @@ class Scontrino extends React.Component {
         });
 
         let height = res.main.header.height + res.main.element.height * fullArr.length + res.main.footer.height;
+        if(this.props.fixedHeight && height < this.props.fixedHeigh) height = this.props.fixedHeigh;
         // noinspection JSPotentiallyInvalidConstructorUsage
         this.doc = new jsPDF({
             orientation: height > res.width ? 'portait' : 'landscape',

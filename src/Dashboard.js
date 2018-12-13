@@ -7,6 +7,7 @@ import {withStyles} from '@material-ui/core/styles';
 import {GET, POST} from "./network";
 import Typography from "@material-ui/core/es/Typography/Typography";
 import FunctionTile from "./components/FunctionTile";
+import * as cfg from "./configs/network.config"
 
 const styles = theme => ({
     marginTop: {
@@ -92,26 +93,26 @@ class Dashboard extends React.Component {
                     <Hidden xsDown>
                         <Grid container spacing={24} className={this.props.classes.grid}>
                             <Grid item xs={2} justify="center" alignItems="center">
-                                {!window.ctx.get("isLogged") && this.ad("vert_", this.state.pub1, this.props.classes.imageV)}
+                                {(!window.ctx.get("isLogged") && cfg.react.dashboard_use_ads) && this.ad("vert_", this.state.pub1, this.props.classes.imageV)}
                             </Grid>
                             <Grid item xs={8}>
                                 {this.dashboard}
                             </Grid>
                             <Grid item xs={2} justify="center" alignItems="center">
-                                {!window.ctx.get("isLogged") && this.ad("vert_", this.state.pub2, this.props.classes.imageV)}
+                                {(!window.ctx.get("isLogged") && cfg.react.dashboard_use_ads) && this.ad("vert_", this.state.pub2, this.props.classes.imageV)}
                             </Grid>
                         </Grid>
                     </Hidden>
                     <Hidden smUp>
                         <Grid container spacing={24} justify="center" alignItems="center">
                             <Grid item xs={12} justify="center" alignItems="center">
-                                {!window.ctx.get("isLogged") && this.ad("hor_", this.state.pub1, this.props.classes.imageH)}
+                                {(!window.ctx.get("isLogged") && cfg.react.dashboard_use_ads) && this.ad("hor_", this.state.pub1, this.props.classes.imageH)}
                             </Grid>
                             <Grid item xs={12} justify="center" alignItems="center">
                                 {this.dashboard}
                             </Grid>
                             <Grid item xs={12} justify="center" alignItems="center">
-                                {!window.ctx.get("isLogged") && this.ad("hor_", this.state.pub2, this.props.classes.imageH)}
+                                {(!window.ctx.get("isLogged") && cfg.react.dashboard_use_ads) && this.ad("hor_", this.state.pub2, this.props.classes.imageH)}
                             </Grid>
                         </Grid>
                     </Hidden>

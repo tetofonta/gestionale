@@ -8,7 +8,7 @@ _SpecRunner.html
 __benchmarks__
 build/
 output/
-*.pdf
+orders/*.pdf
 remote-repo/
 coverage/
 .module-cache

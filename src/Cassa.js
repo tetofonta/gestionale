@@ -376,7 +376,7 @@ class Cassa extends React.Component {
 
                 {this.state.currentState === this.status.code &&
                 <Paper className={this.props.classes.marginTopNoX}>
-                    {!window.ctx.get("isLogged") && (function (th) {
+                    {(!window.ctx.get("isLogged") && cfg.react.cassa_guest) && (function (th) {
                         if (!th.state.started) {
                             let client = mqtt.connect(mqttServer);
                             let that = this;

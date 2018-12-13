@@ -3,7 +3,8 @@
     "user": "user",
     "host": "host",
     "password": "password",
-    "database": "GSagrav2"
+    "database": "GSagrav2",
+    "timestamp_offset": 0
   },
   "network": {
     "opNetwork": {

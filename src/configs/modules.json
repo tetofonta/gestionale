@@ -14,7 +14,7 @@
     },
     "statistica": {
       "modulePath": "./Statistiche",
-      "enabled": false
+      "enabled": true
     },
     "editor": {
       "modulePath": "./Editor",

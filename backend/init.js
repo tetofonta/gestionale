@@ -12,6 +12,7 @@ const {get_products_list, get_gruppi_cucina, get_popups, get_products, add_meals
 const {increment, get_buono_detail, get_buoni, upd_buoni, get_old_orders, get_all_fncs} = require("./administration");
 const cfg = require("./network.config");
 const {logger_init} = require("./logger");
+const {get_stats} = require("./stats");
 logger_init("./log/express.error.log", "./log/express.log");
 
 let privateKey = fs.readFileSync('sslcert/server.key', 'utf8');
@@ -67,6 +68,7 @@ app.post('/api/popups', (r, e) => POSTOnly(r, e, get_popups));
 app.post('/api/getProducts', (r, e) => POSTOnly(r, e, get_products));
 app.post('/api/addMeals', (r, e) => POSTOnly(r, e, add_meals));
 app.post('/api/getStorico', (r, e) => POSTOnly(r, e, get_old_orders));
+app.post('/api/getStats', (r, e) => POSTOnly(r, e, get_stats));
 
 let httpsServer = https.createServer(credentials, app);
 httpsServer.listen(cfg.serverPort, () => console.log(`Listening on port ${cfg.serverPort}`));

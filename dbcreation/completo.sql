@@ -28,6 +28,7 @@ CREATE TABLE `ads` (
   `rank` int(11) NOT NULL,
   `visualized` int(11) NOT NULL DEFAULT '0',
   `image_src` varchar(64) NOT NULL,
+  `total_visualization` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ads_id_uindex` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
@@ -39,7 +40,7 @@ CREATE TABLE `ads` (
 
 LOCK TABLES `ads` WRITE;
 /*!40000 ALTER TABLE `ads` DISABLE KEYS */;
-INSERT INTO `ads` VALUES (1,'sampa',2,2,'/ads/%sampa.png'),(3,'coin',1,1,'/ads/%coin.png'),(5,'bsfc',3,1,'/ads/%bsfc.png');
+INSERT INTO `ads` VALUES (1,'sampa',2,1,'/ads/%sampa.png',0),(3,'coin',1,1,'/ads/%coin.png',3),(5,'bsfc',3,0,'/ads/%bsfc.png',0);
 /*!40000 ALTER TABLE `ads` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -82,6 +83,7 @@ CREATE TABLE `cupons` (
   `valore` float DEFAULT NULL,
   `minimo` float DEFAULT NULL,
   `usato` int(11) NOT NULL DEFAULT '0',
+  `valore_venduto` float DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `cupons_id_uindex` (`id`),
   KEY `cupons_cupons_types_id_fk` (`tipo`),
@@ -95,7 +97,7 @@ CREATE TABLE `cupons` (
 
 LOCK TABLES `cupons` WRITE;
 /*!40000 ALTER TABLE `cupons` DISABLE KEYS */;
-INSERT INTO `cupons` VALUES (12548,2,10,10,0),(35091,2,50,50,1543672733),(45885,2,32,15.5,0),(46904,3,50,50,0),(52484,1,20,30,0);
+INSERT INTO `cupons` VALUES (12548,2,10,10,0,11.23),(35091,2,50,50,1543672733,10),(45885,2,32,15.5,0,11.5),(46904,3,50,50,1544706931,23),(52484,1,20,30,1544706831,105);
 /*!40000 ALTER TABLE `cupons` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -245,7 +247,7 @@ CREATE TABLE `magazzino` (
 
 LOCK TABLES `magazzino` WRITE;
 /*!40000 ALTER TABLE `magazzino` DISABLE KEYS */;
-INSERT INTO `magazzino` VALUES (1,'Pane e salamella','Panino caldo con salamella di maiale',96,10,0,5,5),(3,'Pasta','Pomodoro',98,25,0,1,1),(5,'Filetto','Cavallo',25,50,0,3,1),(7,'Bionda Pills',NULL,95,10,50,9,1),(9,'Mora Polls',NULL,94,10,50,9,1),(11,'Sorbetto',NULL,99,11,5,7,1),(13,'Vino rosso','Vino amabile, da tavola, (Vino-schifo)',100,10,10,11,3),(15,'Vino bianco',NULL,3,10,10,11,3),(17,'Amaro montenegro','sapore vero',29,30,30,13,1),(19,'Barolo','Sei un cazzo di riccone di merda',97,50,50,11,3),(21,'vino1',NULL,100,10,0,11,3),(23,'vino2',NULL,97,10,0,11,1),(25,'vino3',NULL,96,10,0,11,1),(27,'vino4',NULL,96,10,0,11,1),(29,'vino5',NULL,100,10,0,11,1),(31,'vino6',NULL,100,10,0,11,1);
+INSERT INTO `magazzino` VALUES (1,'Pane e salamella','Panino caldo con salamella di maiale',93,10,0,5,5),(3,'Pasta','Pomodoro',96,25,0,1,1),(5,'Filetto','Cavallo',25,50,0,3,1),(7,'Bionda Pills',NULL,95,10,50,9,1),(9,'Mora Polls',NULL,94,10,50,9,1),(11,'Sorbetto',NULL,99,11,5,7,1),(13,'Vino rosso','Vino amabile, da tavola, (Vino-schifo)',100,10,10,11,3),(15,'Vino bianco',NULL,3,10,10,11,3),(17,'Amaro montenegro','sapore vero',29,30,30,13,1),(19,'Barolo','Sei un cazzo di riccone di merda',97,50,50,11,3),(21,'vino1',NULL,97,10,0,11,3),(23,'vino2',NULL,97,10,0,11,1),(25,'vino3',NULL,95,10,0,11,1),(27,'vino4',NULL,93,10,0,11,1),(29,'vino5',NULL,100,10,0,11,1),(31,'vino6',NULL,99,10,0,11,1);
 /*!40000 ALTER TABLE `magazzino` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -267,7 +269,7 @@ CREATE TABLE `ordini_dettagli` (
   `user` varchar(32) NOT NULL DEFAULT 'admin',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ordini_dettagli_id_uindex` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -276,7 +278,7 @@ CREATE TABLE `ordini_dettagli` (
 
 LOCK TABLES `ordini_dettagli` WRITE;
 /*!40000 ALTER TABLE `ordini_dettagli` DISABLE KEYS */;
-INSERT INTO `ordini_dettagli` VALUES (13,'gtyufog','0001','',0,'192.168.178.23',1543766464,'admin'),(15,'vdhjlkb','0002','',0,'192.168.178.23',1543766526,'admin'),(17,'bgfgb','0003','',0,'192.168.178.23',1543780495,'admin'),(19,'gferwgteh','0004','',0,'192.168.178.23',1543780497,'admin'),(23,'edoyutoguni','0000','',0,'192.168.178.23',1543847294,'admin'),(25,'gferwgteh','0004',' ',0,'192.168.178.23',1543871925,'admin'),(27,'gferwgteh1543872016286','0004',' ',0,'192.168.178.23',1543872016,'admin'),(37,'bgfgb1543873938639','0003',' ',0,'192.168.178.23',1543873938,'reprint'),(39,'bgfgb1543874034702','0003',' ',0,'192.168.178.23',1543874034,'reprint'),(41,'gferwgteh1543914727286','0004','  ',0,'192.168.178.23',1543914727,'reprint'),(43,'gferwgteh1543915010177','0004',' ',0,'192.168.178.23',1543915010,'reprint'),(45,'emilubibuqo','0000','',0,'192.168.43.52',1543915161,'stefano'),(47,'ajiruyacece','0000','',0,'192.168.43.52',1544002853,'stefano'),(49,'ajiruyacece1544002900867','0000',' ',0,'192.168.43.52',1544002900,'reprint'),(51,'ajiruyacece1544004141264','0000',' ',0,'192.168.43.52',1544004141,'reprint'),(53,'ugevufofive','0000','',0,'192.168.178.23',1544113839,'stefano'),(55,'ovoyacakegi','0000','',0,'192.168.178.23',1544114083,'stefano'),(57,'utiyujayifi','0000','',0,'192.168.178.23',1544118242,'stefano'),(59,'ovoyacakegi1544120442496','0000',' ',0,'192.168.178.23',1544120442,'reprint'),(61,'ovoyacakegi1544120452521','0000',' ',0,'192.168.178.23',1544120452,'reprint'),(63,'utiyujayifi1544120516349','0000',' ',0,'192.168.178.23',1544120516,'reprint'),(65,'umaqiqupujo','0006','',0,'unavailable',1544302524,'stefano'),(67,'icagozotulo','0004','',0,'self',1544378937,'Operator self'),(69,'ihoyaqumali','0000','',0,'self',1544384126,'Operator self'),(71,'umuhutizaqu','0000','',0,'self',1544384315,'Operator self');
+INSERT INTO `ordini_dettagli` VALUES (13,'gtyufog','0001','',0,'192.168.178.23',1543766464,'admin'),(15,'vdhjlkb','0002','',0,'192.168.178.23',1543766526,'admin'),(17,'bgfgb','0003','',0,'192.168.178.23',1543780495,'admin'),(19,'gferwgteh','0004','',0,'192.168.178.23',1543780497,'admin'),(23,'edoyutoguni','0000','',0,'192.168.178.23',1543847294,'admin'),(25,'gferwgteh','0004',' ',0,'192.168.178.23',1543871925,'admin'),(27,'gferwgteh1543872016286','0004',' ',0,'192.168.178.23',1543872016,'admin'),(37,'bgfgb1543873938639','0003',' ',0,'192.168.178.23',1543873938,'reprint'),(39,'bgfgb1543874034702','0003',' ',0,'192.168.178.23',1543874034,'reprint'),(41,'gferwgteh1543914727286','0004','  ',0,'192.168.178.23',1543914727,'reprint'),(43,'gferwgteh1543915010177','0004',' ',0,'192.168.178.23',1543915010,'reprint'),(45,'emilubibuqo','0000','',0,'192.168.43.52',1543915161,'stefano'),(47,'ajiruyacece','0000','',0,'192.168.43.52',1544002853,'stefano'),(49,'ajiruyacece1544002900867','0000',' ',0,'192.168.43.52',1544002900,'reprint'),(51,'ajiruyacece1544004141264','0000',' ',0,'192.168.43.52',1544004141,'reprint'),(53,'ugevufofive','0000','',0,'192.168.178.23',1544113839,'stefano'),(55,'ovoyacakegi','0000','',0,'192.168.178.23',1544114083,'stefano'),(57,'utiyujayifi','0000','',0,'192.168.178.23',1544118242,'stefano'),(59,'ovoyacakegi1544120442496','0000',' ',0,'192.168.178.23',1544120442,'reprint'),(61,'ovoyacakegi1544120452521','0000',' ',0,'192.168.178.23',1544120452,'reprint'),(63,'utiyujayifi1544120516349','0000',' ',0,'192.168.178.23',1544120516,'reprint'),(65,'umaqiqupujo','0006','',0,'unavailable',1544302524,'stefano'),(67,'icagozotulo','0004','',0,'self',1544378937,'Operator self'),(69,'ihoyaqumali','0000','',0,'self',1544384126,'Operator self'),(71,'umuhutizaqu','0000','',0,'self',1544384315,'Operator self'),(73,'emegeverujo','0000','bvnbvnmxvnxh',1,'12222',1544736711,'stefano');
 /*!40000 ALTER TABLE `ordini_dettagli` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -299,7 +301,7 @@ CREATE TABLE `ordini_prodotti` (
   KEY `ordini_prodotti_magazzino_id_fk` (`product`),
   CONSTRAINT `ordini_prodotti_magazzino_id_fk` FOREIGN KEY (`product`) REFERENCES `magazzino` (`id`),
   CONSTRAINT `ordini_prodotti_ordini_dettagli_id_fk` FOREIGN KEY (`order`) REFERENCES `ordini_dettagli` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=174 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=187 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -308,7 +310,7 @@ CREATE TABLE `ordini_prodotti` (
 
 LOCK TABLES `ordini_prodotti` WRITE;
 /*!40000 ALTER TABLE `ordini_prodotti` DISABLE KEYS */;
-INSERT INTO `ordini_prodotti` VALUES (13,13,1,'NULL',3),(15,15,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',3),(17,17,3,'NULL',2),(19,19,3,'NULL',2),(21,19,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(23,23,5,'NULL',1),(25,23,1,'[{\"qta\":2,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(27,25,3,'NULL',2),(29,25,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(31,27,3,'NULL',2),(33,27,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(35,27,3,'NULL',2),(37,27,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(61,37,3,'NULL',2),(63,39,3,'NULL',2),(65,41,3,'NULL',2),(67,41,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(69,41,3,'NULL',2),(71,41,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(73,43,3,'NULL',2),(75,43,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(77,43,3,'NULL',2),(79,43,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(81,45,5,'NULL',2),(83,47,3,'NULL',2),(85,47,7,'NULL',2),(87,47,27,'NULL',2),(89,51,3,'NULL',2),(91,51,7,'NULL',2),(93,51,27,'NULL',2),(95,53,5,'NULL',2),(97,53,7,'NULL',2),(99,53,9,'NULL',1),(101,53,25,'NULL',2),(103,53,27,'NULL',2),(105,53,29,'NULL',1),(107,53,31,'NULL',1),(109,53,11,'NULL',3),(111,55,7,'NULL',2),(113,55,25,'NULL',2),(115,55,31,'NULL',2),(117,55,11,'NULL',2),(119,57,3,'NULL',2),(121,59,7,'NULL',2),(123,59,25,'NULL',2),(125,59,31,'NULL',2),(127,59,11,'NULL',2),(129,61,7,'NULL',2),(131,61,25,'NULL',2),(133,61,31,'NULL',2),(135,61,11,'NULL',2),(137,63,3,'NULL',2),(139,65,3,'NULL',2),(141,65,1,'[{\"qta\":2,\"var\":{\"select\":{\"values\":[true,null,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}},{\"qta\":2,\"eur\":10,\"cents\":0,\"var\":{\"choose\":null,\"select\":{\"values\":[null,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',4),(143,65,9,'NULL',2),(145,65,27,'NULL',1),(147,65,25,'NULL',2),(149,65,19,'[{\"qta\":1,\"var\":{\"choose\":\"frizzante\",\"select\":{\"values\":[]}}}]',1),(151,65,11,'NULL',1),(153,67,27,'NULL',3),(155,67,25,'NULL',1),(157,67,19,'[{\"qta\":2,\"var\":{\"select\":{\"values\":[]}}}]',2),(159,69,5,'NULL',2),(161,69,7,'NULL',1),(163,69,9,'NULL',4),(165,69,17,'NULL',1),(167,69,23,'NULL',3),(169,69,25,'NULL',1),(171,71,5,'NULL',3),(173,71,7,'NULL',4);
+INSERT INTO `ordini_prodotti` VALUES (13,13,1,'NULL',3),(15,15,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',3),(17,17,3,'NULL',2),(19,19,3,'NULL',2),(21,19,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(23,23,5,'NULL',1),(25,23,1,'[{\"qta\":2,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(27,25,3,'NULL',2),(29,25,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(31,27,3,'NULL',2),(33,27,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(35,27,3,'NULL',2),(37,27,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(61,37,3,'NULL',2),(63,39,3,'NULL',2),(65,41,3,'NULL',2),(67,41,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(69,41,3,'NULL',2),(71,41,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(73,43,3,'NULL',2),(75,43,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(77,43,3,'NULL',2),(79,43,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(81,45,5,'NULL',2),(83,47,3,'NULL',2),(85,47,7,'NULL',2),(87,47,27,'NULL',2),(89,51,3,'NULL',2),(91,51,7,'NULL',2),(93,51,27,'NULL',2),(95,53,5,'NULL',2),(97,53,7,'NULL',2),(99,53,9,'NULL',1),(101,53,25,'NULL',2),(103,53,27,'NULL',2),(105,53,29,'NULL',1),(107,53,31,'NULL',1),(109,53,11,'NULL',3),(111,55,7,'NULL',2),(113,55,25,'NULL',2),(115,55,31,'NULL',2),(117,55,11,'NULL',2),(119,57,3,'NULL',2),(121,59,7,'NULL',2),(123,59,25,'NULL',2),(125,59,31,'NULL',2),(127,59,11,'NULL',2),(129,61,7,'NULL',2),(131,61,25,'NULL',2),(133,61,31,'NULL',2),(135,61,11,'NULL',2),(137,63,3,'NULL',2),(139,65,3,'NULL',2),(141,65,1,'[{\"qta\":2,\"var\":{\"select\":{\"values\":[true,null,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}},{\"qta\":2,\"eur\":10,\"cents\":0,\"var\":{\"choose\":null,\"select\":{\"values\":[null,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',4),(143,65,9,'NULL',2),(145,65,27,'NULL',1),(147,65,25,'NULL',2),(149,65,19,'[{\"qta\":1,\"var\":{\"choose\":\"frizzante\",\"select\":{\"values\":[]}}}]',1),(151,65,11,'NULL',1),(153,67,27,'NULL',3),(155,67,25,'NULL',1),(157,67,19,'[{\"qta\":2,\"var\":{\"select\":{\"values\":[]}}}]',2),(159,69,5,'NULL',2),(161,69,7,'NULL',1),(163,69,9,'NULL',4),(165,69,17,'NULL',1),(167,69,23,'NULL',3),(169,69,25,'NULL',1),(171,71,5,'NULL',3),(173,71,7,'NULL',4),(175,73,3,'NULL',2),(177,73,1,'[{\"qta\":1,\"var\":{\"choose\":null,\"select\":{\"values\":[true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}},{\"qta\":2,\"eur\":10,\"cents\":0,\"var\":{\"choose\":null,\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',3),(179,73,25,'NULL',1),(181,73,27,'NULL',3),(183,73,21,'[{\"qta\":3,\"var\":{\"choose\":\"naturale\",\"select\":{\"values\":[]}}}]',3),(185,73,31,'NULL',1);
 /*!40000 ALTER TABLE `ordini_prodotti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -408,4 +410,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-12 11:23:57
+-- Dump completed on 2018-12-13 22:48:56

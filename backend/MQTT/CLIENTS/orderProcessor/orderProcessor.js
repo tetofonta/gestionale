@@ -24,10 +24,10 @@ client.on('message', function (topic, message, packet) {
         cart.cart = arr;
         if(cart.reprint) return;
         if(cart.buono)
-            getConnection().query(`UPDATE cupons SET usato=${cart.time} WHERE id=${cart.buonoID}`, (e) => {if(e) console.error(e)});
+            getConnection().query(`UPDATE cupons SET usato=${cart.time + cfg.mysql.timestamp_offset}, totale_concesso=${cart.totale[0] + cart.totale[1]/100} WHERE id=${cart.buonoID}`, (e) => {if(e) console.error(e)});
 
 
-        getConnection().query(`INSERT INTO ordini_dettagli(timestamp, id_distict, ordnum, message, asporto, client, user) VALUES (${cart.time}, '${secure(cart.orderID)}', '${secure(cart.ordnum)}', '${secure(cart.message)}', ${cart.asporto ? 1 : 0}, '${secure(cart.ip)}', '${secure(cart.user)}')`, (e) => {
+        getConnection().query(`INSERT INTO ordini_dettagli(timestamp, id_distict, ordnum, message, asporto, client, user) VALUES (${cart.time  + cfg.mysql.timestamp_offset}, '${secure(cart.orderID)}', '${secure(cart.ordnum)}', '${secure(cart.message)}', ${cart.asporto ? 1 : 0}, '${secure(cart.ip)}', '${secure(cart.user)}')`, (e) => {
             if(e) console.error(e);
             else {
                 getConnection().query(`SELECT LAST_INSERT_ID() as last;`, (e, r) => {

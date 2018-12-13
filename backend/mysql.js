@@ -16,7 +16,8 @@ function connect(host, user, password, db) {
         host: host,
         user: user,
         password: password,
-        database: db
+        database: db,
+        multipleStatements: true
     });
 }
 

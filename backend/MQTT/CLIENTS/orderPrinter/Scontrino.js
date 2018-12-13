@@ -88,6 +88,7 @@ class Scontrino {
 
     _generate(res) {
         let height = res.header.height + res.element.height * this.props.elementi.length + res.footer.height;
+        if(height < 297) height = 297;
         this.doc = new jsPDF({
             orientation: height > res.width ? 'portait' : 'landscape',
             unit: 'mm',
