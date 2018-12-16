@@ -31,7 +31,10 @@ const apiCalls = {
     getStorico: "/api/getStorico",
     ip: "/api/ip",
     getAllFncs: "/api/getAllFncs",
-    getStats: "/api/getStats"
+    getStats: "/api/getStats",
+    getAds: "/api/getAds",
+    editAds: "/api/editAds",
+    delAds: "/api/delAds"
 };
 
 let mqttServer;

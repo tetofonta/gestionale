@@ -1,5 +1,6 @@
-const {getConnection} = require("./mysql");
+const {getConnection, avgQTime} = require("./mysql");
 const {onUserAuthenticated} = require("./auth");
+const flatten = require('flatten');
 
 const queries = [
     {
@@ -126,8 +127,9 @@ const queries = [
         type: "bar",
         query: (fromTime, toTime) => `SELECT COALESCE(SUM(qta*(SELECT \`timestamp\` > ${fromTime} AND \`timestamp\` < ${toTime} FROM ordini_dettagli WHERE id = \`order\`)), 0) as y, magazzino.descrizione as label from ordini_prodotti right join magazzino on ordini_prodotti.product = magazzino.id  GROUP BY magazzino.descrizione;\n`
     }
-
 ];
+
+let postTimes = 0, getTimes = 0, postAvg = [], getAvg = [];
 
 function get_stats(req, res) {
     onUserAuthenticated(req, res, (data) => {
@@ -142,16 +144,56 @@ function get_stats(req, res) {
                 res.send({state: false, err: er});
                 return;
             }
+            let avg = avgQTime().reduce((total, score) => total + score) / avgQTime().length;
+            let Pavg = postAvg.reduce((total, score) => total + score) / avgQTime().length;
+            let Gavg = getAvg.reduce((total, score) => total + score) / avgQTime().length;
             let q = JSON.parse(JSON.stringify(queries));
             res.send({
                 state: true,
-                obj: r.map((query, i) => {
+                obj: [...r.map((query, i) => {
                     q[i].query = query;
                     return q[i];
-                })
+                }), {
+                    group: "Sistema",
+                    name: "AVG Query time",
+                    type: "line",
+                    series: "gr",
+                    query: flatten(avgQTime().map((e, i) => [{y: e, label: "" + i, gr: "Query Times"}, {
+                        y: avg,
+                        label: "" + i,
+                        gr: "Average"
+                    }]))
+                }, {
+                    group: "Sistema",
+                    name: "Numero di richieste",
+                    type: "bar",
+                    query: [{y: getTimes, label: "GET"}, {y: postTimes, label: "POST"}]
+                }, {
+                    group: "Sistema",
+                    name: "AVG Response time",
+                    type: "line",
+                    series: "type",
+                    query: [ ...flatten(postAvg.map((e, i) => [{y: e, label: "" + i, gr: "POST Times"}, {y: Pavg, label: "" + i, gr: "POST Average"}])), ...flatten(getAvg.map((e, i) => [{y: e, label: "" + i, gr: "GET Times"}, {y: Gavg, label: "" + i, gr: "GET Average"}]))]
+                }]
             })
         })
     }, ["STATISTICHE"]);
 }
 
 module.exports.get_stats = get_stats;
+module.exports.stats = {
+    post: {
+        times: () => postTimes++,
+        avg: (time) => {
+            if (postAvg.length > 500) postAvg.splice(0, 1);
+            postAvg.push(time);
+        }
+    },
+    get: {
+        times: () => getTimes++,
+        avg: (time) => {
+            if (getAvg.length > 500) getAvg.splice(0, 1);
+            getAvg.push(time);
+        }
+    }
+};

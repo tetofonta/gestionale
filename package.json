@@ -31,7 +31,8 @@
     "cors": "^2.8.5",
     "mosca": "^2.8.3",
     "history": "^4.7.2",
-    "prop-types": "latest"
+    "prop-types": "latest",
+    "xlsx": "^0.14.1"
   },
   "devDependencies": {
     "pkg": "^4.3.5",

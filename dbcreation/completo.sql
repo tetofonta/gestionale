@@ -24,13 +24,14 @@ DROP TABLE IF EXISTS `ads`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ads` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `desc` varchar(32) DEFAULT NULL,
+  `desc` varchar(32) NOT NULL,
   `rank` int(11) NOT NULL,
   `visualized` int(11) NOT NULL DEFAULT '0',
   `image_src` varchar(64) NOT NULL,
   `total_visualization` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `ads_id_uindex` (`id`)
+  UNIQUE KEY `ads_id_uindex` (`id`),
+  UNIQUE KEY `ads_desc_uindex` (`desc`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -177,7 +178,7 @@ CREATE TABLE `funzioni` (
   UNIQUE KEY `funzioni_titolo_uindex` (`titolo`),
   KEY `funzioni_categoria_id_fk` (`categoria`),
   CONSTRAINT `funzioni_categoria_id_fk` FOREIGN KEY (`categoria`) REFERENCES `categoria` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -186,7 +187,7 @@ CREATE TABLE `funzioni` (
 
 LOCK TABLES `funzioni` WRITE;
 /*!40000 ALTER TABLE `funzioni` DISABLE KEYS */;
-INSERT INTO `funzioni` VALUES (1,'Cassa','Crea il tuo ordine',1,'fas fa-money-bill-alt',1,'/newOrdine','Crea il tuo ordine personalizzandolo come vuoi',1,1,'cassa'),(3,'Magazzino','Gestione magazzino e risorse',3,'\'\'',5,'/magazzino',NULL,1,0,'magazzino'),(5,'Statistiche','Andamenti e incassi',7,'\'\'',7,'/stats',NULL,1,0,'statistica'),(7,'Editor','Editor modelli pdf',5,'\'\'',11,'/editor',NULL,1,0,'editor'),(9,'Gestione Buoni','Gestisci e crea buoni',3,'\'\'',3,'/buoni',NULL,1,0,'buoni'),(11,'Storico','Storico e gestione ordini',7,'\'\'',9,'/storico',NULL,1,0,'storico'),(13,'Cassa Self','',1,'\'\'',1,'/self',NULL,1,0,'cassa_self'),(15,'Feedback','Dicci cosa ne pensi',1,'fas fa-comments',1,'/guestFeedback',NULL,0,1,'feedback');
+INSERT INTO `funzioni` VALUES (1,'Cassa','Crea il tuo ordine',1,'fas fa-money-bill-alt',1,'/newOrdine','Crea il tuo ordine personalizzandolo come vuoi',1,1,'cassa'),(3,'Magazzino','Gestione magazzino e risorse',3,'fas fa-warehouse',5,'/magazzino',NULL,1,0,'magazzino'),(5,'Statistiche','Andamenti e incassi',7,'fas fa-chart-bar',7,'/stats',NULL,1,0,'statistica'),(7,'Editor','Editor modelli pdf',5,'fas fa-edit',11,'/editor',NULL,1,0,'editor'),(9,'Gestione Buoni','Gestisci e crea buoni',5,'fas fa-piggy-bank',3,'/buoni',NULL,1,0,'buoni'),(11,'Storico','Storico e gestione ordini',7,'fas fa-history',9,'/storico',NULL,1,0,'storico'),(13,'Cassa Self','',1,'fas fa-barcode',1,'/self',NULL,1,0,'cassa_self'),(15,'Feedback','Dicci cosa ne pensi',1,'fas fa-comments',1,'/guestFeedback','Dicci come ti sei trovato',0,1,'feedback'),(17,'Gestione Ads','Permette di aggiungere, rimuovere e gestire gli advertisement',5,'fas fa-ad',15,'/AdsManager',NULL,1,0,'adsmanager');
 /*!40000 ALTER TABLE `funzioni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -269,7 +270,7 @@ CREATE TABLE `ordini_dettagli` (
   `user` varchar(32) NOT NULL DEFAULT 'admin',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ordini_dettagli_id_uindex` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=74 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -301,7 +302,7 @@ CREATE TABLE `ordini_prodotti` (
   KEY `ordini_prodotti_magazzino_id_fk` (`product`),
   CONSTRAINT `ordini_prodotti_magazzino_id_fk` FOREIGN KEY (`product`) REFERENCES `magazzino` (`id`),
   CONSTRAINT `ordini_prodotti_ordini_dettagli_id_fk` FOREIGN KEY (`order`) REFERENCES `ordini_dettagli` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=187 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=186 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -327,7 +328,7 @@ CREATE TABLE `previlegi` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `abilities_id_uindex` (`id`),
   UNIQUE KEY `abilities_description_uindex` (`description`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -336,7 +337,7 @@ CREATE TABLE `previlegi` (
 
 LOCK TABLES `previlegi` WRITE;
 /*!40000 ALTER TABLE `previlegi` DISABLE KEYS */;
-INSERT INTO `previlegi` VALUES (3,'BUONI'),(1,'CASSA'),(11,'EDITOR'),(5,'MAGAZZINO'),(7,'STATISTICHE'),(9,'STORICO'),(13,'UTENTI');
+INSERT INTO `previlegi` VALUES (15,'AMMINISTRAZIONE'),(3,'BUONI'),(1,'CASSA'),(11,'EDITOR'),(5,'MAGAZZINO'),(7,'STATISTICHE'),(9,'STORICO'),(13,'UTENTI');
 /*!40000 ALTER TABLE `previlegi` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -388,7 +389,7 @@ CREATE TABLE `utenti_previlegi_assoc` (
   KEY `utenti_previlegi_assoc_previlegi_id_fk` (`previlegi_FOREGIN`),
   CONSTRAINT `utenti_previlegi_assoc_abilities_id_fk` FOREIGN KEY (`utenti_FOREGIN`) REFERENCES `previlegi` (`id`),
   CONSTRAINT `utenti_previlegi_assoc_previlegi_id_fk` FOREIGN KEY (`previlegi_FOREGIN`) REFERENCES `previlegi` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -397,7 +398,7 @@ CREATE TABLE `utenti_previlegi_assoc` (
 
 LOCK TABLES `utenti_previlegi_assoc` WRITE;
 /*!40000 ALTER TABLE `utenti_previlegi_assoc` DISABLE KEYS */;
-INSERT INTO `utenti_previlegi_assoc` VALUES (51,3,1),(53,3,3),(55,3,5),(57,3,7),(59,3,11),(63,1,1),(65,1,3),(67,1,5),(69,1,7),(71,1,9),(73,1,11),(75,1,13),(85,11,1),(87,11,7),(89,11,13),(93,5,9),(95,5,3),(97,5,1),(99,5,11),(101,5,5),(103,5,13),(105,5,7),(111,7,1);
+INSERT INTO `utenti_previlegi_assoc` VALUES (51,3,1),(53,3,3),(55,3,5),(57,3,7),(59,3,11),(85,11,1),(87,11,7),(89,11,13),(93,5,9),(95,5,3),(97,5,1),(99,5,11),(101,5,5),(103,5,13),(105,5,7),(111,7,1),(113,1,15),(115,1,3),(117,1,1),(119,1,11),(121,1,5),(123,1,7),(125,1,9),(127,1,13);
 /*!40000 ALTER TABLE `utenti_previlegi_assoc` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -410,4 +411,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-13 22:48:56
+-- Dump completed on 2018-12-16 14:43:35

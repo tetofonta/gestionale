@@ -18,16 +18,18 @@ import Graph from 'react-chartjs2'
 import Typography from "@material-ui/core/es/Typography/Typography";
 import IconButton from "@material-ui/core/es/IconButton/IconButton";
 import CalendarIcon from "@material-ui/icons/CalendarToday";
+import DownloadIcon from "@material-ui/icons/CloudDownload";
 import Dialog from "@material-ui/core/es/Dialog/Dialog";
 import DialogTitle from "@material-ui/core/es/DialogTitle/DialogTitle";
 import DialogContent from "@material-ui/core/es/DialogContent/DialogContent";
 import DialogActions from "@material-ui/core/es/DialogActions/DialogActions";
 import Button from "@material-ui/core/es/Button/Button";
 import TextField from "@material-ui/core/es/TextField/TextField";
+import XLSX from "xlsx"
 
 const styles = theme => ({
     marginTop: {
-        marginTop: 66,
+        marginTop: 64,
         height: "calc(100vh - 66px)",
         width: "100%",
         overflowY: "auto",
@@ -65,6 +67,21 @@ const styles = theme => ({
     },
 });
 
+function flip(arr, total) {
+    let ret = [];
+    for(let i = 0; i < arr[0].length; i++)
+        ret.push(arr.map(q => q[i]));
+
+    let tot = ret.map(e => e[total]).reduce(function(a, b) {
+        return a + b;
+    }, 0);
+    let foo = [];
+    foo[total] = tot;
+    ret.push([]);
+    ret.push(foo);
+    return ret;
+}
+
 class Stats extends React.Component {
 
     state = {
@@ -73,12 +90,23 @@ class Stats extends React.Component {
         tot: 99999999999
     };
 
+    static getDate() {
+        let date = new Date();
+        console.log(`${date.getFullYear()}-${date.getMonth()}-${date.getDay()}T${date.getHours()}:${date.getMinutes()}`);
+        return `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).substr(-2)}-${("0" + date.getDate()).substr(-2)}T${("0" + date.getHours()).substr(-2)}:${("0" + date.getMinutes()).substr(-2)}`
+    }
+
     devFromT = 0;
     devToT = 0;
 
     updateList() {
         this.state.data = {};
-        POST(apiCalls.getStats, {user: window.ctx.get("username"), token: window.ctx.get("token"), fromTime: this.state.fromt, toTime: this.state.tot}).then(res => {
+        POST(apiCalls.getStats, {
+            user: window.ctx.get("username"),
+            token: window.ctx.get("token"),
+            fromTime: this.state.fromt,
+            toTime: this.state.tot
+        }).then(res => {
             if (res.state) {
                 res.obj.forEach(e => {
                     if (!this.state.data[e.group]) this.state.data[e.group] = [];
@@ -90,7 +118,7 @@ class Stats extends React.Component {
         })
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.updateList()
     }
 
@@ -103,6 +131,56 @@ class Stats extends React.Component {
                         color="inherit"
                     >
                         <CalendarIcon/>
+                    </IconButton>,
+                    <IconButton
+                        onClick={() => {
+                            let filename = "report.xlsx";
+                            let wb = XLSX.utils.book_new();
+                            let data, ws;
+                            Object.keys(this.state.data).map(q => {
+                                this.state.data[q].map(e => {
+                                    let ws_name;
+                                    switch (e.type) {
+                                        case "bar":
+                                            data = [[e.name], ...flip([e.query.map(e => e.label), e.query.map(e => e.y)], 1)];
+                                            break;
+                                        case "comparation":
+                                            data = [[e.name], ...flip([Object.keys(e.query[0]), Object.keys(e.query[0]).map(q => e.query[0][q])], 1)];
+                                            break;
+                                        case "value":
+                                            data = [[e.name, e.query[0].value, e.measure]];
+                                            break;
+                                        case "line":
+                                            let series = [];
+                                            e.query.forEach(q => {
+                                                if (!series.includes(q[e.series])) series.push(q[e.series]);
+                                            });
+
+                                            let labels = {};
+                                            e.query.forEach(q => {
+                                                if (!labels[q.label]) labels[q.label] = {};
+                                                series.forEach(w => labels[q.label][w] = 0)
+                                            });
+
+                                            e.query.forEach(q => {
+                                                labels[q.label][q[e.series]] = q.y
+                                            });
+
+                                            data = flip([series, ...series.map(e => Object.keys(labels).map(q => labels[q][e]))], series.length -1);
+                                            break;
+                                        default:
+                                            return;
+                                    }
+                                    ws_name = (Math.random().toString(36).substr(2) + e.name).substr(0, 20);
+                                    ws = XLSX.utils.aoa_to_sheet(data);
+                                    XLSX.utils.book_append_sheet(wb, ws, ws_name);
+                                })
+                            });
+                            XLSX.writeFile(wb, filename);
+                        }}
+                        color="inherit"
+                    >
+                        <DownloadIcon/>
                     </IconButton>
                 ]}/>
                 <Paper className={this.props.classes.marginTop}>
@@ -145,6 +223,7 @@ class Stats extends React.Component {
                             </Paper>
                         </Grid>
                         <Grid item xs={12} lg={9}>
+                            {this.state.open && <Typography variant="title">{this.state.graph.name}</Typography>}
                             {this.state.open && this.state.graph.type === "bar" &&
                             <Graph data={{
                                 labels: this.state.graph.query.map(e => e.label),
@@ -180,21 +259,22 @@ class Stats extends React.Component {
                                 return <Graph data={{
                                     labels: Object.keys(labels),
                                     datasets: series.map(e => {
-                                                return {
-                                                    label: e,
-                                                    data: Object.keys(labels).map(q => labels[q][e])
-                                                }
+                                            return {
+                                                label: e,
+                                                data: Object.keys(labels).map(q => labels[q][e])
                                             }
-                                        )
+                                        }
+                                    )
                                 }} type="line"/>
                             })(this)}
                             {this.state.open && this.state.graph.type === "value" &&
-                            <Typography variant={"display3"}>{this.state.graph.query[0].value} {this.state.graph.measure}</Typography> }
+                            <Typography
+                                variant={"display4"}>{this.state.graph.query[0].value} {this.state.graph.measure}</Typography>}
                             {this.state.open && this.state.graph.type === "comparation" &&
                             <Graph data={{
                                 labels: Object.keys(this.state.graph.query[0]),
                                 datasets: [{data: Object.keys(this.state.graph.query[0]).map(e => this.state.graph.query[0][e])}]
-                            }} type="doughnut"/> }
+                            }} type="doughnut"/>}
 
                         </Grid>
                     </Grid>
@@ -221,7 +301,7 @@ class Stats extends React.Component {
                             fullWidth
                             label="Fine intervallo"
                             type="datetime-local"
-                            defaultValue="2000-01-01T00:00"
+                            defaultValue={Stats.getDate()}
                             InputLabelProps={{
                                 shrink: true,
                             }}
@@ -234,8 +314,8 @@ class Stats extends React.Component {
                         </Button>
                         <Button onClick={() => {
                             this.state.openChooser = false;
-                            this.state.fromt = new Date(this.devFromT).getTime()/1000;
-                            this.state.tot = new Date(this.devToT).getTime()/1000;
+                            this.state.fromt = new Date(this.devFromT).getTime() / 1000;
+                            this.state.tot = new Date(this.devToT).getTime() / 1000;
                             this.updateList();
                         }} color="primary">
                             Conferma

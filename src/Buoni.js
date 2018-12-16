@@ -21,7 +21,7 @@ import Checkbox from "@material-ui/core/es/Checkbox/Checkbox";
 
 const styles = theme => ({
     marginTop: {
-        marginTop: 66,
+        marginTop: 64,
         paddingTop: 30,
         height: "calc(100vh - 66px - 30px)",
         width: "99.5%",

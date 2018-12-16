@@ -27,7 +27,7 @@ import QrReader from "react-qr-reader";
 
 const styles = theme => ({
     marginTop: {
-        marginTop: 66,
+        marginTop: 64,
         height: "calc(100vh - 66px)",
         width: "100%",
         overflowY: "auto",
@@ -199,7 +199,7 @@ class Self extends React.Component {
                     <IconButton color="inherit" onClick={() => this.setState({top: true})}>
                         <AddIcon/>
                     </IconButton>
-                ]} titleText='Cassa Self' history={this.props.history} showHome={true}/>
+                ]} titleText='Cassa Self service' history={this.props.history} showHome={true}/>
 
                 {this.state.btm &&
                 <Drawer anchor="bottom" open={this.state.btm} onClose={() => this.setState({btm: false})}>

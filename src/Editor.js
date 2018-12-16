@@ -38,7 +38,7 @@ import Avatar from "@material-ui/core/es/Avatar/Avatar";
 
 const styles = theme => ({
     marginTop: {
-        marginTop: 66,
+        marginTop: 64,
         height: "calc(100vh - 66px)",
         width: "100%",
         overflowY: "auto",

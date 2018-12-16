@@ -34,7 +34,13 @@
     },
     "feedback": {
       "modulePath": "./Feedback",
-      "enabled": false
+      "enabled": true,
+      "ask": true,
+      "after": 10000
+    },
+    "adsmanager": {
+      "modulePath": "./Ads",
+      "enabled": true
     }
   }
 }

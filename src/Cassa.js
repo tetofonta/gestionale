@@ -37,7 +37,7 @@ import * as cfg from "./configs/network.config"
 
 const styles = theme => ({
     marginTop: {
-        marginTop: 66,
+        marginTop: 64,
         width: "100vw",
         height: "calc(100vh - 150px)",
         overflowY: "auto"
@@ -51,10 +51,11 @@ const styles = theme => ({
         overflowY: "auto"
     },
     marginTopNoX: {
-        marginTop: 66,
+        marginTop: 64,
         width: "100vw",
         height: "calc(100vh - 150px)",
-        overflowX: 'hidden'
+        overflowX: 'hidden',
+        backgroundColor: "#eee"
     },
     root: {
         display: 'flex',
@@ -203,7 +204,7 @@ class Cassa extends React.Component {
 
         let that = this;
 
-        this.ip = /*GETSync(apiCalls.ip)*/ "12222";
+        this.ip = GETSync(apiCalls.ip);
     };
 
     genScontrino() {

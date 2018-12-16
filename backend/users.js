@@ -122,7 +122,7 @@ function usr_del(req, res) {
 
 function usr_getAccessibleFunctions(req, res) {
     if (!(getNW(req) && !req.body.guest)) {
-        getConnection().query(`select funzioni.tooltip as tooltip, funzioni.to as too,titolo, descrizione, categoria.nome as catName, categoria.icona as catIcon, funzioni.icona as fncIcon from funzioni, categoria where categoria.id = funzioni.categoria AND funzioni.isPublic = 1;`, (err, resp, fields) => {
+        getConnection().query(`select funzioni.modulename as modulo, funzioni.tooltip as tooltip, funzioni.to as too,titolo, descrizione, categoria.nome as catName, categoria.icona as catIcon, funzioni.icona as fncIcon from funzioni, categoria where categoria.id = funzioni.categoria AND funzioni.isPublic = 1;`, (err, resp, fields) => {
             let cats = new Map();
             if (resp && !err) {
                 for (let i = 0; i < resp.length; i++) {
@@ -132,7 +132,8 @@ function usr_getAccessibleFunctions(req, res) {
                         desc: resp[i].descrizione,
                         icon: resp[i].fncIcon,
                         to: resp[i].too,
-                        tooltip: resp[i].tooltip
+                        tooltip: resp[i].tooltip,
+                        modulename: resp[i].modulo
                     })
                 }
                 let ret = [];
@@ -148,7 +149,7 @@ function usr_getAccessibleFunctions(req, res) {
         });
     } else
         onUserAuthenticated(req, res, (data) => {
-            getConnection().query(`select funzioni.tooltip as tooltip, funzioni.to as too,titolo, descrizione, categoria.nome as catName, categoria.icona as catIcon, funzioni.icona as fncIcon from funzioni, categoria where categoria.id = funzioni.categoria AND req_prev IN (SELECT previlegi_FOREGIN from utenti_previlegi_assoc, utenti where utenti.id = utenti_FOREGIN AND utenti.username = '${data.user}') and funzioni.isPrivate = 1;`, (err, resp, fields) => {
+            getConnection().query(`select funzioni.modulename as modulo, funzioni.tooltip as tooltip, funzioni.to as too,titolo, descrizione, categoria.nome as catName, categoria.icona as catIcon, funzioni.icona as fncIcon from funzioni, categoria where categoria.id = funzioni.categoria AND req_prev IN (SELECT previlegi_FOREGIN from utenti_previlegi_assoc, utenti where utenti.id = utenti_FOREGIN AND utenti.username = '${data.user}') and funzioni.isPrivate = 1;`, (err, resp, fields) => {
                 let cats = new Map();
                 if (resp && !err) {
                     for (let i = 0; i < resp.length; i++) {
@@ -158,7 +159,8 @@ function usr_getAccessibleFunctions(req, res) {
                             desc: resp[i].descrizione,
                             icon: resp[i].fncIcon,
                             to: resp[i].too,
-                            tooltip: resp[i].tooltip
+                            tooltip: resp[i].tooltip,
+                            modulename: resp[i].modulo
                         })
                     }
                     let ret = [];

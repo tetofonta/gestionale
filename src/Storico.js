@@ -37,7 +37,7 @@ import * as cfg from "./configs/network.config"
 
 const styles = theme => ({
     marginTop: {
-        marginTop: 66,
+        marginTop: 64,
         height: "calc(100vh - 66px)",
         width: "100%",
         overflowY: "auto",

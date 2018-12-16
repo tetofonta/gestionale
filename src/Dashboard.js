@@ -8,10 +8,11 @@ import {GET, POST} from "./network";
 import Typography from "@material-ui/core/es/Typography/Typography";
 import FunctionTile from "./components/FunctionTile";
 import * as cfg from "./configs/network.config"
+import * as modules from "./configs/modules"
 
 const styles = theme => ({
     marginTop: {
-        marginTop: 66,
+        marginTop: 64,
         height: "calc(100vh - 66px)",
         width: "100%",
         overflowY: "auto",
@@ -67,9 +68,15 @@ class Dashboard extends React.Component {
                                 <Typography variant="title"><i className={e.icon}/>{e.category}</Typography>
                             </Grid>
                             <Grid item xs={12}>
-                                {e.content.map(i => <FunctionTile onClick={() => this.props.history.push(i.to)}
-                                                                  icon={i.icon} title={i.name} descr={i.desc}
-                                                                  tooltip={i.tooltip}/>)}
+                                {e.content.map(i => {
+                                    console.log(i);
+                                    if(! modules.modules[i.modulename]) return;
+                                    if(! modules.modules[i.modulename].enabled) return;
+                                    return (
+                                    <FunctionTile onClick={() => this.props.history.push(i.to)}
+                                                  icon={i.icon} title={i.name} descr={i.desc}
+                                                  tooltip={i.tooltip}/>)
+                                })}
                             </Grid>
                         </Grid>
                     );

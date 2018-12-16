@@ -7,6 +7,10 @@ import registerServiceWorker from './registerServiceWorker';
 import {POST} from "./network";
 import {apiCalls} from "./consts";
 
+Array.prototype.flat = function() {
+    return this.reduce((acc, val) => Array.isArray(val) ? acc.concat(val.flat()) : acc.concat(val), []);
+};
+
 
 if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'development'){
     console.log = function(o){};
