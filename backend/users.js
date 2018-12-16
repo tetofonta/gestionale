@@ -177,8 +177,28 @@ function usr_getAccessibleFunctions(req, res) {
         });
 }
 
+function getFeedbackQuestions(req, res){
+    getConnection().query(`SELECT id, testo, answerType, details, title FROM questions`, (e, r) => {
+        if(!r || e) res.send({state: false, err: e});
+        else res.send({state: true, result: r});
+    })
+}
+
+function savefeed(req, res){
+    let data = req.body;
+    if(!data.answers || !Array.isArray(data.answers)) res.send({state: false});
+    data.answers.forEach(e => {
+        getConnection().query(`insert into answers(answer, details, question) values ('${secure(e.answer)}', '${secure(e.details)}', ${secure(e.id)})`, (e) => {
+            if(e) console.error(e)
+        });
+    });
+    res.send({state: true});
+}
+
 module.exports.usr_getList = usr_getList;
 module.exports.usr_edit = usr_edit;
 module.exports.usr_new = usr_new;
 module.exports.usr_del = usr_del;
 module.exports.usr_getAccessibleFunctions = usr_getAccessibleFunctions;
+module.exports.feedback = getFeedbackQuestions;
+module.exports.savefeed = savefeed;

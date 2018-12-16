@@ -1,7 +1,7 @@
 const {getNW} = require("./network");
 const crypto = require('crypto');
 const {getUsers, onUserAuthenticated} = require("./auth");
-const {getConnection} = require("./mysql");
+const {getConnection, secure} = require("./mysql");
 
 let currentno = 0;
 let accessing = false;
@@ -34,7 +34,7 @@ function increment(req, res) {
  */
 function get_buono_detail(req, res) {
     onUserAuthenticated(req, res, (data) => {
-        getConnection().query(`SELECT tipo, valore, minimo FROM cupons WHERE usato = 0 AND id = ${data.id}`, (e, r, f) => {
+        getConnection().query(`SELECT tipo, valore, minimo FROM cupons WHERE usato = 0 AND id = ${secure(data.id)}`, (e, r, f) => {
             if (r.length < 1) {
                 res.send({state: false, err: ""});
                 return;

@@ -25,13 +25,13 @@ function connect(host, user, password, db) {
             if(avgQueryTime.length > cfg.mysql.queryTimeHistory) avgQueryTime.splice(0, 1);
             let time = Date.now() - start;
             avgQueryTime.push(time);
-            cb(e, r, f, time)
+            if(cb) cb(e, r, f, time)
         });
     };
 }
 
 function secure(str) {
-    return str.replaceAll("'", "").replaceAll("`", "").replaceAll("--", "")
+    return connection.escape(str).replaceAll("'", "")
 }
 
 function getConnection() {

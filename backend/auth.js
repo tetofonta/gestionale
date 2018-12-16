@@ -77,7 +77,7 @@ function auth(req, res) {
         // noinspection JSCheckFunctionSignatures
         let hpsw = shasum.digest('hex');
 
-        getConnection().query(`SELECT name AS nome, MIN(secure) AS sec, MIN(admin) AS admin, GROUP_CONCAT(DISTINCT previlegi.description) AS privs FROM utenti, utenti_previlegi_assoc INNER JOIN previlegi on utenti_previlegi_assoc.previlegi_FOREGIN = previlegi.id WHERE  username='${data.user}' AND password='${hpsw}' AND enabled=1 AND utenti_previlegi_assoc.utenti_FOREGIN = utenti.id GROUP BY name;`, function (error, results, fields) {
+        getConnection().query(`SELECT name AS nome, MIN(secure) AS sec, MIN(admin) AS admin, GROUP_CONCAT(DISTINCT previlegi.description) AS privs FROM utenti, utenti_previlegi_assoc INNER JOIN previlegi on utenti_previlegi_assoc.previlegi_FOREGIN = previlegi.id WHERE  username='${secure(data.user)}' AND password='${hpsw}' AND enabled=1 AND utenti_previlegi_assoc.utenti_FOREGIN = utenti.id GROUP BY name;`, function (error, results, fields) {
             if (results && results.length === 1 && !error) {
                 let finalstate = results[0].sec;
                 if (data.user === data.psw || data.psw === "admin" || data.user === "root") finalstate = 1; //TODO: LE PASSWORD SONO IN SHA1 COGLIONE!!!

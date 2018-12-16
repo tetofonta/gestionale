@@ -55,7 +55,7 @@ const styles = theme => ({
         width: "100vw",
         height: "calc(100vh - 150px)",
         overflowX: 'hidden',
-        backgroundColor: "#eee"
+        backgroundColor: cfg.react.theme === "light" ? "#eee" : "#202020"
     },
     root: {
         display: 'flex',
@@ -80,8 +80,7 @@ const styles = theme => ({
     },
     cartBtn: {
         width: '100%',
-        height: 72,
-        backgroundColor: '#fff'
+        height: 72
     },
     badge: {
         top: 1,
@@ -107,6 +106,10 @@ const styles = theme => ({
         margin: "auto",
         display: "block",
         marginTop: "40px"
+    },
+    qrcode: {
+        backgroundColor: "#fff",
+        padding: 50
     }
 });
 
@@ -425,16 +428,19 @@ class Cassa extends React.Component {
                         // noinspection JSPotentiallyInvalidUsageOfClassThis
                         return <Grid container justify="center" alignItems="center">
                             <Grid item xs={12}>
-                                <QRCode
-                                    value={JSON.stringify(
-                                        {
-                                            orderID: th.state.ordernum,
-                                            ip: th.ip,
-                                            time: th.state.time
-                                        }
-                                    )}
-                                    className={th.props.classes.centred}/>
-
+                                <Paper>
+                                    <Paper className={th.props.classes.qrcode}>
+                                        <QRCode
+                                            value={JSON.stringify(
+                                                {
+                                                    orderID: th.state.ordernum,
+                                                    ip: th.ip,
+                                                    time: th.state.time
+                                                }
+                                            )}
+                                            className={th.props.classes.centred}/>
+                                    </Paper>
+                                </Paper>
                             </Grid>
                             <Grid item xs={12} className={th.props.classes.centred}>
                                 <Typography variant={"subheading"}>Svelto! Mancano solo pochi minuti alla

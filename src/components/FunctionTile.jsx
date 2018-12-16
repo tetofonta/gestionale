@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/es/Typography/Typography";
 import Paper from "@material-ui/core/es/Paper/Paper";
 import Tooltip from "@material-ui/core/es/Tooltip/Tooltip";
 import InfoIcon from "@material-ui/icons/Info"
+import * as cfg from "../configs/network.config"
 
 const styles = theme => ({
     paper: {
@@ -18,13 +19,15 @@ const styles = theme => ({
     info: {
         position: 'absolute',
         bottom: 10,
-        left: 10
+        left: 10,
+        color: cfg.react.theme === "light" ? "#404040" : "#eee"
     },
     icon: {
         position: 'absolute',
         bottom: 10,
         right: 10,
-        fontSize: '5rem'
+        fontSize: '5rem',
+        color: cfg.react.theme === "light" ? "#404040" : "#eee"
     }
 });
 

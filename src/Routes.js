@@ -24,13 +24,13 @@ export default class Router extends React.Component {
         res.privates.forEach(e => {
             if (md.modules[e.moduleName] && md.modules[e.moduleName].enabled) {
                 let {classe} = require(`${md.modules[e.moduleName].modulePath}`);
-                this.operations.privated.push(<Route path={e.too} component={classe}/>)
+                this.operations.privated.push(<Route path={"/_" + e.too} component={classe}/>)
             }
         });
         res.publics.forEach(e => {
             if (md.modules[e.moduleName] && md.modules[e.moduleName].enabled) {
                 let {classe} = require(`${md.modules[e.moduleName].modulePath}`);
-                this.operations.publiced.push(<Route path={e.too} component={classe}/>)
+                this.operations.publiced.push(<Route path={"/_" + e.too} component={classe}/>)
             }
         })
     }

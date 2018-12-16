@@ -52,13 +52,13 @@ module.exports.edit_ads = (req, res) => {
     onUserAuthenticated(req, res, (data) => {
         console.log(data);
         data.edited.forEach(e => {
-            getConnection().query(`INSERT INTO ads(\`desc\`, rank, visualized, image_src, total_visualization) VALUES ('${secure(e.desc)}', ${e.rank}, 0, '${secure(e.image_src)}', 0)  ON DUPLICATE KEY UPDATE rank = ${e.rank}, \`desc\` = '${secure(e.desc)}', image_src='${secure(e.image_src)}'`);
+            getConnection().query(`INSERT INTO ads(\`desc\`, rank, visualized, image_src, total_visualization) VALUES ('${secure(e.desc)}', ${secure(e.rank)}, 0, '${secure(e.image_src)}', 0)  ON DUPLICATE KEY UPDATE rank = ${e.rank}, \`desc\` = '${secure(e.desc)}', image_src='${secure(e.image_src)}'`);
         });
     }, ["AMMINISTRAZIONE"])
 };
 
 module.exports.delete_ads = (req, res) => {
     onUserAuthenticated(req, res, (data) => {
-        getConnection().query(`DELETE FROM ads WHERE id = ${data.id}`)
+        getConnection().query(`DELETE FROM ads WHERE id = ${secure(data.id)}`)
     }, ["AMMINISTRAZIONE"])
 };

@@ -53,29 +53,10 @@ class App extends React.Component {
 
     render() {
         let result = App.getOperationMode();
-        if (result === connection_status.guest && cfg.mqtt["track-guest"]) {
-            //start tracking
-            let client = mqtt.connect(mqttServer);
-            let that = this;
-            client.on('connect', () => {
-                let clientid = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2)
-                let seq = 0;
-                document.body.addEventListener('click', function (e) {
-                    client.publish(cfg.mqtt.track, JSON.stringify(
-                        {
-                            event: e.path.filter(e => !(!(e.outerHTML))).map(e => e.outerHTML.replace(/-([0-9])\w+.([ "])/g, "-any")),
-                            location: window.location.href,
-                            clientID: clientid,
-                            sequence: seq++,
-                            timestamp: Date.now()
-                        }));
-                })
-            });
-        }
         console.log(result);
         return (
             <MuiThemeProvider theme={muiTheme}>
-                <style>.app{"{"}background-color: #eee{"}"}</style>
+                <style>.app{"{"}background-color: {cfg.react.theme === "light" ? "#eee" : "#202020" } {"}"}</style>
                 <div className="app">
                     <Routes isGuest={result}/>
                 </div>

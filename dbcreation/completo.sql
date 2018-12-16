@@ -46,6 +46,35 @@ INSERT INTO `ads` VALUES (1,'sampa',2,1,'/ads/%sampa.png',0),(3,'coin',1,1,'/ads
 UNLOCK TABLES;
 
 --
+-- Table structure for table `answers`
+--
+
+DROP TABLE IF EXISTS `answers`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `answers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `answer` varchar(10) DEFAULT NULL,
+  `details` varchar(256) DEFAULT NULL,
+  `question` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `answers_id_uindex` (`id`),
+  KEY `answers_questions_id_fk` (`question`),
+  CONSTRAINT `answers_questions_id_fk` FOREIGN KEY (`question`) REFERENCES `questions` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `answers`
+--
+
+LOCK TABLES `answers` WRITE;
+/*!40000 ALTER TABLE `answers` DISABLE KEYS */;
+INSERT INTO `answers` VALUES (1,'NO','1',1),(3,'3','-',3),(5,'-','nmb.',5),(7,'YES','1',1),(9,'4','-',3),(11,'-','-',5);
+/*!40000 ALTER TABLE `answers` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `categoria`
 --
 
@@ -187,7 +216,7 @@ CREATE TABLE `funzioni` (
 
 LOCK TABLES `funzioni` WRITE;
 /*!40000 ALTER TABLE `funzioni` DISABLE KEYS */;
-INSERT INTO `funzioni` VALUES (1,'Cassa','Crea il tuo ordine',1,'fas fa-money-bill-alt',1,'/newOrdine','Crea il tuo ordine personalizzandolo come vuoi',1,1,'cassa'),(3,'Magazzino','Gestione magazzino e risorse',3,'fas fa-warehouse',5,'/magazzino',NULL,1,0,'magazzino'),(5,'Statistiche','Andamenti e incassi',7,'fas fa-chart-bar',7,'/stats',NULL,1,0,'statistica'),(7,'Editor','Editor modelli pdf',5,'fas fa-edit',11,'/editor',NULL,1,0,'editor'),(9,'Gestione Buoni','Gestisci e crea buoni',5,'fas fa-piggy-bank',3,'/buoni',NULL,1,0,'buoni'),(11,'Storico','Storico e gestione ordini',7,'fas fa-history',9,'/storico',NULL,1,0,'storico'),(13,'Cassa Self','',1,'fas fa-barcode',1,'/self',NULL,1,0,'cassa_self'),(15,'Feedback','Dicci cosa ne pensi',1,'fas fa-comments',1,'/guestFeedback','Dicci come ti sei trovato',0,1,'feedback'),(17,'Gestione Ads','Permette di aggiungere, rimuovere e gestire gli advertisement',5,'fas fa-ad',15,'/AdsManager',NULL,1,0,'adsmanager');
+INSERT INTO `funzioni` VALUES (1,'Cassa','Crea il tuo ordine',1,'fas fa-money-bill-alt',1,'newOrdine','Crea il tuo ordine personalizzandolo come vuoi',1,1,'cassa'),(3,'Magazzino','Gestione magazzino e risorse',3,'fas fa-warehouse',5,'magazzino',NULL,1,0,'magazzino'),(5,'Statistiche','Andamenti e incassi',7,'fas fa-chart-bar',7,'stats',NULL,1,0,'statistica'),(7,'Editor','Editor modelli pdf',5,'fas fa-edit',11,'editor',NULL,1,0,'editor'),(9,'Gestione Buoni','Gestisci e crea buoni',5,'fas fa-piggy-bank',3,'buoni',NULL,1,0,'buoni'),(11,'Storico','Storico e gestione ordini',7,'fas fa-history',9,'storico',NULL,1,0,'storico'),(13,'Cassa Self','',1,'fas fa-barcode',1,'self',NULL,1,0,'cassa_self'),(15,'Feedback','Dicci cosa ne pensi',1,'fas fa-comments',1,'guestFeedback','Dicci come ti sei trovato',0,1,'feedback'),(17,'Gestione Ads','Permette di aggiungere, rimuovere e gestire gli advertisement',5,'fas fa-ad',15,'AdsManager',NULL,1,0,'adsmanager');
 /*!40000 ALTER TABLE `funzioni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -342,6 +371,61 @@ INSERT INTO `previlegi` VALUES (15,'AMMINISTRAZIONE'),(3,'BUONI'),(1,'CASSA'),(1
 UNLOCK TABLES;
 
 --
+-- Table structure for table `question_type`
+--
+
+DROP TABLE IF EXISTS `question_type`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `question_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `desc` varchar(10) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `question_type_id_uindex` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `question_type`
+--
+
+LOCK TABLES `question_type` WRITE;
+/*!40000 ALTER TABLE `question_type` DISABLE KEYS */;
+INSERT INTO `question_type` VALUES (1,'YESNO'),(2,'STARS'),(3,'EMPTY');
+/*!40000 ALTER TABLE `question_type` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `questions`
+--
+
+DROP TABLE IF EXISTS `questions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `questions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `testo` text NOT NULL,
+  `answerType` int(11) NOT NULL,
+  `details` int(11) NOT NULL,
+  `title` varchar(64) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `questions_id_uindex` (`id`),
+  KEY `questions_question_type_id_fk` (`answerType`),
+  CONSTRAINT `questions_question_type_id_fk` FOREIGN KEY (`answerType`) REFERENCES `question_type` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `questions`
+--
+
+LOCK TABLES `questions` WRITE;
+/*!40000 ALTER TABLE `questions` DISABLE KEYS */;
+INSERT INTO `questions` VALUES (1,'Domanda 1?',1,1,'Domanda1'),(3,'Domanda 2?',2,0,'Domanda2'),(5,'Domanda 3?',3,0,'Domanda3');
+/*!40000 ALTER TABLE `questions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `utenti`
 --
 
@@ -411,4 +495,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-16 14:43:44
+-- Dump completed on 2018-12-16 22:23:19

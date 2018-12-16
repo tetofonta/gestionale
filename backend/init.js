@@ -6,7 +6,7 @@ const http = require('http');
 const bodyParser = require('body-parser');
 const path = require('path');
 const {auth, auth_refresh} = require('./auth');
-const {usr_getList, usr_edit, usr_new, usr_del, usr_getAccessibleFunctions} = require('./users');
+const {usr_getList, usr_edit, usr_new, usr_del, usr_getAccessibleFunctions, feedback, savefeed} = require('./users');
 const {get_most_suitable_ads, get_ads, edit_ads, delete_ads} = require("./ads");
 const {get_products_list, get_gruppi_cucina, get_popups, get_products, add_meals} = require("./magazzino");
 const {increment, get_buono_detail, get_buoni, upd_buoni, get_old_orders, get_all_fncs} = require("./administration");
@@ -60,6 +60,8 @@ app.get('/api/ip', (req, res) => GETOnly(req, res, function () {
 app.get('/api/ads', (r, e) => GETOnly(r, e, get_most_suitable_ads));
 app.get('/api/products', (r, e) => GETOnly(r, e, get_products_list));
 app.get('/api/getAllFncs', (r, e) => GETOnly(r, e, get_all_fncs));
+app.get('/api/getFeedback', (r, e) => GETOnly(r, e, feedback));
+app.post('/api/sendFeed', (r, e) => POSTOnly(r, e, savefeed));
 app.post('/api/new_order', (r, e) => POSTOnly(r, e, increment)); //Ritorna il numero di ordine incrementale
 app.post('/api/rst_counter'); //TODO
 app.post('/api/shutdown'); //TODO

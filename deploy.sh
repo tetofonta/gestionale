@@ -10,7 +10,6 @@ mkdir -p output/MQTT/orderPrinter/log
 mkdir -p output/MQTT/orderPrinter/orders
 mkdir -p output/MQTT/orderProcessor/log
 mkdir -p output/MQTT/guestTracker/log
-mkdir -p output/MQTT/statsTracker/log
 mkdir -p output/SERVER/log
 mkdir -p output/SERVER/sslcert
 mkdir -p output/SERVER/static
@@ -21,7 +20,6 @@ yarn pkg --targets "$buildTargets" --out-path output/MQTT/broker backend/MQTT/br
 yarn pkg --targets "$buildTargets" --out-path output/MQTT/orderPrinter backend/MQTT/CLIENTS/orderPrinter/orderPrinter.js
 yarn pkg --targets "$buildTargets" --out-path output/MQTT/orderProcessor backend/MQTT/CLIENTS/orderProcessor/orderProcessor.js
 yarn pkg --targets "$buildTargets" --out-path output/MQTT/guestTracker backend/MQTT/CLIENTS/guestTracker/guestTracker.js
-yarn pkg --targets "$buildTargets" --out-path output/MQTT/statsTracker backend/MQTT/CLIENTS/statsLogger/statsLogger.js
 
 #package express
 yarn pkg --targets "$buildTargets" --out-path output/SERVER backend/init.js

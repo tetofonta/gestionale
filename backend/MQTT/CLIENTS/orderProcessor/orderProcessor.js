@@ -24,10 +24,10 @@ client.on('message', function (topic, message, packet) {
         cart.cart = arr;
         if(cart.reprint) return;
         if(cart.buono)
-            getConnection().query(`UPDATE cupons SET usato=${cart.time + cfg.mysql.timestamp_offset}, totale_concesso=${cart.totale[0] + cart.totale[1]/100} WHERE id=${cart.buonoID}`, (e) => {if(e) console.error(e)});
+            getConnection().query(`UPDATE cupons SET usato=${secure(cart.time + cfg.mysql.timestamp_offset)}, totale_concesso=${secure(cart.totale[0] + cart.totale[1]/100)} WHERE id=${secure(cart.buonoID)}`, (e) => {if(e) console.error(e)});
 
 
-        getConnection().query(`INSERT INTO ordini_dettagli(timestamp, id_distict, ordnum, message, asporto, client, user) VALUES (${cart.time  + cfg.mysql.timestamp_offset}, '${secure(cart.orderID)}', '${secure(cart.ordnum)}', '${secure(cart.message)}', ${cart.asporto ? 1 : 0}, '${secure(cart.ip)}', '${secure(cart.user)}')`, (e) => {
+        getConnection().query(`INSERT INTO ordini_dettagli(timestamp, id_distict, ordnum, message, asporto, client, user) VALUES (${secure(cart.time  + cfg.mysql.timestamp_offset)}, '${secure(cart.orderID)}', '${secure(cart.ordnum)}', '${secure(cart.message)}', ${cart.asporto ? 1 : 0}, '${secure(cart.ip)}', '${secure(cart.user)}')`, (e) => {
             if(e) console.error(e);
             else {
                 getConnection().query(`SELECT LAST_INSERT_ID() as last;`, (e, r) => {
@@ -36,8 +36,8 @@ client.on('message', function (topic, message, packet) {
                     if(e){ console.error(e); oid = -200}
                     let hasErrored = false;
                     cart.cart.forEach(elem => {
-                        if(!hasErrored) getConnection().query(`INSERT INTO ordini_prodotti(\`order\`, product, variant, qta) VALUES (${oid}, ${elem[1].id}, '${secure(elem[1].variants ? JSON.stringify(elem[1].variants) : "NULL")}', ${elem[1].qta})`, (e) => {if(e){console.error(e); hasErrored = true}});
-                        if(!hasErrored) getConnection().query(`UPDATE magazzino SET giacenza = giacenza - ${elem[1].qta} WHERE id = ${elem[1].id}`, (e) => {if(e){console.error(e); hasErrored = true}});
+                        if(!hasErrored) getConnection().query(`INSERT INTO ordini_prodotti(\`order\`, product, variant, qta) VALUES (${secure(oid)}, ${secure(elem[1].id)}, '${secure(elem[1].variants ? JSON.stringify(elem[1].variants) : "NULL")}', ${secure(elem[1].qta)})`, (e) => {if(e){console.error(e); hasErrored = true}});
+                        if(!hasErrored) getConnection().query(`UPDATE magazzino SET giacenza = giacenza - ${secure(elem[1].qta)} WHERE id = ${secure(elem[1].id)}`, (e) => {if(e){console.error(e); hasErrored = true}});
                     })
                 })
             }
