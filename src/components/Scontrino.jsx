@@ -8,6 +8,7 @@ import {apiCalls, orderCifres} from "../consts";
 import Snackbar from "@material-ui/core/es/Snackbar/Snackbar";
 import CircularProgress from "@material-ui/core/es/CircularProgress/CircularProgress";
 import Grid from "@material-ui/core/es/Grid/Grid";
+import * as cfg from "../configs/network.config"
 
 Number.prototype.pad = function (size) {
     let s = String(this);
@@ -143,6 +144,7 @@ class Scontrino extends React.Component {
         this._page(res.main, fullArr);
 
         Object.keys(this.props.elementi).forEach(e => {
+            if(cfg.toPrinter.includes(e)) return;
             this.map.set(this.kw["category"], `${e}`);
             if (this.props.elementi[e].length > 0) {
                 this.doc.addPage();

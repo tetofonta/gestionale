@@ -207,7 +207,7 @@ class Cassa extends React.Component {
 
         let that = this;
 
-        this.ip = GETSync(apiCalls.ip);
+        this.ip = JSON.parse(GETSync(apiCalls.ip)).ip;
     };
 
     genScontrino() {
