@@ -6,6 +6,23 @@ const {getConnection, secure} = require("./mysql");
 let currentno = 0;
 let accessing = false;
 
+getConnection().query(`SELECT ordnum FROM ordini_dettagli WHERE \`timestamp\` = (SELECT MAX(\`timestamp\`) FROM ordini_dettagli) LIMIT 1`, (e, r) => {
+    if (!r || e) return;
+    currentno = r[0].ordnum;
+});
+
+function operateNo(req, res) {
+    onUserAuthenticated(req, res, (data) => {
+        if (data.set)
+            if (!isNaN(parseInt(data.value))){
+                currentno = parseInt(data.value);
+                res.send({state: true, err: "ok"});
+            }
+            else res.send({state: false, err: "Il valore non é un numero."});
+        else res.send({state: true, num: currentno});
+    });
+}
+
 /**
  * @userAuthenticated
  * Incrementa il contatore degli ordini restituendo il prossimo numero di ordine.
@@ -156,8 +173,8 @@ function get_all_fncs(req, res) {
         let publics = [];
 
         r.forEach(e => {
-            if(e.isPublic) publics.push(e);
-            else if(e.isPrivate) privates.push(e);
+            if (e.isPublic) publics.push(e);
+            else if (e.isPrivate) privates.push(e);
         });
 
         res.send({state: true, publics: publics, privates: privates})
@@ -170,3 +187,4 @@ module.exports.get_buono_detail = get_buono_detail;
 module.exports.get_buoni = get_buoni;
 module.exports.upd_buoni = upd_buoni;
 module.exports.get_all_fncs = get_all_fncs;
+module.exports.operateNo = operateNo;

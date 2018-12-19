@@ -10,6 +10,12 @@ String.prototype.replaceAll = function (search, replacement) {
     return target.replace(new RegExp(search, 'g'), replacement);
 };
 
+let mysqlremote = false;
+if(process.argv[2] && process.argv[2] === "-remote") {
+    mysqlremote = true;
+    console.log("using remote connection");
+}
+
 function connect(host, user, password, db) {
     connection = mysql.createConnection({
         host: host,
@@ -36,7 +42,7 @@ function secure(str) {
 
 function getConnection() {
     if (!connection)
-        connect(cfg.mysql.host, cfg.mysql.user, cfg.mysql.password, cfg.mysql.database);
+        connect(mysqlremote ? cfg.mysql.host : "localhost", cfg.mysql.user, cfg.mysql.password, cfg.mysql.database);
 
     return connection;
 }

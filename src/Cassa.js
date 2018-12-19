@@ -37,9 +37,9 @@ import * as cfg from "./configs/network.config"
 
 const styles = theme => ({
     marginTop: {
-        marginTop: 64,
+        marginTop: 66,
         width: "100vw",
-        height: "calc(100vh - 150px)",
+        height: "calc(100vh - 135px)",
         overflowY: "auto"
     },
     bigb: {
@@ -78,9 +78,9 @@ const styles = theme => ({
     step: {
         height: 72
     },
-    cartBtn: {
+    cartabtn: {
         width: '100%',
-        height: 72
+        height: '70px'
     },
     badge: {
         top: 1,
@@ -210,6 +210,16 @@ class Cassa extends React.Component {
         this.ip = JSON.parse(GETSync(apiCalls.ip)).ip;
     };
 
+    getPlugins(){
+        let ret = {};
+        let md = require('./configs/modules');
+        md.modules.cassa.additional.forEach(e => {
+            let {getdata} = require(`${md.modules[e].modulePath}`);
+            ret[e] = getdata();
+        })
+        return ret;
+    }
+
     genScontrino() {
         POST(apiCalls.getOrdNum, {
             user: window.ctx.get("username"),
@@ -228,7 +238,8 @@ class Cassa extends React.Component {
                             resto: (-Math.floor(((this.total[0] + this.total[1] / 100) - parseFloat(this.state.payed)) * 100) / 100).toFixed(2),
                             qrdata: JSON.stringify({
                                 num: this.state.ordernum,
-                                time: Math.floor(Date.now() / 1000)
+                                time: Math.floor(Date.now() / 1000),
+                                plugin: this.getPlugins()
                             }),
                             buono: this.state.usabuono ? `BUONO ${this.state.buonoDesc}` : " ",
                             ordnum: res
@@ -428,19 +439,15 @@ class Cassa extends React.Component {
                         // noinspection JSPotentiallyInvalidUsageOfClassThis
                         return <Grid container justify="center" alignItems="center">
                             <Grid item xs={12}>
-                                <Paper>
-                                    <Paper className={th.props.classes.qrcode}>
-                                        <QRCode
-                                            value={JSON.stringify(
-                                                {
-                                                    orderID: th.state.ordernum,
-                                                    ip: th.ip,
-                                                    time: th.state.time
-                                                }
-                                            )}
-                                            className={th.props.classes.centred}/>
-                                    </Paper>
-                                </Paper>
+                                <QRCode
+                                    value={JSON.stringify(
+                                        {
+                                            orderID: th.state.ordernum,
+                                            ip: th.ip,
+                                            time: th.state.time
+                                        }
+                                    )}
+                                    className={th.props.classes.centred}/>
                             </Grid>
                             <Grid item xs={12} className={th.props.classes.centred}>
                                 <Typography variant={"subheading"}>Svelto! Mancano solo pochi minuti alla
@@ -530,7 +537,7 @@ class Cassa extends React.Component {
                         </Stepper>
                     </Grid>
                     <Grid item xs={2}>
-                        <div className={this.props.classes.cartBtn}>
+                        <Paper className={this.props.classes.cartabtn}>
                             <IconButton aria-label="Cart"
                                         onClick={() => this.setState({step: 1, currentState: this.status.review})}>
                                 <Badge badgeContent={this.getCartLenght()} color="primary"
@@ -538,7 +545,7 @@ class Cassa extends React.Component {
                                     <CartIcon/>
                                 </Badge>
                             </IconButton>
-                        </div>
+                        </Paper>
                     </Grid>
                 </Grid>
                 <Dialog open={this.state.isAddOpen}

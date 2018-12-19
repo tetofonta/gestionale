@@ -11,7 +11,7 @@ function getSuitable(startArr, max, MAXR, cb) {
                 startArr.push(e.image_src);
                 firstqry += ` OR id=${e.id}`;
             });
-            getConnection().query(`UPDATE ads SET visualized=visualized+1, total_visualization WHERE ${firstqry}`, (err, re, f) => {
+            getConnection().query(`UPDATE ads SET visualized=visualized+1, total_visualization=total_visualization+1 WHERE ${firstqry}`, (err, re, f) => {
                 if (startArr.length < max) {
                     let qry = "1";
                     r.forEach(e => qry += ` AND id != ${e.id}`);

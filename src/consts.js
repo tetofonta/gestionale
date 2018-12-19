@@ -36,7 +36,8 @@ const apiCalls = {
     editAds: "/api/editAds",
     delAds: "/api/delAds",
     getFeedback: "/api/getFeedback",
-    sendFeed: "/api/sendFeed"
+    sendFeed: "/api/sendFeed",
+    operate: "/api/operate"
 };
 
 let mqttServer;

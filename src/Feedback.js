@@ -70,7 +70,7 @@ class Template extends React.Component {
     render() {
         return (
             <div>
-                <NavBar titleText='Module Title' history={this.props.history} showHome={true}/>
+                <NavBar titleText='Feedback' history={this.props.history} showHome={true}/>
                 <Paper className={this.props.classes.marginTop}>
                     <div className={this.props.classes.root}>
                         {!this.state.finished && <Stepper activeStep={this.state.activeQuestion} className={this.props.classes.full}

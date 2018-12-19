@@ -9,7 +9,7 @@ const {auth, auth_refresh} = require('./auth');
 const {usr_getList, usr_edit, usr_new, usr_del, usr_getAccessibleFunctions, feedback, savefeed} = require('./users');
 const {get_most_suitable_ads, get_ads, edit_ads, delete_ads} = require("./ads");
 const {get_products_list, get_gruppi_cucina, get_popups, get_products, add_meals} = require("./magazzino");
-const {increment, get_buono_detail, get_buoni, upd_buoni, get_old_orders, get_all_fncs} = require("./administration");
+const {increment, get_buono_detail, get_buoni, upd_buoni, get_old_orders, get_all_fncs, operateNo} = require("./administration");
 const cfg = require("./network.config");
 const {logger_init} = require("./logger");
 const {get_stats, stats} = require("./stats");
@@ -19,7 +19,6 @@ let privateKey = fs.readFileSync('sslcert/server.key', 'utf8');
 let certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
 let credentials = {key: privateKey, cert: certificate};
 const app = express();
-app.use(require('cors')());
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({extended: true})); // support encoded bodies
 app.use(express.static('static'));
@@ -84,11 +83,14 @@ app.post('/api/getStats', (r, e) => POSTOnly(r, e, get_stats));
 app.post('/api/getAds', (r, e) => POSTOnly(r, e, get_ads));
 app.post('/api/editAds', (r, e) => POSTOnly(r, e, edit_ads));
 app.post('/api/delAds', (r, e) => POSTOnly(r, e, delete_ads));
+app.post('/api/operate', (r, e) => POSTOnly(r, e, operateNo));
 
 let httpsServer = https.createServer(credentials, app);
 httpsServer.listen(cfg.serverPort, () => console.log(`Listening on port ${cfg.serverPort}`));
 
 const redirect_app = express();
-redirect_app.get('*', (req, res) => res.redirect('https://' + req.headers.host + ":" + cfg.serverPort + req.url));
+redirect_app.get('/*', (req, res) => {
+    res.send(`<html><head><title>MOVED</title><script>window.location.href = 'https://' + ${req.headers.host.substr(0, req.headers.host.indexOf(":"))} + ":" + ${cfg.serverPort + req.url} </script></head><body></body></html>`)
+});
 let httpServer = http.createServer(redirect_app);
 httpServer.listen(cfg.serverPortHttp, () => console.log(`Listening on port ${cfg.serverPortHttp}`));
