@@ -44,7 +44,7 @@
   },
   "scripts": {
     "start-server": "cd backend && node init.js",
-    "start-server-counter": "cd backend/orderCounter && node counter.js",
+    "start-server-counter": "cd backend/dataManager && node manager.js",
     "start-mqtt": "cd backend/MQTT && node broker.js",
     "start-order-printer": "cd backend/MQTT/CLIENTS/orderPrinter && node orderPrinter.js",
     "start-order-processor": "cd backend/MQTT/CLIENTS/orderProcessor && node orderProcessor.js",

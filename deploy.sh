@@ -11,7 +11,7 @@ mkdir -p output/MQTT/orderPrinter/orders
 mkdir -p output/MQTT/orderProcessor/log
 mkdir -p output/MQTT/guestTracker/log
 mkdir -p output/SERVER/log
-mkdir -p output/COUNTER/log
+mkdir -p output/MANAGER/log
 mkdir -p output/SERVER/sslcert
 mkdir -p output/SERVER/static
 mkdir -p output/CAPTIVE/sslcert
@@ -28,7 +28,7 @@ yarn pkg --targets "$buildTargets" --out-path output/CAPTIVE backend/CAPTIVE/cap
 
 #package express
 yarn pkg --targets "$buildTargets" --out-path output/SERVER backend/init.js
-yarn pkg --targets "$buildTargets" --out-path output/COUNTER backend/orderCounter/counter.js
+yarn pkg --targets "$buildTargets" --out-path output/MANAGER backend/dataManager/manager.js
 
 #start yarn build
 yarn build
