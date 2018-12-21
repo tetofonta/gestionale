@@ -2,9 +2,27 @@ const {getNW} = require("./network");
 const crypto = require('crypto');
 const {getUsers, onUserAuthenticated} = require("./auth");
 const {getConnection, secure} = require("./mysql");
+const http = require("http");
+const request = require("request");
+const querystring = require("querystring");
+const cfg = require("./network.config");
 
-let currentno = 0;
-let accessing = false;
+
+function operateNo(req, res) {
+    onUserAuthenticated(req, res, (data) => {
+        request.post({
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: `http://${cfg.counterIP}:${cfg.counterPort}/api/operate`,
+            body: JSON.stringify(data)
+        }, (err, resp, body) => {
+            res.send(body)
+        })
+    });
+}
 
 /**
  * @userAuthenticated
@@ -16,12 +34,9 @@ let accessing = false;
  */
 function increment(req, res) {
     onUserAuthenticated(req, res, () => {
-        while (accessing) ;
-        accessing = true;
-        let no = currentno++;
-        accessing = false;
-
-        res.send({state: true, ordnum: no});
+        request(`http://${cfg.counterIP}:${cfg.counterPort}/api/getNext`, req.body, (err, resp, body) => {
+            res.send(body)
+        })
     }, ["CASSA"]);
 }
 
@@ -156,8 +171,8 @@ function get_all_fncs(req, res) {
         let publics = [];
 
         r.forEach(e => {
-            if(e.isPublic) publics.push(e);
-            else if(e.isPrivate) privates.push(e);
+            if (e.isPublic) publics.push(e);
+            else if (e.isPrivate) privates.push(e);
         });
 
         res.send({state: true, publics: publics, privates: privates})
@@ -170,3 +185,4 @@ module.exports.get_buono_detail = get_buono_detail;
 module.exports.get_buoni = get_buoni;
 module.exports.upd_buoni = upd_buoni;
 module.exports.get_all_fncs = get_all_fncs;
+module.exports.operateNo = operateNo;

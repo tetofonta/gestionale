@@ -9,7 +9,7 @@ const {auth, auth_refresh} = require('./auth');
 const {usr_getList, usr_edit, usr_new, usr_del, usr_getAccessibleFunctions, feedback, savefeed} = require('./users');
 const {get_most_suitable_ads, get_ads, edit_ads, delete_ads} = require("./ads");
 const {get_products_list, get_gruppi_cucina, get_popups, get_products, add_meals} = require("./magazzino");
-const {increment, get_buono_detail, get_buoni, upd_buoni, get_old_orders, get_all_fncs} = require("./administration");
+const {increment, get_buono_detail, get_buoni, upd_buoni, get_old_orders, get_all_fncs, operateNo} = require("./administration");
 const cfg = require("./network.config");
 const {logger_init} = require("./logger");
 const {get_stats, stats} = require("./stats");
@@ -19,7 +19,6 @@ let privateKey = fs.readFileSync('sslcert/server.key', 'utf8');
 let certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
 let credentials = {key: privateKey, cert: certificate};
 const app = express();
-app.use(require('cors')());
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({extended: true})); // support encoded bodies
 app.use(express.static('static'));
@@ -45,6 +44,10 @@ function POSTOnly(req, res, callback) {
     stats.post.times();
     stats.post.avg(Date.now() - start);
 }
+//
+// app.get('/_*', (req, res) => {
+//     // res.sendFile(path.join('./static/index.html'));
+// });
 
 app.get('/api/hello', (req, res) => GETOnly(req, res, function () {
     if (debug) {
@@ -63,7 +66,6 @@ app.get('/api/getAllFncs', (r, e) => GETOnly(r, e, get_all_fncs));
 app.get('/api/getFeedback', (r, e) => GETOnly(r, e, feedback));
 app.post('/api/sendFeed', (r, e) => POSTOnly(r, e, savefeed));
 app.post('/api/new_order', (r, e) => POSTOnly(r, e, increment)); //Ritorna il numero di ordine incrementale
-app.post('/api/rst_counter'); //TODO
 app.post('/api/shutdown'); //TODO
 app.post('/api/auth', (r, e) => POSTOnly(r, e, auth));
 app.post('/api/refresh', (r, e) => POSTOnly(r, e, auth_refresh));
@@ -84,11 +86,20 @@ app.post('/api/getStats', (r, e) => POSTOnly(r, e, get_stats));
 app.post('/api/getAds', (r, e) => POSTOnly(r, e, get_ads));
 app.post('/api/editAds', (r, e) => POSTOnly(r, e, edit_ads));
 app.post('/api/delAds', (r, e) => POSTOnly(r, e, delete_ads));
+app.post('/api/operate', (r, e) => POSTOnly(r, e, operateNo));
 
-let httpsServer = https.createServer(credentials, app);
-httpsServer.listen(cfg.serverPort, () => console.log(`Listening on port ${cfg.serverPort}`));
+let server;
+if(cfg.network.use_ssl){
+    server = https.createServer(credentials, app);
+    server.listen(cfg.serverPort, () => console.log(`Listening on port ${cfg.serverPort}`));
 
-const redirect_app = express();
-redirect_app.get('*', (req, res) => res.redirect('https://' + req.headers.host + ":" + cfg.serverPort + req.url));
-let httpServer = http.createServer(redirect_app);
-httpServer.listen(cfg.serverPortHttp, () => console.log(`Listening on port ${cfg.serverPortHttp}`));
+    const redirect_app = express();
+    redirect_app.get('*', (req, res) => {
+        res.send(`<html><head><title>MOVED</title></head><body><a href="https://' + ${req.headers.host.substr(0, req.headers.host.indexOf(":"))}:${cfg.serverPort + req.url}">Vai alla pagina</a></body></html>`)
+    });
+    let httpServer = http.createServer(redirect_app);
+    httpServer.listen(cfg.serverPortHttp, () => console.log(`Listening on port ${cfg.serverPortHttp}`));
+} else {
+    server = http.createServer(app);
+    server.listen(cfg.serverPort, () => console.log(`Listening on port ${cfg.serverPort}`));
+}

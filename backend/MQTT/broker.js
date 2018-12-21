@@ -4,7 +4,7 @@ const cfg = require("../network.config");
 const {logger_init} = require("../logger");
 logger_init("./log/broker.error.log", "./log/broker.log");
 
-let restrictedTopics = [cfg.mqtt["order-listmsg"], cfg.mqtt["order-official"]];
+let restrictedTopics = [cfg.mqtt["order-official"]];
 
 function nop() {
 }

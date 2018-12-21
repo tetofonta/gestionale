@@ -1,19 +1,15 @@
 {
   "mysql": {
-    "user": "user",
-    "host": "host",
-    "password": "password",
-    "database": "GSagrav2",
-    "timestamp_offset": 0
+    "user": "root",
+    "host": "-network host-",
+    "password": "-password-",
+    "database": "-database name-",
+    "timestamp_offset": 0,
+    "queryTimeHistory": 500
   },
   "network": {
     "opNetwork": {
-      "ip": [
-        192,
-        168,
-        1,
-        0
-      ],
+      "ip": [192, 168, 122, 0],
       "subnet": 24
     }
   },
@@ -32,9 +28,15 @@
     "order-guest": "order/guest",
     "order-listmsg": "order/msg",
     "order-listch": "order/channel",
-    "listSendTimeout": 2
+    "track": "analytics/tracking",
+    "listSendTimeout": 2,
+    "track-guest": true
   },
   "react": {
+    "primary_color": "#2196f3",
+    "secondary_color": "#ff1080",
+    "theme": "dark",
+    "use_shadows": false,
     "categoryWidth": "25%",
     "categoryHeight": 200,
     "productsHeight": 110,
@@ -49,6 +51,8 @@
     "currency": "EUR",
     "orderCifres": 4,
     "scontrino": "/TEMPLATES/scontrino.json",
+    "dashboard_use_ads": true,
+    "cassa_guest": true,
     "scontrini": {
       "categorieCucina": [
         "PRIMI PIATTI",
@@ -77,7 +81,7 @@
   "guest": {
     "timeout": 900
   },
-  "serverIP": "192.168.1.46",
+  "serverIP": "192.168.122.1",
   "serverPort": 5000,
   "serverPortHttp": 6000,
   "sagraName": "Sagra San Lorenzo",

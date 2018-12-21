@@ -8,7 +8,7 @@ const {execFile} = require('child_process');
 const {logger_init} = require("../../../logger");
 logger_init("./log/printer.error.log", "./log/printer.log");
 
-let client = mqtt.connect(`mqtt://${cfg.serverIP}:${cfg.mqtt.broker.port}`);
+let client = mqtt.connect(`mqtt://${cfg.MQTTIP}:${cfg.mqtt.broker.port}`);
 
 client.on('connect', function () {
     client.subscribe(cfg.mqtt["order-official"], err => {

@@ -11,8 +11,10 @@ mkdir -p output/MQTT/orderPrinter/orders
 mkdir -p output/MQTT/orderProcessor/log
 mkdir -p output/MQTT/guestTracker/log
 mkdir -p output/SERVER/log
+mkdir -p output/COUNTER/log
 mkdir -p output/SERVER/sslcert
 mkdir -p output/SERVER/static
+mkdir -p output/CAPTIVE/sslcert
 
 
 #package MQTT apps
@@ -21,8 +23,12 @@ yarn pkg --targets "$buildTargets" --out-path output/MQTT/orderPrinter backend/M
 yarn pkg --targets "$buildTargets" --out-path output/MQTT/orderProcessor backend/MQTT/CLIENTS/orderProcessor/orderProcessor.js
 yarn pkg --targets "$buildTargets" --out-path output/MQTT/guestTracker backend/MQTT/CLIENTS/guestTracker/guestTracker.js
 
+#packages captive
+yarn pkg --targets "$buildTargets" --out-path output/CAPTIVE backend/CAPTIVE/captive.js
+
 #package express
 yarn pkg --targets "$buildTargets" --out-path output/SERVER backend/init.js
+yarn pkg --targets "$buildTargets" --out-path output/COUNTER backend/orderCounter/counter.js
 
 #start yarn build
 yarn build
@@ -37,6 +43,7 @@ rm -rf output/*/scss/
 
 openssl req -nodes -new -x509 -keyout output/SERVER/sslcert/server.key -out output/SERVER/sslcert/server.crt
 cp output/SERVER/sslcert/* output/MQTT/broker/sslcert/
+cp output/SERVER/sslcert/* output/CAPTIVE/sslcert/
 
 #remove junk
 rm -rf ./build/

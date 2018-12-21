@@ -36,12 +36,13 @@ const apiCalls = {
     editAds: "/api/editAds",
     delAds: "/api/delAds",
     getFeedback: "/api/getFeedback",
-    sendFeed: "/api/sendFeed"
+    sendFeed: "/api/sendFeed",
+    operate: "/api/operate"
 };
 
 let mqttServer;
-if (document.location.protocol === 'https:') mqttServer = `wss://${cfg.serverIP}:${cfg.mqtt.broker.ws.secure}`;
-else mqttServer = `ws://${cfg.serverIP}:${cfg.mqtt.broker.ws.port}`;
+if (document.location.protocol === 'https:') mqttServer = `wss://${cfg.MQTTIP}:${cfg.mqtt.broker.ws.secure}`;
+else mqttServer = `ws://${cfg.MQTTIP}:${cfg.mqtt.broker.ws.port}`;
 
 const loginLogo =
     <img src={"/logo/drawing.svg.png"} width="76px"/>;

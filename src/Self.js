@@ -9,7 +9,7 @@ import Drawer from "@material-ui/core/es/Drawer/Drawer";
 import OrderListItem from "./components/OrderListItem";
 import MenuIcon from "@material-ui/icons/Menu"
 import IconButton from "@material-ui/core/es/IconButton/IconButton";
-import AddIcon from "@material-ui/icons/Add";
+import AddIcon from "@material-ui/icons/Info";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import Button from "@material-ui/core/es/Button/Button";
 import {GET, POST} from "./network";
@@ -274,6 +274,8 @@ class Self extends React.Component {
                                 onClick={() => {
                                     this.setState({buonoOpen: true})
                                 }}>Usa un buono</Button>
+                        <Typography
+                            variant="title">DA PAGARE: {this.totale[0] + this.totale[1]/100} {Currency}</Typography>
                         <TextField
                             label="Pagato"
                             rowsMax="6"

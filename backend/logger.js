@@ -38,14 +38,14 @@ function log_my_data(data, file, type, debug){
     if (debug) log_stdout.write(util.format(`[${Date.toString()}][${type}][${process.pid}]\t\t${util.format(md)}`) + "\n");
 }
 
-function logger_init(err, log, debug = false) {
+function logger_init(err, log, debug = true) {
 
     const log_file = createStream(log);
     const err_file = createStream(err);
 
     if(!log_file || !err_file){
         // console.error("Cannot create logging files. reverting to defaults");
-        logger_init("./err.log", "./log.log", false);
+        logger_init("./err.log", "./log.log", debug);
         return;
     }
 

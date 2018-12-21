@@ -10,7 +10,8 @@
     },
     "cassa": {
       "modulePath": "./Cassa",
-      "enabled": true
+      "enabled": true,
+      "additional": ["networklogin"]
     },
     "statistica": {
       "modulePath": "./Statistiche",
@@ -36,10 +37,18 @@
       "modulePath": "./Feedback",
       "enabled": true,
       "ask": true,
-      "after": 10000
+      "after": 18000000
     },
     "adsmanager": {
       "modulePath": "./Ads",
+      "enabled": true
+    },
+    "ordermanager": {
+      "modulePath": "./OrderOptions",
+      "enabled": true
+    },
+    "networklogin": {
+      "modulePath": "./NetworkLogin",
       "enabled": true
     }
   }
