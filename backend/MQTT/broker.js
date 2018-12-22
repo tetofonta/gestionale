@@ -12,12 +12,25 @@ function nop() {
 mosca.Server.prototype.publish = function publish(packet, client, callback) {
 
     try {
+        let remote;
+        if(client.connection.stream.socket) remote = client.connection.stream.socket._socket.remoteAddress;
+        else remote = client.connection.stream.remoteAddress;
+
         if (restrictedTopics.includes(packet.topic))
-            if (!getNW_st(client.connection.stream.socket._socket.remoteAddress)) {
-                console.log("Denied connection from " + client.connection.stream.socket._socket.remoteAddress);
+            if (!getNW_st(remote)) {
+                console.log("Denied connection from " + remote);
                 return;
             }
-        console.log(packet)
+        if (client) {
+            let newPayload;
+            try {
+                newPayload = JSON.parse(packet.payload.toString());
+            } catch (e) {
+                return;
+            }
+            newPayload.sender = {address: remote};
+            packet.payload = Buffer.from(JSON.stringify(newPayload), 'utf8');
+        }
     } catch (e) {
         console.error(e)
     }

@@ -16,28 +16,11 @@ function operateNo(req, res) {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            url: `http://${cfg.counterIP}:${cfg.counterPort}/api/operate`,
+            url: `http://${cfg.managerIP}:${cfg.managerPort}/api/operate`,
             body: JSON.stringify(data)
         }, (err, resp, body) => {
             res.send(body)
         })
-    });
-}
-
-getConnection().query(`SELECT ordnum FROM ordini_dettagli WHERE \`timestamp\` = (SELECT MAX(\`timestamp\`) FROM ordini_dettagli) LIMIT 1`, (e, r) => {
-    if (!r || e) return;
-    currentno = r[0].ordnum;
-});
-
-function operateNo(req, res) {
-    onUserAuthenticated(req, res, (data) => {
-        if (data.set)
-            if (!isNaN(parseInt(data.value))){
-                currentno = parseInt(data.value);
-                res.send({state: true, err: "ok"});
-            }
-            else res.send({state: false, err: "Il valore non é un numero."});
-        else res.send({state: true, num: currentno});
     });
 }
 
@@ -51,7 +34,7 @@ function operateNo(req, res) {
  */
 function increment(req, res) {
     onUserAuthenticated(req, res, () => {
-        request(`http://${cfg.counterIP}:${cfg.counterPort}/api/getNext`, req.body, (err, resp, body) => {
+        request(`http://${cfg.managerIP}:${cfg.managerPort}/api/getNext`, req.body, (err, resp, body) => {
             res.send(body)
         })
     }, ["CASSA"]);

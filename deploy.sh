@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-buildTargets="node6-linux-x64"
+buildTargets="node6-linux-x64,node6-linux-x86"
 
 #build skeleton
 mkdir -p output
@@ -12,6 +12,8 @@ mkdir -p output/MQTT/orderProcessor/log
 mkdir -p output/MQTT/guestTracker/log
 mkdir -p output/SERVER/log
 mkdir -p output/MANAGER/log
+mkdir -p output/LOAD_BALANCER/log
+mkdir -p output/LOAD_BALANCER/sslcert
 mkdir -p output/SERVER/sslcert
 mkdir -p output/SERVER/static
 mkdir -p output/CAPTIVE/sslcert
@@ -29,6 +31,7 @@ yarn pkg --targets "$buildTargets" --out-path output/CAPTIVE backend/CAPTIVE/cap
 #package express
 yarn pkg --targets "$buildTargets" --out-path output/SERVER backend/init.js
 yarn pkg --targets "$buildTargets" --out-path output/MANAGER backend/dataManager/manager.js
+yarn pkg --targets "$buildTargets" --out-path output/LOAD_BALANCER backend/LOAD_BALANCER/lb.js
 
 #start yarn build
 yarn build
@@ -44,9 +47,7 @@ rm -rf output/*/scss/
 openssl req -nodes -new -x509 -keyout output/SERVER/sslcert/server.key -out output/SERVER/sslcert/server.crt
 cp output/SERVER/sslcert/* output/MQTT/broker/sslcert/
 cp output/SERVER/sslcert/* output/CAPTIVE/sslcert/
+cp output/SERVER/sslcert/* output/LOAD_BALANCER/sslcert/
 
 #remove junk
 rm -rf ./build/
-
-#copy launcher
-cp run.sh output/run.sh

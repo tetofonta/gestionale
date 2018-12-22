@@ -40,7 +40,7 @@ function onUserAuthenticated(req, res, cb, neededPrivs, permitGuest = false) {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            url: `http://${cfg.counterIP}:${cfg.counterPort}/api/getUserState`,
+            url: `http://${cfg.managerIP}:${cfg.managerPort}/api/getUserState`,
             body: JSON.stringify({user: data.user, token: data.token, neededPrivs: neededPrivs})
         }, (err, resp, body) => {
             body = JSON.parse(body);
@@ -70,7 +70,7 @@ function auth(req, res) {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        url: `http://${cfg.counterIP}:${cfg.counterPort}/api/auth`,
+        url: `http://${cfg.managerIP}:${cfg.managerPort}/api/auth`,
         body: JSON.stringify(req.body)
     }, (err, resp, body) => {
         res.send(body)
@@ -92,7 +92,7 @@ function auth_refresh(req, res) {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        url: `http://${cfg.counterIP}:${cfg.counterPort}/api/refresh`,
+        url: `http://${cfg.managerIP}:${cfg.managerPort}/api/refresh`,
         body: JSON.stringify(req.body)
     }, (err, resp, body) => {
         res.send(body)

@@ -13,7 +13,10 @@ const {increment, get_buono_detail, get_buoni, upd_buoni, get_old_orders, get_al
 const cfg = require("./network.config");
 const {logger_init} = require("./logger");
 const {get_stats, stats} = require("./stats");
+const {mqttClient} = require("./lbClient");
 logger_init("./log/express.error.log", "./log/express.log");
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+mqttClient(cfg.mqtt.broker.port, cfg.MQTTIP);
 
 let privateKey = fs.readFileSync('sslcert/server.key', 'utf8');
 let certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
@@ -28,6 +31,12 @@ const OP = "client";
 const debug = false;
 
 function GETOnly(req, res, callback) {
+    if(cfg.network.only_from_balanced){
+        if(req.headers[cfg.load_balancer.load_balanced_sign_header] && req.headers[cfg.load_balancer.load_balanced_sign_header] !== 'YUP'){
+            res.send("NETWORK ERROR, Only Load Balanced.");
+            return;
+        }
+    }
     let start = Date.now();
     callback(req, res);
     stats.get.times();
@@ -35,6 +44,12 @@ function GETOnly(req, res, callback) {
 }
 
 function POSTOnly(req, res, callback) {
+    if(cfg.network.only_from_balanced){
+        if(req.headers[cfg.load_balancer.load_balanced_sign_header] && req.headers[cfg.load_balancer.load_balanced_sign_header] !== 'YUP'){
+            res.send("NETWORK ERROR, Only Load Balanced.");
+            return;
+        }
+    }
     let start = Date.now();
     if (req.method !== "POST"){
         res.send({state: false, err: "wrong method"});
@@ -44,10 +59,10 @@ function POSTOnly(req, res, callback) {
     stats.post.times();
     stats.post.avg(Date.now() - start);
 }
-//
-// app.get('/_*', (req, res) => {
-//     // res.sendFile(path.join('./static/index.html'));
-// });
+
+app.get('/_*', (req, res) => {
+    res.sendFile(path.join('/static/index.html', { root: cfg.static_root }));
+});
 
 app.get('/api/hello', (req, res) => GETOnly(req, res, function () {
     if (debug) {
@@ -88,9 +103,8 @@ app.post('/api/editAds', (r, e) => POSTOnly(r, e, edit_ads));
 app.post('/api/delAds', (r, e) => POSTOnly(r, e, delete_ads));
 app.post('/api/operate', (r, e) => POSTOnly(r, e, operateNo));
 
-let server;
 if(cfg.network.use_ssl){
-    server = https.createServer(credentials, app);
+    let server = https.createServer(credentials, app);
     server.listen(cfg.serverPort, () => console.log(`Listening on port ${cfg.serverPort}`));
 
     const redirect_app = express();
@@ -100,6 +114,6 @@ if(cfg.network.use_ssl){
     let httpServer = http.createServer(redirect_app);
     httpServer.listen(cfg.serverPortHttp, () => console.log(`Listening on port ${cfg.serverPortHttp}`));
 } else {
-    server = http.createServer(app);
+    let server = http.createServer(app);
     server.listen(cfg.serverPort, () => console.log(`Listening on port ${cfg.serverPort}`));
 }

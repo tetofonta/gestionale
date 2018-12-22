@@ -33,7 +33,8 @@
     "history": "^4.7.2",
     "prop-types": "latest",
     "request": "^2.88.0",
-    "xlsx": "^0.14.1"
+    "xlsx": "^0.14.1",
+    "os-utils": "^0.0.14"
   },
   "devDependencies": {
     "pkg": "^4.3.5",
