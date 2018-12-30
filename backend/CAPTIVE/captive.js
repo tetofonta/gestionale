@@ -229,7 +229,7 @@ app.post("/api/login", (req, res) => {
         getConnection().query(`UPDATE credentials SET used = 1, client='${secure(req.body.client)}' WHERE \`user\` = '${data.usr}'`, (e, r) => {
             if(e){
                 console.error(e);
-                res.send({state: false, err: 500})
+                res.send({state: false, err: 500});
                 return;
             }
             permitUser(req.body.client, iface(cfg.network.internet_iface));

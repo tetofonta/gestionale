@@ -11,7 +11,14 @@
     "opNetwork": {
       "ip": [192, 168, 122, 0],
       "subnet": 24
-    }
+    },
+    "iptables": "iptables",
+    "host_internet_minutes": 60,
+    "use_ssl": true,
+    "lb_use_ssl": true,
+    "only_from_balanced": false,
+    "registration_timeout": 900,
+    "internet_iface": "--internet traffic interface--"
   },
   "mqtt": {
     "broker": {
@@ -29,8 +36,9 @@
     "order-listmsg": "order/msg",
     "order-listch": "order/channel",
     "track": "analytics/tracking",
-    "listSendTimeout": 2,
-    "track-guest": true
+    "load_send": "load/send",
+    "load_access": "load/sub",
+    "listSendTimeout": 2
   },
   "react": {
     "primary_color": "#2196f3",
@@ -81,9 +89,26 @@
   "guest": {
     "timeout": 900
   },
-  "serverIP": "192.168.122.1",
+  "load_balancer": {
+    "load_intervals": 10,
+    "allowed_hosts": ["217.0.15.2", "217.0.15.3", "192.168.1.46"],
+    "log_packets": true,
+    "log_filter": ["client", "header", "body"],
+    "load_balanced_sign_header": "Load-Balanced",
+    "timeout": 20
+  },
+  "static_root": "",
+  "serverIP": "192.168.1.46",
+  "MQTTIP": "192.168.1.46",
+  "loginIP": "192.168.1.46",
+  "managerIP": "192.168.1.46",
   "serverPort": 5000,
   "serverPortHttp": 6000,
-  "sagraName": "Sagra San Lorenzo",
-  "printerName": "Samsung-C460-Series"
+  "serverLoginPort": 9000,
+  "managerPort": 7000,
+  "loadBalancerPort": 8000,
+  "loadBalancerPortHttp": 4000,
+  "loginBind": "127.0.0.1",
+  "sagraName": "--nome della sagra--",
+  "printerName": "--nome della stampante di rete--"
 }
