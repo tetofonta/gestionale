@@ -11,6 +11,7 @@ function nop() {
 
 mosca.Server.prototype.publish = function publish(packet, client, callback) {
 
+if(client){
     try {
         let remote;
         if(client.connection.stream.socket) remote = client.connection.stream.socket._socket.remoteAddress;
@@ -34,6 +35,7 @@ mosca.Server.prototype.publish = function publish(packet, client, callback) {
     } catch (e) {
         console.error(e)
     }
+}
 
 
     const that = this;

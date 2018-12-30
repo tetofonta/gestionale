@@ -7,12 +7,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Dialog from "@material-ui/core/es/Dialog/Dialog";
-import DialogTitle from "@material-ui/core/es/DialogTitle/DialogTitle";
-import DialogContent from "@material-ui/core/es/DialogContent/DialogContent";
-import DialogContentText from "@material-ui/core/es/DialogContentText/DialogContentText";
-import DialogActions from "@material-ui/core/es/DialogActions/DialogActions";
-import {loginLogo} from "./consts";
+import {apiCalls, loginLogo} from "./consts";
+import {POST, POSTSync} from "./network"
+import * as cfg from "./configs/network.config"
 import QrReader from "react-qr-reader";
 
 
@@ -50,23 +47,20 @@ const styles = theme => ({
 
 class NetworkLogin extends React.Component {
 
-    continueLIN = () => {
-        this.props.history.push("/dashboard");
-    };
-    show = (title, text, val) => {
-        this.setState({tex: text});
-        this.setState({titl: title});
-        this.setState({showed: val});
-    };
-
     state = {
-        tex: "WhyI'mHERE?",
-        titl: "WhyI'mHERE?",
-        showed: false,
+
     };
 
-    login(user, password){
-        this.props.history.push("/")
+    login(user, password) {
+        POST(apiCalls.loginnw, {usr: user, psw: password}).then(res => {
+            if(res.state){
+                window.location.href = "https://www.google.com/";
+            }
+            else{
+                console.log(res)
+                this.setState({message: "CREDENZIALI NON ABILITATE"})
+            }
+        })
     }
 
     render() {
@@ -76,11 +70,6 @@ class NetworkLogin extends React.Component {
             username: "",
             password: "",
         };
-
-        if (window.ctx.get("isLogged")) {
-            this.props.history.push('/dashboard');
-            return (<main>Already logged in.</main>);
-        }
 
         return (
             <div>
@@ -92,20 +81,20 @@ class NetworkLogin extends React.Component {
                         <form className={classes.form}>
 
                             {!this.state.useTextMode && <div>
-                            <QrReader
-                                delay={500}
-                                onError={(e) => this.setState({message: e.toString()})}
-                                onScan={(e) => {
-                                    try{
-                                        let obj = JSON.parse(e);
-                                        if(obj.plugin && obj.plugin.networklogin && obj.plugin.networklogin.user && obj.plugin.networklogin.password)
-                                            this.login(obj.plugin.networklogin.user, obj.plugin.networklogin.password);
-                                        else this.setState({message: "QR Code errato."})
-                                    } catch (e) {
-                                        this.setState({message: "Impossibile decodificare il codice QR."})
-                                    }
-                                }}
-                            />
+                                <QrReader
+                                    delay={500}
+                                    onError={(e) => this.setState({message: e.toString()})}
+                                    onScan={(e) => {
+                                        try {
+                                            let obj = JSON.parse(e);
+                                            if (obj.plugin && obj.plugin.networklogin && obj.plugin.networklogin.user && obj.plugin.networklogin.password)
+                                                this.login(obj.plugin.networklogin.user, obj.plugin.networklogin.password);
+                                            else this.setState({message: "QR Code errato."})
+                                        } catch (e) {
+                                            this.setState({message: "Impossibile decodificare il codice QR."})
+                                        }
+                                    }}
+                                />
                                 <Typography>{this.state.message}</Typography>
                                 <Button
                                     fullWidth
@@ -131,12 +120,11 @@ class NetworkLogin extends React.Component {
                                     <Input
                                         name="password"
                                         type="password"
-                                        id="password"
                                         autoComplete="current-password"
                                         onChange={evt => creds.password = evt.target.value}
-                                        onKeyPress={(e) => this.login(creds.username, creds.password)}
                                     />
                                 </FormControl>
+                                <Typography>{this.state.message}</Typography>
                                 <Button
                                     fullWidth
                                     variant="raised"
@@ -159,34 +147,20 @@ class NetworkLogin extends React.Component {
                             </Button>
                         </form>
                     </Paper>
-                    <Dialog
-                        open={this.state.showed}
-                        aria-labelledby="alert-dialog-title"
-                        aria-describedby="alert-dialog-description"
-                    >
-                        <DialogTitle id="alert-dialog-title">{this.state.titl}</DialogTitle>
-                        <DialogContent>
-                            <DialogContentText id="alert-dialog-description">
-                                {this.state.tex}
-                            </DialogContentText>
-                        </DialogContent>
-                        <DialogActions>
-                            <Button onClick={() => {
-                                this.show("", "", false);
-                                this.continueLIN();
-                            }} color="primary">
-                                OK
-                            </Button>
-                        </DialogActions>
-                    </Dialog>
                 </main>
             </div>
         );
     }
 }
 
-function getdata(){
-    return {user: "aaaa", password: "bbb"}
+function getdata() {
+    let answ = POSTSync(apiCalls.getNWCreds, {user: window.ctx.get("username"), token: window.ctx.get("token")});
+    answ = JSON.parse(answ);
+    if (answ.state)
+        return {user: answ.usr, password: answ.psw};
+
+    console.log(answ);
+    return {user: "", password: ""};
 }
 
 let classe = withStyles(styles)(NetworkLogin);

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-buildTargets="node6-linux-x64,node6-linux-x86"
+buildTargets="node10-linux-x64,node10-linux-x86"
 
 #build skeleton
 mkdir -p output
@@ -32,6 +32,7 @@ yarn pkg --targets "$buildTargets" --out-path output/CAPTIVE backend/CAPTIVE/cap
 yarn pkg --targets "$buildTargets" --out-path output/SERVER backend/init.js
 yarn pkg --targets "$buildTargets" --out-path output/MANAGER backend/dataManager/manager.js
 yarn pkg --targets "$buildTargets" --out-path output/LOAD_BALANCER backend/LOAD_BALANCER/lb.js
+yarn pkg --targets "$buildTargets" --out-path output/CAPTIVE backend/CAPTIVE/captive.js
 
 #start yarn build
 yarn build
@@ -48,6 +49,7 @@ openssl req -nodes -new -x509 -keyout output/SERVER/sslcert/server.key -out outp
 cp output/SERVER/sslcert/* output/MQTT/broker/sslcert/
 cp output/SERVER/sslcert/* output/CAPTIVE/sslcert/
 cp output/SERVER/sslcert/* output/LOAD_BALANCER/sslcert/
+cp output/SERVER/sslcert/* output/CAPTIVE/sslcert/
 
 #remove junk
 rm -rf ./build/

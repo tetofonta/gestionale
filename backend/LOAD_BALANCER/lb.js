@@ -112,7 +112,7 @@ if (cfg.network.lb_use_ssl) {
 
     const redirect_app = express();
     redirect_app.get('*', (req, res) => {
-        res.send(`<html><head><title>MOVED</title></head><body><a href="https://' + ${req.headers.host.substr(0, req.headers.host.indexOf(":"))}:${cfg.serverPort + req.url}">Vai alla pagina</a></body></html>`)
+        res.send(`<html><head><title>MOVED</title></head><body><a href="https://${cfg.serverIP}/">Vai alla pagina</a> <script>window.location.href = "https://${cfg.serverIP}/"</script></body></html>`)
     });
     let httpServer = http.createServer(redirect_app);
     httpServer.listen(cfg.loadBalancerPortHttp, () => console.log(`Listening on port ${cfg.loadBalancerPortHttp}`));

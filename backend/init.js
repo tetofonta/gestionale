@@ -14,6 +14,7 @@ const cfg = require("./network.config");
 const {logger_init} = require("./logger");
 const {get_stats, stats} = require("./stats");
 const {mqttClient} = require("./lbClient");
+const {generateCredentials, loginnw} = require("./network_management");
 logger_init("./log/express.error.log", "./log/express.log");
 process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
 mqttClient(cfg.mqtt.broker.port, cfg.MQTTIP);
@@ -102,6 +103,8 @@ app.post('/api/getAds', (r, e) => POSTOnly(r, e, get_ads));
 app.post('/api/editAds', (r, e) => POSTOnly(r, e, edit_ads));
 app.post('/api/delAds', (r, e) => POSTOnly(r, e, delete_ads));
 app.post('/api/operate', (r, e) => POSTOnly(r, e, operateNo));
+app.post('/api/getNetworkCreds', (r, e) => POSTOnly(r, e, generateCredentials));
+app.post('/api/loginnw', (r, e) => POSTOnly(r, e, loginnw));
 
 if(cfg.network.use_ssl){
     let server = https.createServer(credentials, app);

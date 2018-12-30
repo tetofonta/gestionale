@@ -51,8 +51,9 @@
     "start-order-processor": "cd backend/MQTT/CLIENTS/orderProcessor && node orderProcessor.js",
     "start-guest-tracker": "cd backend/MQTT/CLIENTS/guestTracker && node guestTracker.js",
     "start-guest-tracker-worker": "cd backend/MQTT/CLIENTS/guestTracker && node guestTracker.js -worker-enable",
+    "start-captive": "cd backend/CAPTIVE && node captive.js",
     "start": "HTTPS=true && react-scripts start",
-    "dev": "yarn concurrently --kill-others-on-fail \"yarn start-server\" \"yarn start-server-counter\" \"yarn start\" \"yarn start-mqtt\" \"yarn start-order-printer\" \"yarn start-order-processor\" \"yarn start-guest-tracker\" \"yarn start-guest-tracker-worker\"",
+    "dev": "yarn concurrently --kill-others-on-fail \"yarn start-captive\" \"yarn start-server\" \"yarn start-server-counter\" \"yarn start\" \"yarn start-mqtt\" \"yarn start-order-printer\" \"yarn start-order-processor\" \"yarn start-guest-tracker\" \"yarn start-guest-tracker-worker\"",
     "build": "react-scripts build",
     "deploy": "sh deploy.sh",
     "test": "yarn mocha TEST/maketest.js"

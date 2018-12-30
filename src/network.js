@@ -45,4 +45,12 @@ let POST = async (path, form) => {
     return body;
 };
 
-export {GET, GETSync, POST}
+let POSTSync = (path, form) => {
+    let xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", path, false);
+    xmlHttp.setRequestHeader('Content-type', 'application/json');
+    xmlHttp.send(JSON.stringify(form));
+    return xmlHttp.responseText;
+};
+
+export {GET, GETSync, POST, POSTSync}

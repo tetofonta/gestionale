@@ -6,6 +6,10 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import {POST} from "./network";
 import {apiCalls} from "./consts";
+import * as cfg from "./configs/network.config"
+
+//if(window.location.hostname !== cfg.serverIP)
+//    window.location.href = `https://${cfg.serverIP}/`;
 
 Array.prototype.flat = function() {
     return this.reduce((acc, val) => Array.isArray(val) ? acc.concat(val.flat()) : acc.concat(val), []);
@@ -60,6 +64,7 @@ try {
                 window.ctx.set("name", oldOnes.name);
                 window.ctx.set("token", res.token);
                 window.ctx.set("admin", oldOnes.isAdmin);
+                if(oldOnes.nwaccess) window.ctx.set("nwaccess", oldOnes.nwaccess);
 
                 oldOnes.token = res.token;
                 document.cookie = JSON.stringify(oldOnes);
