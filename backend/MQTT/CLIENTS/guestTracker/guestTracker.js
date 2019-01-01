@@ -18,12 +18,18 @@ client.on('connect', function () {
             if (err) console.error(err)
         });
         console.log("Worker is enabled");
+        setInterval(updateList, cfg.mqtt.listRefresh * 1000);
     }
 });
 
 let clientid = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2)
 let orders = {};
 let lists = {};
+
+function updateList(){
+    client.publish(cfg.mqtt["order-listmsg"], JSON.stringify({action: "set", data: {orders: orders}}))
+}
+
 
 function mergeLists(th){
     let i = lists[th];
