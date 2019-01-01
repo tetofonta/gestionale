@@ -38,9 +38,6 @@ client.on('connect', function () {
     })
 });
 
-let privateKey = fs.readFileSync('sslcert/server.key', 'utf8');
-let certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
-let credentials = {key: privateKey, cert: certificate};
 const listen = express();
 listen.use(bodyParser.json()); // support json encoded bodies
 listen.use(bodyParser.urlencoded({extended: true})); // support encoded bodies
@@ -107,6 +104,9 @@ listen.get("*", handler(request));
 listen.post("*", handler(request.post));
 
 if (cfg.network.lb_use_ssl) {
+    let privateKey = fs.readFileSync('sslcert/server.key', 'utf8');
+    let certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
+    let credentials = {key: privateKey, cert: certificate};
     let server = https.createServer(credentials, listen);
     server.listen(cfg.loadBalancerPort, () => console.log(`Listening on port ${cfg.loadBalancerPort}`));
 

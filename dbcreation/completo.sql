@@ -41,7 +41,7 @@ CREATE TABLE `ads` (
 
 LOCK TABLES `ads` WRITE;
 /*!40000 ALTER TABLE `ads` DISABLE KEYS */;
-INSERT INTO `ads` VALUES (1,'sampa',2,1,'/ads/%sampa.png',159),(3,'coin',1,1,'/ads/%coin.png',84),(5,'bsfc',3,0,'/ads/%bsfc.png',78);
+INSERT INTO `ads` VALUES (1,'sampa',2,1,'/ads/%sampa.png',165),(3,'coin',1,1,'/ads/%coin.png',87),(5,'bsfc',3,0,'/ads/%bsfc.png',81);
 /*!40000 ALTER TABLE `ads` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -116,7 +116,7 @@ CREATE TABLE `credentials` (
   `initiate` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `credentials_id_uindex` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -524,4 +524,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-30 15:17:00
+-- Dump completed on 2019-01-01 15:29:11

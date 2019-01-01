@@ -1,6 +1,7 @@
 {
-  "name": "vezo",
+  "name": "gestionale",
   "version": "0.1.0",
+  "license": "GPL3",
   "private": true,
   "proxy": "https://localhost:5000/",
   "dependencies": {
@@ -55,12 +56,15 @@
     "start": "HTTPS=true && react-scripts start",
     "dev": "yarn concurrently --kill-others-on-fail \"yarn start-captive\" \"yarn start-server\" \"yarn start-server-counter\" \"yarn start\" \"yarn start-mqtt\" \"yarn start-order-printer\" \"yarn start-order-processor\" \"yarn start-guest-tracker\" \"yarn start-guest-tracker-worker\"",
     "build": "react-scripts build",
-    "deploy": "sh deploy.sh",
+    "deploy": "bash deploy.bash",
     "test": "yarn mocha TEST/maketest.js"
   },
   "browserslist": [
     ">0.2%",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "pkg": {
+    "scripts": "backend/*.js"
+  }
 }

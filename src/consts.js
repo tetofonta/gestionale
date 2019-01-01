@@ -1,5 +1,6 @@
 import React from "react";
 import * as cfg from './configs/network.config'
+import * as api from './configs/api'
 
 const connection_status = Object.freeze({
     guest: "guest",
@@ -9,38 +10,8 @@ const connection_status = Object.freeze({
 
 const sagraName = cfg.sagraName;
 
-const apiCalls = {
-    refresh: "/api/refresh",
-    hello: "/api/hello",
-    auth: "/api/auth",
-    userList: "/api/userList",
-    editUser: "/api/editUser",
-    newUser: "/api/newUser",
-    delUser: "/api/delUser",
-    ads: "/api/ads",
-    productList: "/api/products",
-    getFncs: "/api/getfunctions",
-    getOrdNum: "/api/new_order",
-    buono: "/api/buono",
-    buoni: "/api/buoni",
-    updbuoni: "/api/updateBuoni",
-    getGruppiCucina: "api/gruppiCucina",
-    getPopups: "api/popups",
-    getProducts: "api/getProducts",
-    addMeals: "api/addMeals",
-    getStorico: "/api/getStorico",
-    ip: "/api/ip",
-    getAllFncs: "/api/getAllFncs",
-    getStats: "/api/getStats",
-    getAds: "/api/getAds",
-    editAds: "/api/editAds",
-    delAds: "/api/delAds",
-    getFeedback: "/api/getFeedback",
-    sendFeed: "/api/sendFeed",
-    operate: "/api/operate",
-    getNWCreds: "/api/getNetworkCreds",
-    loginnw: "/api/loginnw"
-};
+const apiCalls = {};
+Object.keys(api.apicalls).forEach(e => apiCalls[e] = api.apicalls[e].url);
 
 let mqttServer;
 if (document.location.protocol === 'https:') mqttServer = `wss://${cfg.MQTTIP}:${cfg.mqtt.broker.ws.secure}`;

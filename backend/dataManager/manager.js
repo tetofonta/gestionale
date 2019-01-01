@@ -26,5 +26,20 @@ app.get("/", (req, res) => {
     res.send("ALIVE")
 });
 
-let server = http.createServer(app);
-server.listen(cfg.managerPort, () => console.log(`Listening on port ${cfg.managerPort}`));
+if (cfg.network.manager_use_ssl) {
+    let privateKey = fs.readFileSync('sslcert/server.key', 'utf8');
+    let certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
+    let credentials = {key: privateKey, cert: certificate};
+    let server = https.createServer(credentials, app);
+    server.listen(cfg.managerPort, () => console.log(`Listening on port ${cfg.managerPort}`));
+
+    const redirect_app = express();
+    redirect_app.get('*', (req, res) => {
+        res.send(`<html><head><title>MOVED</title></head><body></body></html>`)
+    });
+    let httpServer = http.createServer(redirect_app);
+    httpServer.listen(cfg.managerPortHttp, () => console.log(`Listening on port ${cfg.managerPortHttp}`));
+} else {
+    let server = http.createServer(app);
+    server.listen(cfg.managerPortHttp, () => console.log(`Listening on port ${cfg.managerPortHttp}`));
+}

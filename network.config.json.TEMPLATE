@@ -108,7 +108,6 @@
   "managerPort": 7000,
   "loadBalancerPort": 8000,
   "loadBalancerPortHttp": 4000,
-  "loginBind": "127.0.0.1",
   "sagraName": "--nome della sagra--",
   "printerName": "--nome della stampante di rete--"
 }

@@ -144,9 +144,9 @@ function get_stats(req, res) {
                 res.send({state: false, err: er});
                 return;
             }
-            let avg = avgQTime().reduce((total, score) => total + score) / avgQTime().length;
-            let Pavg = postAvg.reduce((total, score) => total + score) / avgQTime().length;
-            let Gavg = getAvg.reduce((total, score) => total + score) / avgQTime().length;
+            let avg = avgQTime().reduce((total, score) => total + score, 0) / avgQTime().length;
+            let Pavg = postAvg.reduce((total, score) => total + score, 0) / avgQTime().length;
+            let Gavg = getAvg.reduce((total, score) => total + score, 0) / avgQTime().length;
             let q = JSON.parse(JSON.stringify(queries));
             res.send({
                 state: true,
@@ -180,7 +180,7 @@ function get_stats(req, res) {
     }, ["STATISTICHE"]);
 }
 
-module.exports.get_stats = get_stats;
+module.exports.callback = get_stats;
 module.exports.stats = {
     post: {
         times: () => postTimes++,

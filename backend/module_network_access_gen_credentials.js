@@ -9,7 +9,7 @@ const cfg = require("./network.config");
 const srs = require('secure-random-string');
 
 
-module.exports.generateCredentials = function (req, res) {
+module.exports.callback = function (req, res) {
     onUserAuthenticated(req, res, (data) => {
 
         let psw = srs({length: 10});
@@ -28,26 +28,4 @@ module.exports.generateCredentials = function (req, res) {
         });
 
     }, ["CASSA"]);
-};
-
-module.exports.loginnw = function(req, res){
-    let ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress).split(",")[0];
-    ip = ip.replace("::ffff:", "");
-    let r = {
-        client: ip,
-        usr: req.body.usr,
-        psw: req.body.psw
-    };
-
-    request.post({
-        method: "POST",
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        url: `https://${cfg.loginIP}:${cfg.serverLoginPort}/api/login`,
-        body: JSON.stringify(r)
-    }, (err, resp, body) => {
-        res.send(body)
-    })
 };
