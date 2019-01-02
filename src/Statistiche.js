@@ -69,10 +69,10 @@ const styles = theme => ({
 
 function flip(arr, total) {
     let ret = [];
-    for(let i = 0; i < arr[0].length; i++)
+    for (let i = 0; i < arr[0].length; i++)
         ret.push(arr.map(q => q[i]));
 
-    let tot = ret.map(e => e[total]).reduce(function(a, b) {
+    let tot = ret.map(e => e[total]).reduce(function (a, b) {
         return a + b;
     }, 0);
     let foo = [];
@@ -89,15 +89,14 @@ class Stats extends React.Component {
         fromt: 0,
         tot: 99999999999
     };
+    devFromT = 0;
+    devToT = 0;
 
     static getDate() {
         let date = new Date();
         console.log(`${date.getFullYear()}-${date.getMonth()}-${date.getDay()}T${date.getHours()}:${date.getMinutes()}`);
         return `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).substr(-2)}-${("0" + date.getDate()).substr(-2)}T${("0" + date.getHours()).substr(-2)}:${("0" + date.getMinutes()).substr(-2)}`
     }
-
-    devFromT = 0;
-    devToT = 0;
 
     updateList() {
         this.state.data = {};
@@ -166,7 +165,7 @@ class Stats extends React.Component {
                                                 labels[q.label][q[e.series]] = q.y
                                             });
 
-                                            data = flip([series, ...series.map(e => Object.keys(labels).map(q => labels[q][e]))], series.length -1);
+                                            data = flip([series, ...series.map(e => Object.keys(labels).map(q => labels[q][e]))], series.length - 1);
                                             break;
                                         default:
                                             return;

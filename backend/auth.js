@@ -15,12 +15,12 @@ const cfg = require("./network.config");
  * @requires POST, {user: String, token: String, <key>: <value>, ..., ...}
  * @return JSON, {state: bool, err: String} in caso di errore, altrimenti é compito di cb(data) scrivere sull'oggetto res.
  */
-function onUserAuthenticated(req, res, cb, neededPrivs, permitGuest = false) {
+function onUserAuthenticated(req, res, cb, neededPrivs) {
     if (getNW(req)) {
 
         let data = req.body;
         try {
-            if(!data.user || !data.token){
+            if (!data.user || !data.token) {
                 res.send({state: false, err: "Insufficent data"});
                 return;
             }
@@ -37,11 +37,11 @@ function onUserAuthenticated(req, res, cb, neededPrivs, permitGuest = false) {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            url: `http://${cfg.managerIP}:${cfg.managerPort}/api/getUserState`,
+            url: `${cfg.network.manager_use_ssl ? "https://" : "http://" }${cfg.managerIP}:${cfg.managerPort}/api/getUserState`,
             body: JSON.stringify({user: data.user, token: data.token, neededPrivs: neededPrivs})
         }, (err, resp, body) => {
             body = JSON.parse(body);
-            if(body.state){
+            if (body.state) {
                 data.token = undefined;
                 data.neededPrivs = undefined;
                 if (cb) cb(data);

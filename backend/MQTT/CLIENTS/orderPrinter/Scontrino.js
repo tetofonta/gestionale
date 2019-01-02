@@ -1,7 +1,15 @@
-global.window = {document: {createElementNS: () => {return {}} }};
+global.window = {
+    document: {
+        createElementNS: () => {
+            return {}
+        }
+    }
+};
 global.navigator = {};
-global.btoa = () => {};
-global.atob = () => {};
+global.btoa = () => {
+};
+global.atob = () => {
+};
 
 const jsPDF = require("jspdf");
 const cfg = require("../../../network.config");
@@ -24,10 +32,6 @@ let write = (doc, font, variant, size, x, y, text) => {
 
 class Scontrino {
 
-    getDoc() {
-        return this.doc;
-    }
-
     constructor(path, kw, elements, ordnum, obj = null) {
         this.props = {};
         this.doc = null;
@@ -40,6 +44,10 @@ class Scontrino {
         this.props.object = obj;
 
         this.createPaper();
+    }
+
+    getDoc() {
+        return this.doc;
     }
 
     _createMap(kw) {
@@ -55,40 +63,40 @@ class Scontrino {
     }
 
     _parse(element, offset = 0) {
-            for (let i = 0; i < element.length; i++) {
-                let e = element[i];
-                switch (e.type) {
-                    case "reference":
-                        console.error("YOU CANT USE QR IN THIS");
-                        break;
-                    case "image":
-                        this.doc.addImage(e.data, e.format, e.x, e.y + offset, e.w, e.h);
-                        break;
-                    case "text":
-                        if (e.parse) this.map.forEach((v, k) => e.text = e.text.replace(k, v));
-                        write(this.doc, e.font, e.variant, e.size, e.x, e.y + offset, e.text);
-                        break;
-                    case "qr":
-                        console.error("YOU CANT USE QR IN THIS");
-                        break;
-                    case "line":
-                        this.doc.setLineWidth(e.width);
-                        this.doc.line(e.coordsx[0], e.coordsy[0] + offset, e.coordsx[1] + offset, e.coordsy[1] + offset);
-                        break;
-                    case "rect":
-                        this.doc.setDrawColor(e.border[0], e.border[1], e.border[2]);
-                        this.doc.setFillColor(e.fill[0], e.fill[1], e.fill[2]);
-                        this.doc.roundedRect(e.x, e.y + offset, e.w, e.h, e.round, e.round, e.dofill ? 'FD' : 'D');
-                        break;
-                    default:
-                        console.error(`INEXISTENT ELEMENT ${e.type}`);
-                }
+        for (let i = 0; i < element.length; i++) {
+            let e = element[i];
+            switch (e.type) {
+                case "reference":
+                    console.error("YOU CANT USE QR IN THIS");
+                    break;
+                case "image":
+                    this.doc.addImage(e.data, e.format, e.x, e.y + offset, e.w, e.h);
+                    break;
+                case "text":
+                    if (e.parse) this.map.forEach((v, k) => e.text = e.text.replace(k, v));
+                    write(this.doc, e.font, e.variant, e.size, e.x, e.y + offset, e.text);
+                    break;
+                case "qr":
+                    console.error("YOU CANT USE QR IN THIS");
+                    break;
+                case "line":
+                    this.doc.setLineWidth(e.width);
+                    this.doc.line(e.coordsx[0], e.coordsy[0] + offset, e.coordsx[1] + offset, e.coordsy[1] + offset);
+                    break;
+                case "rect":
+                    this.doc.setDrawColor(e.border[0], e.border[1], e.border[2]);
+                    this.doc.setFillColor(e.fill[0], e.fill[1], e.fill[2]);
+                    this.doc.roundedRect(e.x, e.y + offset, e.w, e.h, e.round, e.round, e.dofill ? 'FD' : 'D');
+                    break;
+                default:
+                    console.error(`INEXISTENT ELEMENT ${e.type}`);
             }
+        }
     }
 
     _generate(res) {
         let height = res.header.height + res.element.height * this.props.elementi.length + res.footer.height;
-        if(height < 297) height = 297;
+        if (height < 297) height = 297;
         this.doc = new jsPDF({
             orientation: height > res.width ? 'portait' : 'landscape',
             unit: 'mm',

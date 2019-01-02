@@ -14,12 +14,13 @@ module.exports.callback = function (req, res) {
 
         let psw = srs({length: 10});
         let usr = srs({length: 10});
-        let shasum = crypto.createHash('sha1'); shasum.update(psw);
+        let shasum = crypto.createHash('sha1');
+        shasum.update(psw);
         let hpsw = shasum.digest('hex');
 
-        getConnection().query(`DELETE FROM credentials WHERE initiate < ${Math.floor(Date.now()/1000) - cfg.network.registration_timeout}`);
-        getConnection().query(`INSERT INTO credentials(\`user\`, \`passw_hash\`, initiate) VALUES ('${secure(usr)}', '${secure(hpsw)}', ${Math.floor(Date.now()/1000)})`, (e, r) => {
-            if(e) {
+        getConnection().query(`DELETE FROM credentials WHERE initiate < ${Math.floor(Date.now() / 1000) - cfg.network.registration_timeout}`);
+        getConnection().query(`INSERT INTO credentials(\`user\`, \`passw_hash\`, initiate) VALUES ('${secure(usr)}', '${secure(hpsw)}', ${Math.floor(Date.now() / 1000)})`, (e, r) => {
+            if (e) {
                 res.send({state: false, err: e});
                 return;
             }

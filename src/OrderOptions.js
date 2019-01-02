@@ -27,17 +27,19 @@ const styles = theme => ({
 class OrderOprions extends React.Component {
 
     state = {};
-
+    value = "";
 
     componentDidMount() {
-        POST(apiCalls.operate, {user: window.ctx.get("username"), token: window.ctx.get("token"), set: false}).then(r => {
-            if(r.state)
+        POST(apiCalls.operate, {
+            user: window.ctx.get("username"),
+            token: window.ctx.get("token"),
+            set: false
+        }).then(r => {
+            if (r.state)
                 this.setState({currentno: r.num});
             else this.setState({open: true, message: r.err});
         })
     }
-
-    value = "";
 
     render() {
         return (
@@ -47,7 +49,12 @@ class OrderOprions extends React.Component {
                     <div className={this.props.classes.centred}>
                         <TextField placeholder={this.state.currentno} onChange={(e) => this.value = e.target.value}/>
                         <Button onClick={() => {
-                            POST(apiCalls.operate, {user: window.ctx.get("username"), token: window.ctx.get("token"), set: true, value: this.value}).then(r => {
+                            POST(apiCalls.operate, {
+                                user: window.ctx.get("username"),
+                                token: window.ctx.get("token"),
+                                set: true,
+                                value: this.value
+                            }).then(r => {
                                 this.setState({open: true, message: r.err});
                             })
                         }} variant="contained" colo="primary">Imposta</Button>

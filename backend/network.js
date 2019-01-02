@@ -29,13 +29,4 @@ function getNW(req) {
     return isInNetwork(hwip, createIP({ip: ip, sub: opNetwork.sub}));
 }
 
-function getNW_st(ip) {
-    let allowed_ip = createIP(opNetwork);
-    ip = ip.split(".");
-    ip.map(e => parseInt(e));
-
-    return isInNetwork(allowed_ip, createIP({ip: ip, sub: opNetwork.sub}));
-}
-
 module.exports.getNW = getNW;
-module.exports.getNW_st = getNW_st;

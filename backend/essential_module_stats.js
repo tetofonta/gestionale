@@ -173,7 +173,15 @@ function get_stats(req, res) {
                     name: "AVG Response time",
                     type: "line",
                     series: "type",
-                    query: [ ...flatten(postAvg.map((e, i) => [{y: e, label: "" + i, gr: "POST Times"}, {y: Pavg, label: "" + i, gr: "POST Average"}])), ...flatten(getAvg.map((e, i) => [{y: e, label: "" + i, gr: "GET Times"}, {y: Gavg, label: "" + i, gr: "GET Average"}]))]
+                    query: [...flatten(postAvg.map((e, i) => [{y: e, label: "" + i, gr: "POST Times"}, {
+                        y: Pavg,
+                        label: "" + i,
+                        gr: "POST Average"
+                    }])), ...flatten(getAvg.map((e, i) => [{y: e, label: "" + i, gr: "GET Times"}, {
+                        y: Gavg,
+                        label: "" + i,
+                        gr: "GET Average"
+                    }]))]
                 }]
             })
         })

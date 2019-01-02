@@ -13,7 +13,7 @@ client.on('connect', function () {
     client.subscribe(cfg.mqtt["order-listmsg"], err => {
         if (err) console.error(err)
     });
-    if(process.argv[2] && process.argv[2] === "-worker-enable") {
+    if (process.argv[2] && process.argv[2] === "-worker-enable") {
         client.subscribe(cfg.mqtt["order-listch"], err => {
             if (err) console.error(err)
         });
@@ -26,12 +26,12 @@ let clientid = Math.random().toString(36).substr(2) + Math.random().toString(36)
 let orders = {};
 let lists = {};
 
-function updateList(){
+function updateList() {
     client.publish(cfg.mqtt["order-listmsg"], JSON.stringify({action: "set", data: {orders: orders}}))
 }
 
 
-function mergeLists(th){
+function mergeLists(th) {
     let i = lists[th];
     let newOrders = {};
     i.forEach(e => {
@@ -51,23 +51,27 @@ client.on('message', function (topic, message, packet) {
             break;
         case cfg.mqtt["order-listmsg"]:
             let objj = JSON.parse(message.toString());
-            switch (objj.action){
+            switch (objj.action) {
                 case "del":
                     objj = objj.data;
-                    if (objj.host !== clientid){
+                    if (objj.host !== clientid) {
                         orders[objj.order] = undefined;
                         console.log(`${objj.host} has deleted ${objj.orderID}`);
                     }
                     break;
                 case "req":
-                    client.publish(cfg.mqtt["order-listch"], JSON.stringify({list: orders, client: clientid, required: objj.client}));
+                    client.publish(cfg.mqtt["order-listch"], JSON.stringify({
+                        list: orders,
+                        client: clientid,
+                        required: objj.client
+                    }));
                     console.log(`${objj.client} has requested`);
                     break;
             }
             break;
         case cfg.mqtt["order-listch"]:
             let ret = JSON.parse(message.toString());
-            if(!lists[ret.required]){
+            if (!lists[ret.required]) {
                 lists[ret.required] = [];
                 setTimeout(() => mergeLists(ret.required), cfg.mqtt.listSendTimeout * 1000);
             }

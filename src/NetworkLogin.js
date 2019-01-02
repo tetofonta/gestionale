@@ -9,7 +9,6 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import {apiCalls, loginLogo} from "./consts";
 import {POST, POSTSync} from "./network"
-import * as cfg from "./configs/network.config"
 import QrReader from "react-qr-reader";
 
 
@@ -47,16 +46,14 @@ const styles = theme => ({
 
 class NetworkLogin extends React.Component {
 
-    state = {
-
-    };
+    state = {};
 
     login(user, password) {
         POST(apiCalls.loginnw, {usr: user, psw: password}).then(res => {
-            if(res.state){
+            if (res.state) {
                 window.location.href = "https://www.google.com/";
             }
-            else{
+            else {
                 console.log(res)
                 this.setState({message: "CREDENZIALI NON ABILITATE"})
             }

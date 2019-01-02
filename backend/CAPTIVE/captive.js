@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({extended: true})); // support encoded bodies
 const RATELIMIT = chain("RATELIMIT")();
 const HOSTFW = chain("HOSTFW")();
 
-function ping(ip, iface, cb){
+function ping(ip, iface, cb) {
     let out = exec("arping", ["-c", "1", "-I", iface, ip]);
     let err = !out;
     out = out.split("\n")[1].split(" ");
@@ -32,25 +32,26 @@ function ping(ip, iface, cb){
 }
 
 let map = {};
-function validateConnection(interval, rules, ip){
+
+function validateConnection(interval, rules, ip) {
     ping(ip, cfg.network.guest_interface, (err, info) => {
-        if(err && !map[ip]){
+        if (err && !map[ip]) {
             clearInterval(interval);
             return;
         }
-        if(err && map[ip]){
+        if (err && map[ip]) {
             console.log(`client ${info.tip} disconnected. deleting...`);
             rules.forEach(e => e.deleteRule());
             delete map[ip];
             clearInterval(interval);
             return;
         }
-        if(!map[ip]){
+        if (!map[ip]) {
             console.log(`new host joined ${info.tip} as ${info.tha}`);
             map[ip] = info.tha;
             return;
         }
-        if(map[ip] === info.tha) return;
+        if (map[ip] === info.tha) return;
         console.log(`client changed at ${info.tip} (${map[ip]} => ${info.tha}), deleting...`);
         rules.forEach(e => e.deleteRule());
         clearInterval(interval);
@@ -72,7 +73,7 @@ function permitUser(ip, internet, guest) {
     ];
 
     rules.forEach(e => e.execute());
-    let object = setInterval(() => validateConnection(object, rules, ip, guest), cfg.network.renew_interval*1000)
+    let object = setInterval(() => validateConnection(object, rules, ip, guest), cfg.network.renew_interval * 1000)
 }
 
 app.post("/api/login", (req, res) => {

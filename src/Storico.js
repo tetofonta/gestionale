@@ -3,21 +3,15 @@ import {withStyles} from '@material-ui/core/styles';
 import NavBar from "./components/NavBar";
 import Paper from "@material-ui/core/es/Paper/Paper";
 import List from "@material-ui/core/es/List/List";
-import ListItem from "@material-ui/core/es/ListItem/ListItem";
-import ListItemText from "@material-ui/core/es/ListItemText/ListItemText";
 import Scontrino from "./components/Scontrino";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import FormControlLabel from "@material-ui/core/es/FormControlLabel/FormControlLabel";
-import ListItemAvatar from "@material-ui/core/es/ListItemAvatar/ListItemAvatar";
 import {POST} from "./network";
 import {apiCalls, mqttServer, scontrinoModel} from "./consts";
-import Typography from "@material-ui/core/es/Typography/Typography";
 import Checkbox from "@material-ui/core/es/Checkbox/Checkbox";
 import {getBillData, getCarts, renderCart} from "./Cart";
 import * as mqtt from "mqtt";
 import Button from "@material-ui/core/es/Button/Button";
-import AppBar from "@material-ui/core/es/AppBar/AppBar";
-import Toolbar from "@material-ui/core/es/Toolbar/Toolbar";
 import IconButton from "@material-ui/core/es/IconButton/IconButton";
 import SearchIcon from "@material-ui/icons/Search"
 import CloseIcon from "@material-ui/icons/Close"
@@ -128,8 +122,8 @@ class Storico extends React.Component {
             <div>
                 <NavBar elements={[
                     <IconButton color="inherit" onClick={() => this.setState({search: true})}>
-                    {this.state.doSearch ? <SearchProgressIcon/> : <SearchIcon/>}
-                </IconButton>
+                        {this.state.doSearch ? <SearchProgressIcon/> : <SearchIcon/>}
+                    </IconButton>
                 ]} titleText='Storico ordini' history={this.props.history} showHome={true}/>
 
                 <Paper className={this.props.classes.marginTop}>
@@ -144,7 +138,8 @@ class Storico extends React.Component {
                                     }).map(e =>
                                         <OrderListItem id={e} onClick={() => {
                                             this.setState({ord: this.state.list[e], open: true})
-                                        }} ordnum={this.state.list[e].ordnum} user={this.state.list[e].user} time={this.state.list[e].time}/>
+                                        }} ordnum={this.state.list[e].ordnum} user={this.state.list[e].user}
+                                                       time={this.state.list[e].time}/>
                                     )}
                                 </List>
                             </Paper>
@@ -254,10 +249,16 @@ class Storico extends React.Component {
                             delay={500}
                             onError={(e) => this.setState({err: e})}
                             onScan={(e) => {
-                                if(e){
+                                if (e) {
                                     try {
                                         let data = JSON.parse(e);
-                                        if(data.num) this.setState({id: data.num, camera: false, doSearch: true, search: false, num: undefined});
+                                        if (data.num) this.setState({
+                                            id: data.num,
+                                            camera: false,
+                                            doSearch: true,
+                                            search: false,
+                                            num: undefined
+                                        });
                                         else this.setState({err: "Cos'é sta merda?"});
                                     } catch (e) {
                                         this.setState({err: "Impossibile capire cosa c'é scritto =("})
@@ -296,7 +297,7 @@ class Storico extends React.Component {
                             color="inherit"
                             onClick={() => this.setState({err: undefined})}
                         >
-                            <CloseIcon />
+                            <CloseIcon/>
                         </IconButton>,
                     ]}
                 />

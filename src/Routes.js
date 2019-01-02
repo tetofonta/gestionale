@@ -17,7 +17,7 @@ export default class Router extends React.Component {
 
     componentDidMount() {
         let md = require('./configs/modules');
-        if(md.modules["users"] && md.modules["users"].enabled)
+        if (md.modules["users"] && md.modules["users"].enabled)
             this.operations.privated.push(<Route path={"/users"} component={Users}/>)
         let res = JSON.parse(GETSync(apiCalls.getAllFncs));
         console.log(res);

@@ -70,12 +70,12 @@ class Dashboard extends React.Component {
                             <Grid item xs={12}>
                                 {e.content.map(i => {
                                     console.log(i);
-                                    if(! modules.modules[i.modulename]) return;
-                                    if(! modules.modules[i.modulename].enabled) return;
+                                    if (!modules.modules[i.modulename]) return;
+                                    if (!modules.modules[i.modulename].enabled) return;
                                     return (
-                                    <FunctionTile onClick={() => this.props.history.push("/_" + i.to)}
-                                                  icon={i.icon} title={i.name} descr={i.desc}
-                                                  tooltip={i.tooltip}/>)
+                                        <FunctionTile onClick={() => this.props.history.push("/_" + i.to)}
+                                                      icon={i.icon} title={i.name} descr={i.desc}
+                                                      tooltip={i.tooltip}/>)
                                 })}
                             </Grid>
                         </Grid>

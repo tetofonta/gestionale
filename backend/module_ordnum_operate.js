@@ -1,6 +1,6 @@
 const {getNW} = require("./network");
 const crypto = require('crypto');
-const {getUsers, onUserAuthenticated} = require("./auth");
+const {onUserAuthenticated} = require("./auth");
 const {getConnection, secure} = require("./mysql");
 const http = require("http");
 const request = require("request");
@@ -16,7 +16,7 @@ module.exports.callback = function (req, res) {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            url: `http://${cfg.managerIP}:${cfg.managerPort}/api/operate`,
+            url: `${cfg.network.manager_use_ssl ? "https://" : "http://" }${cfg.managerIP}:${cfg.managerPort}/api/operate`,
             body: JSON.stringify(data)
         }, (err, resp, body) => {
             res.send(body)

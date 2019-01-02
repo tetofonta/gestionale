@@ -3,7 +3,7 @@ const {getUsers, onUserAuthenticated} = require("./auth");
 const {getConnection, secure} = require("./mysql");
 const crypto = require('crypto');
 
-module.exports.callback = function(req, res) {
+module.exports.callback = function (req, res) {
     onUserAuthenticated(req, res, (data) => {
         getConnection().query(`DELETE FROM utenti_previlegi_assoc WHERE utenti_FOREGIN=(SELECT id FROM utenti WHERE username='${secure(data.modusername)}')`, (e, resp, f) => {
             if (resp && !e) {

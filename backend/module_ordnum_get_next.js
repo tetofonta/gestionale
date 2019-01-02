@@ -10,7 +10,7 @@ const cfg = require("./network.config");
 
 module.exports.callback = function (req, res) {
     onUserAuthenticated(req, res, () => {
-        request(`http://${cfg.managerIP}:${cfg.managerPort}/api/getNext`, req.body, (err, resp, body) => {
+        request(`${cfg.network.manager_use_ssl ? "https://" : "http://" }${cfg.managerIP}:${cfg.managerPort}/api/getNext`, req.body, (err, resp, body) => {
             res.send(body)
         })
     }, ["CASSA"]);

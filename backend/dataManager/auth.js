@@ -65,7 +65,7 @@ function get_user_state(req, res) {
         return;
     }
 
-    if(data.neededPrivs && !data.neededPrivs.every(v => userData.privs.includes(v))){
+    if (data.neededPrivs && !data.neededPrivs.every(v => userData.privs.includes(v))) {
         res.send({state: false, err: "Not enough permissions"});
         return;
     }

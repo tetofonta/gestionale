@@ -82,7 +82,10 @@ describe('AUTH Backend', function () {
                 assert.equal(typeof(obj.name), "string");
                 assert.equal(typeof(obj.secure), "number");
                 assert.equal(typeof(obj.isAdmin), "number");
-                makePOST(cfg.network.opNetwork.ip.join("."), {username: obj.username, token: obj.token}, auth_refresh, (obj) => {
+                makePOST(cfg.network.opNetwork.ip.join("."), {
+                    username: obj.username,
+                    token: obj.token
+                }, auth_refresh, (obj) => {
                     assert.ok(obj.state);
                     assert.equal(typeof(obj.token), "string");
                     setImmediate(done);
@@ -100,14 +103,20 @@ describe('AUTH Backend', function () {
             })
         });
         it('should return state: false on user not logged', function (done) {
-            makePOST(cfg.network.opNetwork.ip.join("."), {user: "maria", token: " "}, (r, e) => onUserAuthenticated(r, e, () => e.send({state: true})), (obj) => {
+            makePOST(cfg.network.opNetwork.ip.join("."), {
+                user: "maria",
+                token: " "
+            }, (r, e) => onUserAuthenticated(r, e, () => e.send({state: true})), (obj) => {
                 assert.ok(!obj.state);
                 assert.equal(obj.err, "Access denied.");
                 setImmediate(done);
             })
         });
         it('should return state: false on guest network without flag', function (done) {
-            makePOST("10.16.25.14", {user: "maria", token: " "}, (r, e) => onUserAuthenticated(r, e, () => e.send({state: true})), (obj) => {
+            makePOST("10.16.25.14", {
+                user: "maria",
+                token: " "
+            }, (r, e) => onUserAuthenticated(r, e, () => e.send({state: true})), (obj) => {
                 assert.ok(!obj.state);
                 assert.equal(obj.err, "Access denied from guest network.");
                 setImmediate(done)
@@ -121,7 +130,10 @@ describe('AUTH Backend', function () {
                 assert.equal(typeof(obj.name), "string");
                 assert.equal(typeof(obj.secure), "number");
                 assert.equal(typeof(obj.isAdmin), "number");
-                makePOST(cfg.network.opNetwork.ip.join("."), {user: obj.username, token: obj.token}, (r, e) => onUserAuthenticated(r, e, () => e.send({state: true})), (obj) => {
+                makePOST(cfg.network.opNetwork.ip.join("."), {
+                    user: obj.username,
+                    token: obj.token
+                }, (r, e) => onUserAuthenticated(r, e, () => e.send({state: true})), (obj) => {
                     assert.ok(obj.state);
                     setImmediate(done);
                 })
@@ -135,7 +147,10 @@ describe('AUTH Backend', function () {
                 assert.equal(typeof(obj.name), "string");
                 assert.equal(typeof(obj.secure), "number");
                 assert.equal(typeof(obj.isAdmin), "number");
-                makePOST(cfg.network.opNetwork.ip.join("."), {user: obj.username, token: obj.token}, (r, e) => onUserAuthenticated(r, e, () => e.send({state: true}), ["CASSA"]), (obj) => {
+                makePOST(cfg.network.opNetwork.ip.join("."), {
+                    user: obj.username,
+                    token: obj.token
+                }, (r, e) => onUserAuthenticated(r, e, () => e.send({state: true}), ["CASSA"]), (obj) => {
                     assert.ok(obj.state);
                     setImmediate(done);
                 })
@@ -149,7 +164,10 @@ describe('AUTH Backend', function () {
                 assert.equal(typeof(obj.name), "string");
                 assert.equal(typeof(obj.secure), "number");
                 assert.equal(typeof(obj.isAdmin), "number");
-                makePOST(cfg.network.opNetwork.ip.join("."), {user: obj.username, token: obj.token}, (r, e) => onUserAuthenticated(r, e, () => e.send({state: true}), ["CASSA", "CUCINA"]), (obj) => {
+                makePOST(cfg.network.opNetwork.ip.join("."), {
+                    user: obj.username,
+                    token: obj.token
+                }, (r, e) => onUserAuthenticated(r, e, () => e.send({state: true}), ["CASSA", "CUCINA"]), (obj) => {
                     assert.ok(!obj.state);
                     assert.equal(obj.err, "Not enough permissions");
                     setImmediate(done);

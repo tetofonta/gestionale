@@ -275,7 +275,7 @@ class Self extends React.Component {
                                     this.setState({buonoOpen: true})
                                 }}>Usa un buono</Button>
                         <Typography
-                            variant="title">DA PAGARE: {this.totale[0] + this.totale[1]/100} {Currency}</Typography>
+                            variant="title">DA PAGARE: {this.totale[0] + this.totale[1] / 100} {Currency}</Typography>
                         <TextField
                             label="Pagato"
                             rowsMax="6"

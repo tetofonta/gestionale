@@ -33,4 +33,5 @@ class Err404 extends React.Component {
         );
     }
 }
+
 export default withStyles(styles)(Err404)

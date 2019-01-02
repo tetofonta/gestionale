@@ -210,7 +210,7 @@ class Cassa extends React.Component {
         this.ip = JSON.parse(GETSync(apiCalls.ip)).ip;
     };
 
-    getPlugins(){
+    getPlugins() {
         let ret = {};
         let md = require('./configs/modules');
         md.modules.cassa.additional.forEach(e => {

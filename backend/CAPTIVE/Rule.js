@@ -91,7 +91,7 @@ module.exports.network = (ip, nm) => {
     }
 };
 
-class Rule{
+class Rule {
     constructor(table) {
         this.table = table;
         this.appending = "";
@@ -158,7 +158,7 @@ class Rule{
 
 module.exports.Rule = Rule;
 
-    module.exports.ipt_flush = function () {
+module.exports.ipt_flush = function () {
     exec(cfg.network.iptables, ["-F"]);
     exec(cfg.network.iptables, ["-t", "nat", "-F"]);
     exec(cfg.network.iptables, ["-t", "mangle", "-F"]);

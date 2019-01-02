@@ -6,20 +6,22 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import {POST} from "./network";
 import {apiCalls} from "./consts";
-import * as cfg from "./configs/network.config"
 
 //if(window.location.hostname !== cfg.serverIP)
 //    window.location.href = `https://${cfg.serverIP}/`;
 
-Array.prototype.flat = function() {
+Array.prototype.flat = function () {
     return this.reduce((acc, val) => Array.isArray(val) ? acc.concat(val.flat()) : acc.concat(val), []);
 };
 
 
-if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'development'){
-    console.log = function(o){};
-    console.warn = function(o){};
-    console.error = function(o){};
+if (!process.env.NODE_ENV || process.env.NODE_ENV !== 'development') {
+    console.log = function (o) {
+    };
+    console.warn = function (o) {
+    };
+    console.error = function (o) {
+    };
 }
 
 let timeoutInMiliseconds = 15 * 60000;
@@ -64,7 +66,7 @@ try {
                 window.ctx.set("name", oldOnes.name);
                 window.ctx.set("token", res.token);
                 window.ctx.set("admin", oldOnes.isAdmin);
-                if(oldOnes.nwaccess) window.ctx.set("nwaccess", oldOnes.nwaccess);
+                if (oldOnes.nwaccess) window.ctx.set("nwaccess", oldOnes.nwaccess);
 
                 oldOnes.token = res.token;
                 document.cookie = JSON.stringify(oldOnes);

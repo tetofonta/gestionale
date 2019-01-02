@@ -9,7 +9,7 @@ const cfg = require("./network.config");
 
 
 module.exports.callback = function (req, res) {
-    if(getNW(req)){
+    if (getNW(req)) {
         getConnection().query(`SELECT moduleName, \`to\` as too, isPublic, isPrivate FROM funzioni WHERE 1`, (e, r) => {
             if (!r || e) {
                 console.error(e);

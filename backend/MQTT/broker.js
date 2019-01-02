@@ -11,31 +11,31 @@ function nop() {
 
 mosca.Server.prototype.publish = function publish(packet, client, callback) {
 
-if(client){
-    try {
-        let remote;
-        if(client.connection.stream.socket) remote = client.connection.stream.socket._socket.remoteAddress;
-        else remote = client.connection.stream.remoteAddress;
+    if (client) {
+        try {
+            let remote;
+            if (client.connection.stream.socket) remote = client.connection.stream.socket._socket.remoteAddress;
+            else remote = client.connection.stream.remoteAddress;
 
-        if (restrictedTopics.includes(packet.topic))
-            if (!getNW_st(remote)) {
-                console.log("Denied connection from " + remote);
-                return;
+            if (restrictedTopics.includes(packet.topic))
+                if (!getNW_st(remote)) {
+                    console.log("Denied connection from " + remote);
+                    return;
+                }
+            if (client) {
+                let newPayload;
+                try {
+                    newPayload = JSON.parse(packet.payload.toString());
+                } catch (e) {
+                    return;
+                }
+                newPayload.sender = {address: remote};
+                packet.payload = Buffer.from(JSON.stringify(newPayload), 'utf8');
             }
-        if (client) {
-            let newPayload;
-            try {
-                newPayload = JSON.parse(packet.payload.toString());
-            } catch (e) {
-                return;
-            }
-            newPayload.sender = {address: remote};
-            packet.payload = Buffer.from(JSON.stringify(newPayload), 'utf8');
+        } catch (e) {
+            console.error(e)
         }
-    } catch (e) {
-        console.error(e)
     }
-}
 
 
     const that = this;

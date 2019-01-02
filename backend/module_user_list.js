@@ -3,7 +3,7 @@ const {getUsers, onUserAuthenticated} = require("./auth");
 const {getConnection, secure} = require("./mysql");
 const crypto = require('crypto');
 
-module.exports.callback = function(req, res) {
+module.exports.callback = function (req, res) {
     onUserAuthenticated(req, res, (data) => {
         getConnection().query(`SELECT  utenti.username,  utenti.name,  utenti.enabled,  utenti.admin,  GROUP_CONCAT(description) as privs from  utenti, previlegi, utenti_previlegi_assoc where (username='${data.user}' OR (SELECT admin from utenti where username='${data.user}')) AND utenti.id=utenti_FOREGIN and previlegi.id=previlegi_FOREGIN group by username;`, (err, resp, fields) => {
             getConnection().query('select GROUP_CONCAT(description) as lol from previlegi', (perr, pset, fi) => {

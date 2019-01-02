@@ -3,7 +3,7 @@ const {getUsers, onUserAuthenticated} = require("./auth");
 const {getConnection, secure} = require("./mysql");
 const crypto = require('crypto');
 
-module.exports.callback = function(req, res) {
+module.exports.callback = function (req, res) {
     onUserAuthenticated(req, res, (data) => {
         getConnection().query(`SELECT id, admin FROM utenti WHERE username='${secure(data.user)}'`, (e, resp, f) => {
             if (resp && !e) {

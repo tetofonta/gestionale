@@ -73,7 +73,8 @@ class Template extends React.Component {
                 <NavBar titleText='Feedback' history={this.props.history} showHome={true}/>
                 <Paper className={this.props.classes.marginTop}>
                     <div className={this.props.classes.root}>
-                        {!this.state.finished && <Stepper activeStep={this.state.activeQuestion} className={this.props.classes.full}
+                        {!this.state.finished &&
+                        <Stepper activeStep={this.state.activeQuestion} className={this.props.classes.full}
                                  orientation="vertical">
                             {this.state.questions.map((e, i) => {
                                 return (
@@ -82,21 +83,34 @@ class Template extends React.Component {
                                         <StepContent>
                                             <Typography>{e.testo}</Typography>
                                             {e.answerType === 1 && <div>
-                                                <Button onClick={() => {e.answered = 'YES'; this.forceUpdate();}} color="primary" variant={(e.answered && e.answered === "YES") ? "contained" : ""}>SI</Button>
-                                                <Button onClick={() => {e.answered = 'NO'; this.forceUpdate();}} color="secondary" variant={(e.answered && e.answered === "NO") ? "contained" : ""}>NO</Button>
+                                                <Button onClick={() => {
+                                                    e.answered = 'YES';
+                                                    this.forceUpdate();
+                                                }} color="primary"
+                                                        variant={(e.answered && e.answered === "YES") ? "contained" : ""}>SI</Button>
+                                                <Button onClick={() => {
+                                                    e.answered = 'NO';
+                                                    this.forceUpdate();
+                                                }} color="secondary"
+                                                        variant={(e.answered && e.answered === "NO") ? "contained" : ""}>NO</Button>
                                             </div>}
 
                                             {e.answerType === 2 && <div>
                                                 {[0, 1, 2, 3, 4].map(q =>
-                                                    <Checkbox checked={e.answered > q} onChange={(evt) => {e.answered = q+1; this.forceUpdate()}} classes={{
+                                                    <Checkbox checked={e.answered > q} onChange={(evt) => {
+                                                        e.answered = q + 1;
+                                                        this.forceUpdate()
+                                                    }} classes={{
                                                         root: this.props.classes.CheckboxRoot,
                                                         checked: this.props.classes.checked
                                                     }} icon={<StarIconBorder/>} checkedIcon={<StarIcon/>} value={q}/>)}
 
                                             </div>}
 
-                                            {(e.answerType === 3 || e.details === 1) && <TextField onChange={(evt) => {e.details = evt.target.value}} className={this.props.classes.root}
-                                                label={e.answerType === 3 ? "Risposta" : "Vuoi aggiungere qualcosa?"}/>}
+                                            {(e.answerType === 3 || e.details === 1) && <TextField onChange={(evt) => {
+                                                e.details = evt.target.value
+                                            }} className={this.props.classes.root}
+                                                                                                   label={e.answerType === 3 ? "Risposta" : "Vuoi aggiungere qualcosa?"}/>}
 
                                             <div className={this.props.classes.actionsContainer}>
                                                 <div>
@@ -110,16 +124,18 @@ class Template extends React.Component {
                                                     <Button
                                                         variant="contained"
                                                         color="primary"
-                                                        onClick={() =>{
-                                                            if(this.state.activeQuestion !== this.state.questions.length - 1) this.setState({activeQuestion: this.state.activeQuestion + 1});
+                                                        onClick={() => {
+                                                            if (this.state.activeQuestion !== this.state.questions.length - 1) this.setState({activeQuestion: this.state.activeQuestion + 1});
                                                             else {
-                                                                POST(apiCalls.sendFeed, {answers: this.state.questions.map(q => {
+                                                                POST(apiCalls.sendFeed, {
+                                                                    answers: this.state.questions.map(q => {
                                                                         return {
                                                                             id: q.id,
                                                                             answer: q.answered ? q.answered : "-",
                                                                             details: q.details ? q.details : "-"
                                                                         }
-                                                                    })}).then(() => {
+                                                                    })
+                                                                }).then(() => {
                                                                     this.setState({finished: true})
                                                                 })
                                                             }
@@ -142,7 +158,8 @@ class Template extends React.Component {
                             </Grid>
                             <Grid item xs={1}/>
                             <Grid item xs={11}>
-                                <Button variant="contained" onClick={() => this.props.history.push("/")}>Torna alla Home</Button>
+                                <Button variant="contained" onClick={() => this.props.history.push("/")}>Torna alla
+                                    Home</Button>
                             </Grid>
                         </Grid>}
                     </div>

@@ -51,7 +51,7 @@ const handler = (reqFnc) => (req, res) => {
 
     let ip = Object.keys(hosts).reduce((a, v) => {
         if (typeof a === 'undefined') return v;
-        if(Date.now() - hosts[v].date > cfg.load_balancer.timeout * 1000){
+        if (Date.now() - hosts[v].date > cfg.load_balancer.timeout * 1000) {
             hosts[v].load = 101;
             return a;
         }
@@ -60,9 +60,9 @@ const handler = (reqFnc) => (req, res) => {
     });
 
     let o = {};
-    if(cfg.load_balancer.log_packets){
+    if (cfg.load_balancer.log_packets) {
         cfg.load_balancer.log_filter.forEach(e => {
-            switch (e){
+            switch (e) {
                 case "client":
                     o.client = (req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress).split(",")[0];
                     break;
@@ -89,12 +89,12 @@ const handler = (reqFnc) => (req, res) => {
     }).on('error', error => {
         console.error(error)
     }).on('data', (chunk) => {
-        if(cfg.load_balancer.log_packets && cfg.load_balancer.log_filter.includes("response")){
-            if(!o.res) o.res = "";
+        if (cfg.load_balancer.log_packets && cfg.load_balancer.log_filter.includes("response")) {
+            if (!o.res) o.res = "";
             o.res += chunk;
         }
     }).on('end', () => {
-        if(cfg.load_balancer.log_packets) console.log(o);
+        if (cfg.load_balancer.log_packets) console.log(o);
     });
 
     _rq.pipe(res);

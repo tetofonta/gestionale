@@ -3,7 +3,7 @@ const {getUsers, onUserAuthenticated} = require("./auth");
 const {getConnection, secure} = require("./mysql");
 const crypto = require('crypto');
 
-module.exports.callback = function(req, res) {
+module.exports.callback = function (req, res) {
     if (!(getNW(req) && !req.body.guest)) {
         getConnection().query(`select funzioni.modulename as modulo, funzioni.tooltip as tooltip, funzioni.to as too,titolo, descrizione, categoria.nome as catName, categoria.icona as catIcon, funzioni.icona as fncIcon from funzioni, categoria where categoria.id = funzioni.categoria AND funzioni.isPublic = 1;`, (err, resp, fields) => {
             let cats = new Map();
