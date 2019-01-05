@@ -1,0 +1,13 @@
+{
+  "name": "module_edit_ads",
+  "index": "index.js",
+  "version": "1.0",
+  "license": "GPL3",
+  "private": true,
+  "api_name": "editAds",
+  "api_url": "/api/editAds",
+  "api_action": "POST",
+  "api_enable": true,
+  "dependencies": {
+  }
+}

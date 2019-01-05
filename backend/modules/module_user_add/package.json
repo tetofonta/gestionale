@@ -1,0 +1,13 @@
+{
+  "name": "module_user_add",
+  "index": "index.js",
+  "version": "1.0",
+  "license": "GPL3",
+  "private": true,
+  "api_name": "newUser",
+  "api_url": "/api/newUser",
+  "api_action": "POST",
+  "api_enable": true,
+  "dependencies": {
+  }
+}

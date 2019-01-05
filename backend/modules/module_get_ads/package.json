@@ -1,0 +1,13 @@
+{
+  "name": "module_get_ads",
+  "index": "index.js",
+  "version": "1.0",
+  "license": "GPL3",
+  "private": true,
+  "api_name": "getAds",
+  "api_url": "/api/getAds",
+  "api_action": "POST",
+  "api_enable": true,
+  "dependencies": {
+  }
+}

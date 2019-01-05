@@ -1,0 +1,13 @@
+{
+  "name": "module_functions_get_all",
+  "index": "index.js",
+  "version": "1.0",
+  "license": "GPL3",
+  "private": true,
+  "api_name": "getAllFncs",
+  "api_url": "/api/getAllFncs",
+  "api_action": "GET",
+  "api_enable": true,
+  "dependencies": {
+  }
+}

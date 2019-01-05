@@ -1,0 +1,13 @@
+{
+  "name": "module_user_del",
+  "index": "index.js",
+  "version": "1.0",
+  "license": "GPL3",
+  "private": true,
+  "api_name": "delUser",
+  "api_url": "/api/delUser",
+  "api_action": "POST",
+  "api_enable": true,
+  "dependencies": {
+  }
+}

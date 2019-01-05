@@ -131,61 +131,67 @@ const queries = [
 
 let postTimes = 0, getTimes = 0, postAvg = [], getAvg = [];
 
-function get_stats(req, res) {
-    onUserAuthenticated(req, res, (data) => {
-        console.log(data);
-        let ret = {};
-        let queriesT = "";
-        queries.forEach((e, i) => {
-            queriesT += e.query(data.fromTime, data.toTime) + "\n"
-        });
-        getConnection().query(queriesT, (er, r) => {
-            if (!r || er) {
-                res.send({state: false, err: er});
-                return;
-            }
-            let avg = avgQTime().reduce((total, score) => total + score, 0) / avgQTime().length;
-            let Pavg = postAvg.reduce((total, score) => total + score, 0) / avgQTime().length;
-            let Gavg = getAvg.reduce((total, score) => total + score, 0) / avgQTime().length;
-            let q = JSON.parse(JSON.stringify(queries));
-            res.send({
-                state: true,
-                obj: [...r.map((query, i) => {
-                    q[i].query = query;
-                    return q[i];
-                }), {
-                    group: "Sistema",
-                    name: "AVG Query time",
-                    type: "line",
-                    series: "gr",
-                    query: flatten(avgQTime().map((e, i) => [{y: e, label: "" + i, gr: "Query Times"}, {
-                        y: avg,
-                        label: "" + i,
-                        gr: "Average"
-                    }]))
-                }, {
-                    group: "Sistema",
-                    name: "Numero di richieste",
-                    type: "bar",
-                    query: [{y: getTimes, label: "GET"}, {y: postTimes, label: "POST"}]
-                }, {
-                    group: "Sistema",
-                    name: "AVG Response time",
-                    type: "line",
-                    series: "type",
-                    query: [...flatten(postAvg.map((e, i) => [{y: e, label: "" + i, gr: "POST Times"}, {
-                        y: Pavg,
-                        label: "" + i,
-                        gr: "POST Average"
-                    }])), ...flatten(getAvg.map((e, i) => [{y: e, label: "" + i, gr: "GET Times"}, {
-                        y: Gavg,
-                        label: "" + i,
-                        gr: "GET Average"
-                    }]))]
-                }]
-            })
+module.exports.auth_required = true;
+module.exports.privs = ["STATISTICHE"];
+
+module.exports.format = [];
+
+function get_stats(proxy) {
+    let req = proxy.req;
+    let res = proxy.res;
+    let data = proxy.recv;
+    console.log(data);
+    let ret = {};
+    let queriesT = "";
+    queries.forEach((e, i) => {
+        queriesT += e.query(data.fromTime, data.toTime) + "\n"
+    });
+    getConnection().query(queriesT, (er, r) => {
+        if (!r || er) {
+            res.send({state: false, err: er});
+            return;
+        }
+        let avg = avgQTime().reduce((total, score) => total + score, 0) / avgQTime().length;
+        let Pavg = postAvg.reduce((total, score) => total + score, 0) / avgQTime().length;
+        let Gavg = getAvg.reduce((total, score) => total + score, 0) / avgQTime().length;
+        let q = JSON.parse(JSON.stringify(queries));
+        res.send({
+            state: true,
+            obj: [...r.map((query, i) => {
+                q[i].query = query;
+                return q[i];
+            }), {
+                group: "Sistema",
+                name: "AVG Query time",
+                type: "line",
+                series: "gr",
+                query: flatten(avgQTime().map((e, i) => [{y: e, label: "" + i, gr: "Query Times"}, {
+                    y: avg,
+                    label: "" + i,
+                    gr: "Average"
+                }]))
+            }, {
+                group: "Sistema",
+                name: "Numero di richieste",
+                type: "bar",
+                query: [{y: getTimes, label: "GET"}, {y: postTimes, label: "POST"}]
+            }, {
+                group: "Sistema",
+                name: "AVG Response time",
+                type: "line",
+                series: "type",
+                query: [...flatten(postAvg.map((e, i) => [{y: e, label: "" + i, gr: "POST Times"}, {
+                    y: Pavg,
+                    label: "" + i,
+                    gr: "POST Average"
+                }])), ...flatten(getAvg.map((e, i) => [{y: e, label: "" + i, gr: "GET Times"}, {
+                    y: Gavg,
+                    label: "" + i,
+                    gr: "GET Average"
+                }]))]
+            }]
         })
-    }, ["STATISTICHE"]);
+    })
 }
 
 module.exports.callback = get_stats;

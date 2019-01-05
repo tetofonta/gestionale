@@ -1,0 +1,13 @@
+{
+  "name": "module_get_popups",
+  "index": "index.js",
+  "version": "1.0",
+  "license": "GPL3",
+  "private": true,
+  "api_name": "getPopups",
+  "api_url": "/api/popups",
+  "api_action": "POST",
+  "api_enable": true,
+  "dependencies": {
+  }
+}

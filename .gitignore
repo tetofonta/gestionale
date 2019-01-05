@@ -8,6 +8,7 @@ _SpecRunner.html
 __benchmarks__
 build/
 output/
+backend/modules/built/*.js
 orders/*.pdf
 remote-repo/
 coverage/

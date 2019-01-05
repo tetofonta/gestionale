@@ -1,0 +1,14 @@
+{
+  "name": "module_network_access_login",
+  "index": "index.js",
+  "version": "1.0",
+  "license": "GPL3",
+  "private": true,
+  "api_name": "loginnw",
+  "api_url": "/api/loginnw",
+  "api_action": "POST",
+  "api_enable": true,
+  "dependencies": {
+    "request": "^2.88.0"
+  }
+}

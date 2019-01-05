@@ -1,0 +1,14 @@
+{
+  "name": "module_auth_refresh",
+  "index": "index.js",
+  "version": "1.0",
+  "license": "GPL3",
+  "private": true,
+  "api_name": "refresh",
+  "api_url": "/api/refresh",
+  "api_action": "POST",
+  "api_enable": true,
+  "dependencies": {
+    "request": "^2.88.0"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "module_user_edit",
+  "index": "index.js",
+  "version": "1.0",
+  "license": "GPL3",
+  "private": true,
+  "api_name": "editUser",
+  "api_url": "/api/editUser",
+  "api_action": "POST",
+  "api_enable": true,
+  "dependencies": {
+  }
+}

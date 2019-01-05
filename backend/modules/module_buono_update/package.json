@@ -1,0 +1,13 @@
+{
+  "name": "module_buono_update",
+  "index": "index.js",
+  "version": "1.0",
+  "license": "GPL3",
+  "private": true,
+  "api_name": "updbuoni",
+  "api_url": "/api/updateBuoni",
+  "api_action": "POST",
+  "api_enable": true,
+  "dependencies": {
+  }
+}

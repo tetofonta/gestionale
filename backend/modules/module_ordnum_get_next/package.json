@@ -1,0 +1,14 @@
+{
+  "name": "module_ordnum_get_next",
+  "index": "index.js",
+  "version": "1.0",
+  "license": "GPL3",
+  "private": true,
+  "api_name": "getOrdNum",
+  "api_url": "/api/new_order",
+  "api_action": "POST",
+  "api_enable": true,
+  "dependencies": {
+    "request": "^2.88.0"
+  }
+}

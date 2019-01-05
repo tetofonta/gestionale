@@ -1,0 +1,13 @@
+{
+  "name": "module_get_product_list",
+  "index": "index.js",
+  "version": "1.0",
+  "license": "GPL3",
+  "private": true,
+  "api_name": "productList",
+  "api_url": "/api/products",
+  "api_action": "GET",
+  "api_enable": true,
+  "dependencies": {
+  }
+}

@@ -15,19 +15,19 @@ const cfg = require("./network.config");
  * @requires POST, {user: String, token: String, <key>: <value>, ..., ...}
  * @return JSON, {state: bool, err: String} in caso di errore, altrimenti é compito di cb(data) scrivere sull'oggetto res.
  */
-function onUserAuthenticated(req, res, cb, neededPrivs) {
-    if (getNW(req)) {
+function onUserAuthenticated(proxy, cb, neededPrivs) {
+    if (getNW(proxy.req)) {
 
-        let data = req.body;
+        let data = proxy.req.body;
         try {
             if (!data.user || !data.token) {
-                res.send({state: false, err: "Insufficent data"});
+                proxy.res.send({state: false, err: "Insufficent data"});
                 return;
             }
             data.user = secure(data.user);
             data.token = secure(data.token);
         } catch (e) {
-            res.send({state: false, err: "500"});
+            proxy.res.send({state: false, err: "500"});
             return;
         }
 
@@ -44,13 +44,13 @@ function onUserAuthenticated(req, res, cb, neededPrivs) {
             if (body.state) {
                 data.token = undefined;
                 data.neededPrivs = undefined;
-                if (cb) cb(data);
-            } else res.send(body);
+                if (cb) cb(proxy);
+            } else proxy.res.send(body);
         });
 
         return;
     }
-    res.send({state: false, err: "Access denied from guest network."})
+    proxy.res.send({state: false, err: "Access denied from guest network."})
 }
 
 module.exports.onUserAuthenticated = onUserAuthenticated;

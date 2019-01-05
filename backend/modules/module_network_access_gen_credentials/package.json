@@ -1,0 +1,13 @@
+{
+  "name": "module_network_access_gen_credentials",
+  "index": "index.js",
+  "version": "1.0",
+  "license": "GPL3",
+  "private": true,
+  "api_name": "getNWCreds",
+  "api_url": "/api/getNetworkCreds",
+  "api_action": "POST",
+  "api_enable": true,
+  "dependencies": {
+  }
+}

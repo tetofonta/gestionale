@@ -1,0 +1,13 @@
+{
+  "name": "module_get_kitchen_groups",
+  "index": "index.js",
+  "version": "1.0",
+  "license": "GPL3",
+  "private": true,
+  "api_name": "getGruppiCucina",
+  "api_url": "/api/gruppiCucina",
+  "api_action": "POST",
+  "api_enable": true,
+  "dependencies": {
+  }
+}

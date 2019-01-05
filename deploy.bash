@@ -17,6 +17,13 @@ mkdir -p output/MANAGER/sslcert
 mkdir -p output/LOAD_BALANCER/sslcert
 mkdir -p output/CAPTIVE/sslcert
 
+#build backend modules
+
+cwd="$PWD"
+cd ./backend/modules/
+node ./buildAll.js
+cd "$cwd"
+
 #package MQTT apps
 yarn pkg --targets "$1" --out-path output/MQTT/broker backend/MQTT/broker.js
 yarn pkg --targets "$1" --out-path output/MQTT/orderPrinter backend/MQTT/CLIENTS/orderPrinter/orderPrinter.js

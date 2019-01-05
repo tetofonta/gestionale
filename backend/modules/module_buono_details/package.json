@@ -1,0 +1,13 @@
+{
+  "name": "module_buono_details",
+  "index": "index.js",
+  "version": "1.0",
+  "license": "GPL3",
+  "private": true,
+  "api_name": "buono",
+  "api_url": "/api/buono",
+  "api_action": "POST",
+  "api_enable": true,
+  "dependencies": {
+  }
+}

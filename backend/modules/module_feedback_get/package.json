@@ -1,0 +1,13 @@
+{
+  "name": "module_feedback_get",
+  "index": "index.js",
+  "version": "1.0",
+  "license": "GPL3",
+  "private": true,
+  "api_name": "getFeedback",
+  "api_url": "/api/getFeedback",
+  "api_action": "GET",
+  "api_enable": true,
+  "dependencies": {
+  }
+}

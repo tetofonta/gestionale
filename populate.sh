@@ -23,6 +23,6 @@ fi
 
 ln -s "$PWD/network.config.json" ./backend/
 ln -s "$PWD/network.config.json" ./src/configs/
-ln -s "$PWD/backend/api.json" ./src/configs/
+ln -s "$PWD/backend/modules/built/api.json" ./src/configs/
 
 yarn install

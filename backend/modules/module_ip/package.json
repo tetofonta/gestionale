@@ -1,0 +1,13 @@
+{
+  "name": "module_ip",
+  "index": "index.js",
+  "version": "1.0",
+  "license": "GPL3",
+  "private": true,
+  "api_name": "ip",
+  "api_url": "/api/ip",
+  "api_action": "GET",
+  "api_enable": true,
+  "dependencies": {
+  }
+}
