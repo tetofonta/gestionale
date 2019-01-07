@@ -42,13 +42,13 @@
   },
   "devDependencies": {
     "concurrently": "^4.1.0",
-    "istanbul": "^0.4.5",
-    "mocha": "^5.2.0",
+    "jest": "^23.6.0",
     "pkg": "^4.3.5",
     "rewire": "^4.0.1",
     "webpack": "~4.19.1",
     "webpack-cli": "^3.1.2",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-node-externals": "^1.7.2",
+    "sync-request": "^6.0.0"
   },
   "scripts": {
     "start-server": "cd backend && node init.js",
@@ -66,7 +66,7 @@
     "dev": "yarn concurrently --kill-others-on-fail \"yarn start-load-balancer\" \"yarn start-captive\" \"yarn start-server\" \"yarn start-manager\" \"yarn start-broker\" \"yarn start-guest-tracker -worker-enable\" \"yarn start-order-processor\" \"yarn start-order-printer\" \"yarn start\"",
     "build": "react-scripts build",
     "deploy": "bash deploy.bash",
-    "test": "yarn mocha TEST/"
+    "test": "yarn jest"
   },
   "browserslist": [
     ">0.2%",

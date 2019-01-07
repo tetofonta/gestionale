@@ -43,5 +43,5 @@ if (cfg.network.manager_use_ssl) {
     httpServer.listen(cfg.managerPortHttp, () => console.log(`Listening on port ${cfg.managerPortHttp}`));
 } else {
     let server = http.createServer(app);
-    server.listen(cfg.managerPortHttp, () => console.log(`Listening on port ${cfg.managerPortHttp}`));
+    server.listen(cfg.managerPort, () => console.log(`Listening on port ${cfg.managerPort}`));
 }

@@ -41,7 +41,7 @@ CREATE TABLE `ads` (
 
 LOCK TABLES `ads` WRITE;
 /*!40000 ALTER TABLE `ads` DISABLE KEYS */;
-INSERT INTO `ads` VALUES (1,'sampa',2,1,'/ads/%sampa.png',165),(3,'coin',1,1,'/ads/%coin.png',87),(5,'bsfc',3,0,'/ads/%bsfc.png',81);
+INSERT INTO `ads` VALUES (1,'sampa',2,2,'/ads/%sampa.png',176),(3,'coin',1,1,'/ads/%coin.png',93),(5,'bsfc',3,3,'/ads/%bsfc.png',90);
 /*!40000 ALTER TABLE `ads` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -116,7 +116,7 @@ CREATE TABLE `credentials` (
   `initiate` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `credentials_id_uindex` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -125,7 +125,7 @@ CREATE TABLE `credentials` (
 
 LOCK TABLES `credentials` WRITE;
 /*!40000 ALTER TABLE `credentials` DISABLE KEYS */;
-INSERT INTO `credentials` VALUES (9,'6RgWJxCJl8','97e63bfd751badca93acc8815a85f7538fd966ef','127.0.0.1',1,1646173661);
+INSERT INTO `credentials` VALUES (9,'6RgWJxCJl8','97e63bfd751badca93acc8815a85f7538fd966ef','127.0.0.1',1,1646173661),(15,'eUo5op426w','ef6c1596f2e953262275c4bfddea28edb9374ac1',NULL,0,1546702941);
 /*!40000 ALTER TABLE `credentials` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -143,10 +143,13 @@ CREATE TABLE `cupons` (
   `minimo` float DEFAULT NULL,
   `usato` int(11) NOT NULL DEFAULT '0',
   `valore_venduto` float DEFAULT '0',
+  `accettato_usr` varchar(41) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `cupons_id_uindex` (`id`),
   KEY `cupons_cupons_types_id_fk` (`tipo`),
-  CONSTRAINT `cupons_cupons_types_id_fk` FOREIGN KEY (`tipo`) REFERENCES `cupons_types` (`id`)
+  KEY `cupons_utenti_username_fk` (`accettato_usr`),
+  CONSTRAINT `cupons_cupons_types_id_fk` FOREIGN KEY (`tipo`) REFERENCES `cupons_types` (`id`),
+  CONSTRAINT `cupons_utenti_username_fk` FOREIGN KEY (`accettato_usr`) REFERENCES `utenti` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -156,7 +159,7 @@ CREATE TABLE `cupons` (
 
 LOCK TABLES `cupons` WRITE;
 /*!40000 ALTER TABLE `cupons` DISABLE KEYS */;
-INSERT INTO `cupons` VALUES (12548,2,10,10,0,11.23),(35091,2,50,50,1543672733,10),(45885,2,32,15.5,0,11.5),(46904,3,50,50,1544706931,23),(52484,1,20,30,1544706831,105);
+INSERT INTO `cupons` VALUES (12548,2,10,10,0,11.23,'stefano'),(35091,2,50,50,1543672733,10,'pier'),(45885,2,32,15.5,0,11.5,'stefano'),(46904,3,50,50,1544706931,23,'stefano'),(52484,1,20,30,1544706831,105,'stefano');
 /*!40000 ALTER TABLE `cupons` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -235,7 +238,9 @@ CREATE TABLE `funzioni` (
   UNIQUE KEY `funzioni_id_uindex` (`id`),
   UNIQUE KEY `funzioni_titolo_uindex` (`titolo`),
   KEY `funzioni_categoria_id_fk` (`categoria`),
-  CONSTRAINT `funzioni_categoria_id_fk` FOREIGN KEY (`categoria`) REFERENCES `categoria` (`id`)
+  KEY `funzioni_previlegi_id_fk` (`req_prev`),
+  CONSTRAINT `funzioni_categoria_id_fk` FOREIGN KEY (`categoria`) REFERENCES `categoria` (`id`),
+  CONSTRAINT `funzioni_previlegi_id_fk` FOREIGN KEY (`req_prev`) REFERENCES `previlegi` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -306,7 +311,7 @@ CREATE TABLE `magazzino` (
 
 LOCK TABLES `magazzino` WRITE;
 /*!40000 ALTER TABLE `magazzino` DISABLE KEYS */;
-INSERT INTO `magazzino` VALUES (1,'Pane e salamella','Panino caldo con salamella di maiale',83,10,0,5,5),(3,'Pasta','Pomodoro',95,25,0,1,1),(5,'Filetto','Cavallo',19,50,0,3,1),(7,'Bionda Pills',NULL,92,10,50,9,1),(9,'Mora Polls',NULL,94,10,50,9,1),(11,'Sorbetto',NULL,99,11,5,7,1),(13,'Vino rosso','Vino amabile, da tavola, (Vino-schifo)',100,10,10,11,3),(15,'Vino bianco',NULL,3,10,10,11,3),(17,'Amaro montenegro','sapore vero',26,30,30,13,1),(19,'Barolo','Sei un cazzo di riccone di merda',97,50,50,11,3),(21,'vino1',NULL,97,10,0,11,3),(23,'vino2',NULL,93,10,0,11,1),(25,'vino3',NULL,93,10,0,11,1),(27,'vino4',NULL,93,10,0,11,1),(29,'vino5',NULL,100,10,0,11,1),(31,'vino6',NULL,99,10,0,11,1);
+INSERT INTO `magazzino` VALUES (1,'Pane e salamella','Panino caldo con salamella di maiale',81,10,0,5,5),(3,'Pasta','Pomodoro',93,25,0,1,1),(5,'Filetto','Cavallo',15,50,0,3,1),(7,'Bionda Pills',NULL,92,10,50,9,1),(9,'Mora Polls',NULL,93,10,50,9,1),(11,'Sorbetto',NULL,97,11,5,7,1),(13,'Vino rosso','Vino amabile, da tavola, (Vino-schifo)',100,10,10,11,3),(15,'Vino bianco',NULL,3,10,10,11,3),(17,'Amaro montenegro','sapore vero',26,30,30,13,1),(19,'Barolo','Sei un cazzo di riccone di merda',97,50,50,11,3),(21,'vino1',NULL,97,10,0,11,3),(23,'vino2',NULL,92,10,0,11,1),(25,'vino3',NULL,91,10,0,11,1),(27,'vino4',NULL,91,10,0,11,1),(29,'vino5',NULL,99,10,0,11,1),(31,'vino6',NULL,97,10,0,11,1);
 /*!40000 ALTER TABLE `magazzino` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -327,8 +332,10 @@ CREATE TABLE `ordini_dettagli` (
   `timestamp` int(11) NOT NULL,
   `user` varchar(32) NOT NULL DEFAULT 'admin',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `ordini_dettagli_id_uindex` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=latin1;
+  UNIQUE KEY `ordini_dettagli_id_uindex` (`id`),
+  KEY `ordini_dettagli_utenti_username_fk` (`user`),
+  CONSTRAINT `ordini_dettagli_utenti_username_fk` FOREIGN KEY (`user`) REFERENCES `utenti` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -337,7 +344,7 @@ CREATE TABLE `ordini_dettagli` (
 
 LOCK TABLES `ordini_dettagli` WRITE;
 /*!40000 ALTER TABLE `ordini_dettagli` DISABLE KEYS */;
-INSERT INTO `ordini_dettagli` VALUES (13,'gtyufog','0001','',0,'192.168.178.23',1543766464,'admin'),(15,'vdhjlkb','0002','',0,'192.168.178.23',1543766526,'admin'),(17,'bgfgb','0003','',0,'192.168.178.23',1543780495,'admin'),(19,'gferwgteh','0004','',0,'192.168.178.23',1543780497,'admin'),(23,'edoyutoguni','0000','',0,'192.168.178.23',1543847294,'admin'),(25,'gferwgteh','0004',' ',0,'192.168.178.23',1543871925,'admin'),(27,'gferwgteh1543872016286','0004',' ',0,'192.168.178.23',1543872016,'admin'),(37,'bgfgb1543873938639','0003',' ',0,'192.168.178.23',1543873938,'reprint'),(39,'bgfgb1543874034702','0003',' ',0,'192.168.178.23',1543874034,'reprint'),(41,'gferwgteh1543914727286','0004','  ',0,'192.168.178.23',1543914727,'reprint'),(43,'gferwgteh1543915010177','0004',' ',0,'192.168.178.23',1543915010,'reprint'),(45,'emilubibuqo','0000','',0,'192.168.43.52',1543915161,'stefano'),(47,'ajiruyacece','0000','',0,'192.168.43.52',1544002853,'stefano'),(49,'ajiruyacece1544002900867','0000',' ',0,'192.168.43.52',1544002900,'reprint'),(51,'ajiruyacece1544004141264','0000',' ',0,'192.168.43.52',1544004141,'reprint'),(53,'ugevufofive','0000','',0,'192.168.178.23',1544113839,'stefano'),(55,'ovoyacakegi','0000','',0,'192.168.178.23',1544114083,'stefano'),(57,'utiyujayifi','0000','',0,'192.168.178.23',1544118242,'stefano'),(59,'ovoyacakegi1544120442496','0000',' ',0,'192.168.178.23',1544120442,'reprint'),(61,'ovoyacakegi1544120452521','0000',' ',0,'192.168.178.23',1544120452,'reprint'),(63,'utiyujayifi1544120516349','0000',' ',0,'192.168.178.23',1544120516,'reprint'),(65,'umaqiqupujo','0006','',0,'unavailable',1544302524,'stefano'),(67,'icagozotulo','0004','',0,'self',1544378937,'Operator self'),(69,'ihoyaqumali','0000','',0,'self',1544384126,'Operator self'),(71,'umuhutizaqu','0000','',0,'self',1544384315,'Operator self'),(73,'emegeverujo','0000','bvnbvnmxvnxh',1,'12222',1544736711,'stefano'),(75,'ulobeqotequ','0001','',0,'192.168.1.46',1544997229,'stefano'),(77,'ulobeqotequ','0001','',0,'192.168.1.46',1544997232,'stefano'),(79,'oqozilotahe','0003','',0,'192.168.1.46',1545059616,'stefano'),(81,'alecohacihi','0004','',0,'192.168.1.46',1545059896,'stefano'),(83,'uhamudiluqe','0005','',0,'192.168.1.46',1545060004,'stefano'),(85,'ecebiteluku','0005','',0,'self',1545129866,'Operator self'),(87,'ofilazutope','0005','',0,'::ffff:192.168.122.1',1545482415,'stefano');
+INSERT INTO `ordini_dettagli` VALUES (13,'gtyufog','0001','',0,'192.168.178.23',1543766464,'pier'),(15,'vdhjlkb','0002','',0,'192.168.178.23',1543766526,'pier'),(17,'bgfgb','0003','',0,'192.168.178.23',1543780495,'pier'),(19,'gferwgteh','0004','',0,'192.168.178.23',1543780497,'pier'),(23,'edoyutoguni','0000','',0,'192.168.178.23',1543847294,'pier'),(25,'gferwgteh','0004',' ',0,'192.168.178.23',1543871925,'pier'),(27,'gferwgteh1543872016286','0004',' ',0,'192.168.178.23',1543872016,'pier'),(37,'bgfgb1543873938639','0003',' ',0,'192.168.178.23',1543873938,'reprint'),(39,'bgfgb1543874034702','0003',' ',0,'192.168.178.23',1543874034,'reprint'),(41,'gferwgteh1543914727286','0004','  ',0,'192.168.178.23',1543914727,'reprint'),(43,'gferwgteh1543915010177','0004',' ',0,'192.168.178.23',1543915010,'reprint'),(45,'emilubibuqo','0000','',0,'192.168.43.52',1543915161,'stefano'),(47,'ajiruyacece','0000','',0,'192.168.43.52',1544002853,'stefano'),(49,'ajiruyacece1544002900867','0000',' ',0,'192.168.43.52',1544002900,'reprint'),(51,'ajiruyacece1544004141264','0000',' ',0,'192.168.43.52',1544004141,'reprint'),(53,'ugevufofive','0000','',0,'192.168.178.23',1544113839,'stefano'),(55,'ovoyacakegi','0000','',0,'192.168.178.23',1544114083,'stefano'),(57,'utiyujayifi','0000','',0,'192.168.178.23',1544118242,'stefano'),(59,'ovoyacakegi1544120442496','0000',' ',0,'192.168.178.23',1544120442,'reprint'),(61,'ovoyacakegi1544120452521','0000',' ',0,'192.168.178.23',1544120452,'reprint'),(63,'utiyujayifi1544120516349','0000',' ',0,'192.168.178.23',1544120516,'reprint'),(65,'umaqiqupujo','0006','',0,'unavailable',1544302524,'stefano'),(67,'icagozotulo','0004','',0,'self',1544378937,'Operator self'),(69,'ihoyaqumali','0000','',0,'self',1544384126,'Operator self'),(71,'umuhutizaqu','0000','',0,'self',1544384315,'Operator self'),(73,'emegeverujo','0000','bvnbvnmxvnxh',1,'12222',1544736711,'stefano'),(75,'ulobeqotequ','0001','',0,'192.168.1.46',1544997229,'stefano'),(77,'ulobeqotequ','0001','',0,'192.168.1.46',1544997232,'stefano'),(79,'oqozilotahe','0003','',0,'192.168.1.46',1545059616,'stefano'),(81,'alecohacihi','0004','',0,'192.168.1.46',1545059896,'stefano'),(83,'uhamudiluqe','0005','',0,'192.168.1.46',1545060004,'stefano'),(85,'ecebiteluku','0005','',0,'self',1545129866,'Operator self'),(87,'ofilazutope','0005','',0,'::ffff:192.168.122.1',1545482415,'stefano'),(89,'opopoveyati','0005','',1,'192.168.122.1',1546426018,'stefano'),(91,'ehizunusali','0006','',1,'self',1546426052,'Operator self'),(93,'uyiforupoji','0006','',1,'192.168.122.1',1546702945,'stefano');
 /*!40000 ALTER TABLE `ordini_dettagli` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -360,7 +367,7 @@ CREATE TABLE `ordini_prodotti` (
   KEY `ordini_prodotti_magazzino_id_fk` (`product`),
   CONSTRAINT `ordini_prodotti_magazzino_id_fk` FOREIGN KEY (`product`) REFERENCES `magazzino` (`id`),
   CONSTRAINT `ordini_prodotti_ordini_dettagli_id_fk` FOREIGN KEY (`order`) REFERENCES `ordini_dettagli` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=214 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=240 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -369,7 +376,7 @@ CREATE TABLE `ordini_prodotti` (
 
 LOCK TABLES `ordini_prodotti` WRITE;
 /*!40000 ALTER TABLE `ordini_prodotti` DISABLE KEYS */;
-INSERT INTO `ordini_prodotti` VALUES (13,13,1,'NULL',3),(15,15,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',3),(17,17,3,'NULL',2),(19,19,3,'NULL',2),(21,19,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(23,23,5,'NULL',1),(25,23,1,'[{\"qta\":2,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(27,25,3,'NULL',2),(29,25,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(31,27,3,'NULL',2),(33,27,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(35,27,3,'NULL',2),(37,27,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(61,37,3,'NULL',2),(63,39,3,'NULL',2),(65,41,3,'NULL',2),(67,41,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(69,41,3,'NULL',2),(71,41,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(73,43,3,'NULL',2),(75,43,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(77,43,3,'NULL',2),(79,43,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(81,45,5,'NULL',2),(83,47,3,'NULL',2),(85,47,7,'NULL',2),(87,47,27,'NULL',2),(89,51,3,'NULL',2),(91,51,7,'NULL',2),(93,51,27,'NULL',2),(95,53,5,'NULL',2),(97,53,7,'NULL',2),(99,53,9,'NULL',1),(101,53,25,'NULL',2),(103,53,27,'NULL',2),(105,53,29,'NULL',1),(107,53,31,'NULL',1),(109,53,11,'NULL',3),(111,55,7,'NULL',2),(113,55,25,'NULL',2),(115,55,31,'NULL',2),(117,55,11,'NULL',2),(119,57,3,'NULL',2),(121,59,7,'NULL',2),(123,59,25,'NULL',2),(125,59,31,'NULL',2),(127,59,11,'NULL',2),(129,61,7,'NULL',2),(131,61,25,'NULL',2),(133,61,31,'NULL',2),(135,61,11,'NULL',2),(137,63,3,'NULL',2),(139,65,3,'NULL',2),(141,65,1,'[{\"qta\":2,\"var\":{\"select\":{\"values\":[true,null,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}},{\"qta\":2,\"eur\":10,\"cents\":0,\"var\":{\"choose\":null,\"select\":{\"values\":[null,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',4),(143,65,9,'NULL',2),(145,65,27,'NULL',1),(147,65,25,'NULL',2),(149,65,19,'[{\"qta\":1,\"var\":{\"choose\":\"frizzante\",\"select\":{\"values\":[]}}}]',1),(151,65,11,'NULL',1),(153,67,27,'NULL',3),(155,67,25,'NULL',1),(157,67,19,'[{\"qta\":2,\"var\":{\"select\":{\"values\":[]}}}]',2),(159,69,5,'NULL',2),(161,69,7,'NULL',1),(163,69,9,'NULL',4),(165,69,17,'NULL',1),(167,69,23,'NULL',3),(169,69,25,'NULL',1),(171,71,5,'NULL',3),(173,71,7,'NULL',4),(175,73,3,'NULL',2),(177,73,1,'[{\"qta\":1,\"var\":{\"choose\":null,\"select\":{\"values\":[true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}},{\"qta\":2,\"eur\":10,\"cents\":0,\"var\":{\"choose\":null,\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',3),(179,73,25,'NULL',1),(181,73,27,'NULL',3),(183,73,21,'[{\"qta\":3,\"var\":{\"choose\":\"naturale\",\"select\":{\"values\":[]}}}]',3),(185,73,31,'NULL',1),(187,75,5,'NULL',2),(189,75,23,'NULL',2),(191,75,25,'NULL',1),(193,77,5,'NULL',2),(195,77,23,'NULL',2),(197,77,25,'NULL',1),(199,81,3,'NULL',1),(201,81,1,'[{\"qta\":1,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}},{\"qta\":2,\"eur\":10,\"cents\":0,\"var\":{\"choose\":null,\"select\":{\"values\":[true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',3),(203,81,17,'NULL',1),(205,83,1,'[{\"qta\":1,\"var\":{\"select\":{\"values\":[],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}},{\"qta\":1,\"eur\":10,\"cents\":0,\"var\":{\"choose\":null,\"select\":{\"values\":[true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}},{\"qta\":1,\"eur\":10,\"cents\":0,\"var\":{\"choose\":null,\"select\":{\"values\":[null,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}},{\"qta\":1,\"eur\":10,\"cents\":0,\"var\":{\"choose\":null,\"select\":{\"values\":[null,null,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}},{\"qta\":1,\"eur\":10,\"cents\":0,\"var\":{\"choose\":null,\"select\":{\"values\":[true,null,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',5),(207,85,7,'NULL',3),(209,87,5,'NULL',2),(211,87,1,'[{\"qta\":2,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(213,87,17,'NULL',2);
+INSERT INTO `ordini_prodotti` VALUES (13,13,1,'NULL',3),(15,15,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',3),(17,17,3,'NULL',2),(19,19,3,'NULL',2),(21,19,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(23,23,5,'NULL',1),(25,23,1,'[{\"qta\":2,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(27,25,3,'NULL',2),(29,25,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(31,27,3,'NULL',2),(33,27,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(35,27,3,'NULL',2),(37,27,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(61,37,3,'NULL',2),(63,39,3,'NULL',2),(65,41,3,'NULL',2),(67,41,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(69,41,3,'NULL',2),(71,41,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(73,43,3,'NULL',2),(75,43,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(77,43,3,'NULL',2),(79,43,1,'[{\"qta\":3,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(81,45,5,'NULL',2),(83,47,3,'NULL',2),(85,47,7,'NULL',2),(87,47,27,'NULL',2),(89,51,3,'NULL',2),(91,51,7,'NULL',2),(93,51,27,'NULL',2),(95,53,5,'NULL',2),(97,53,7,'NULL',2),(99,53,9,'NULL',1),(101,53,25,'NULL',2),(103,53,27,'NULL',2),(105,53,29,'NULL',1),(107,53,31,'NULL',1),(109,53,11,'NULL',3),(111,55,7,'NULL',2),(113,55,25,'NULL',2),(115,55,31,'NULL',2),(117,55,11,'NULL',2),(119,57,3,'NULL',2),(121,59,7,'NULL',2),(123,59,25,'NULL',2),(125,59,31,'NULL',2),(127,59,11,'NULL',2),(129,61,7,'NULL',2),(131,61,25,'NULL',2),(133,61,31,'NULL',2),(135,61,11,'NULL',2),(137,63,3,'NULL',2),(139,65,3,'NULL',2),(141,65,1,'[{\"qta\":2,\"var\":{\"select\":{\"values\":[true,null,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}},{\"qta\":2,\"eur\":10,\"cents\":0,\"var\":{\"choose\":null,\"select\":{\"values\":[null,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',4),(143,65,9,'NULL',2),(145,65,27,'NULL',1),(147,65,25,'NULL',2),(149,65,19,'[{\"qta\":1,\"var\":{\"choose\":\"frizzante\",\"select\":{\"values\":[]}}}]',1),(151,65,11,'NULL',1),(153,67,27,'NULL',3),(155,67,25,'NULL',1),(157,67,19,'[{\"qta\":2,\"var\":{\"select\":{\"values\":[]}}}]',2),(159,69,5,'NULL',2),(161,69,7,'NULL',1),(163,69,9,'NULL',4),(165,69,17,'NULL',1),(167,69,23,'NULL',3),(169,69,25,'NULL',1),(171,71,5,'NULL',3),(173,71,7,'NULL',4),(175,73,3,'NULL',2),(177,73,1,'[{\"qta\":1,\"var\":{\"choose\":null,\"select\":{\"values\":[true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}},{\"qta\":2,\"eur\":10,\"cents\":0,\"var\":{\"choose\":null,\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',3),(179,73,25,'NULL',1),(181,73,27,'NULL',3),(183,73,21,'[{\"qta\":3,\"var\":{\"choose\":\"naturale\",\"select\":{\"values\":[]}}}]',3),(185,73,31,'NULL',1),(187,75,5,'NULL',2),(189,75,23,'NULL',2),(191,75,25,'NULL',1),(193,77,5,'NULL',2),(195,77,23,'NULL',2),(197,77,25,'NULL',1),(199,81,3,'NULL',1),(201,81,1,'[{\"qta\":1,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}},{\"qta\":2,\"eur\":10,\"cents\":0,\"var\":{\"choose\":null,\"select\":{\"values\":[true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',3),(203,81,17,'NULL',1),(205,83,1,'[{\"qta\":1,\"var\":{\"select\":{\"values\":[],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}},{\"qta\":1,\"eur\":10,\"cents\":0,\"var\":{\"choose\":null,\"select\":{\"values\":[true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}},{\"qta\":1,\"eur\":10,\"cents\":0,\"var\":{\"choose\":null,\"select\":{\"values\":[null,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}},{\"qta\":1,\"eur\":10,\"cents\":0,\"var\":{\"choose\":null,\"select\":{\"values\":[null,null,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}},{\"qta\":1,\"eur\":10,\"cents\":0,\"var\":{\"choose\":null,\"select\":{\"values\":[true,null,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',5),(207,85,7,'NULL',3),(209,87,5,'NULL',2),(211,87,1,'[{\"qta\":2,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',2),(213,87,17,'NULL',2),(215,89,3,'NULL',2),(217,89,5,'NULL',2),(219,89,1,'[{\"qta\":1,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',1),(221,89,23,'NULL',1),(223,89,25,'NULL',2),(225,91,5,'NULL',2),(227,91,1,'[{\"qta\":1,\"var\":{\"select\":{\"values\":[null,true,true],\"labels\":[\"ketchup\",\"senape\",\"mayo\"]}}}]',1),(229,91,11,'NULL',1),(231,93,9,'NULL',1),(233,93,27,'NULL',2),(235,93,29,'NULL',1),(237,93,31,'NULL',2),(239,93,11,'NULL',1);
 /*!40000 ALTER TABLE `ordini_prodotti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -472,7 +479,7 @@ CREATE TABLE `utenti` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `utenti_id_uindex` (`id`),
   UNIQUE KEY `utenti_username_uindex` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -481,7 +488,7 @@ CREATE TABLE `utenti` (
 
 LOCK TABLES `utenti` WRITE;
 /*!40000 ALTER TABLE `utenti` DISABLE KEYS */;
-INSERT INTO `utenti` VALUES (1,'stefano','2866093772d6f50c923fb6a19f976bb22e87124c','Stefano',1,1,1),(3,'giovanni','d033e22ae348aeb5660fc2140aec35850c4da997','Enrichetto',1,1,0),(4,'luucaa','d033e22ae348aeb5660fc2140aec35850c4da997','Luca',0,1,1),(5,'luca','f9c0f8b91180c7d93028c79ef4993e4d5a5b3e59','Luca',1,1,1),(7,'matteo','b1b3773a05c0ed0176787a4f1574ff0075f7521e','cipo',0,1,0),(11,'pier','c44386c0d8a91e6dd5ec8dcc9120c23ad83cf827','Pierangelo',1,1,1);
+INSERT INTO `utenti` VALUES (1,'stefano','2866093772d6f50c923fb6a19f976bb22e87124c','Stefano',1,1,1),(3,'giovanni','d033e22ae348aeb5660fc2140aec35850c4da997','Enrichetto',1,1,0),(4,'luucaa','d033e22ae348aeb5660fc2140aec35850c4da997','Luca',0,1,1),(5,'luca','f9c0f8b91180c7d93028c79ef4993e4d5a5b3e59','Luca',1,1,1),(7,'matteo','b1b3773a05c0ed0176787a4f1574ff0075f7521e','cipo',0,1,0),(11,'pier','c44386c0d8a91e6dd5ec8dcc9120c23ad83cf827','Pierangelo',1,1,1),(13,'reprint','unloggable','reprint',1,0,0),(15,'Operator Self','unloggable','Operator Self',1,0,0),(17,'zGCUMaGmze','31d8555e87e3bab8c4eb3289addfee9ed3aedaa6','1',1,1,0),(19,'hZqv1ejqxp','dbd11b200cd0d5b9c122900399935a533d8374bd','2',1,1,0),(21,'bwC0R1Xzhs','999d55e79a6ef57f51f2bfeee9fa84aabfd34627','3',1,1,0),(23,'jZEd8rSlzz','b3edc979879e8156f5b804deac6d0bffd28e6098','4',1,1,0),(25,'crbofQFG90','531200c63562a613a09d54c38b889a66941cda20','5',1,1,0),(27,'tF4zBelNuu','faf12ce7f0fb4f8c5c93a5321283da41b80acfe4','6',1,1,0),(29,'vhl7gGF4GY','39a3a4b19ca47d5fedf72385faf39d3b36150c18','7',1,1,0),(31,'Jphx9LMutr','1fe3510b008eaeb5094253dc7d172758b2dda550','8',1,1,0);
 /*!40000 ALTER TABLE `utenti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -498,11 +505,11 @@ CREATE TABLE `utenti_previlegi_assoc` (
   `previlegi_FOREGIN` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `utenti_previlegi_assoc_id_uindex` (`id`),
-  KEY `utenti_previlegi_assoc_abilities_id_fk` (`utenti_FOREGIN`),
   KEY `utenti_previlegi_assoc_previlegi_id_fk` (`previlegi_FOREGIN`),
-  CONSTRAINT `utenti_previlegi_assoc_abilities_id_fk` FOREIGN KEY (`utenti_FOREGIN`) REFERENCES `previlegi` (`id`),
+  KEY `utenti_previlegi_assoc_abilities_id_fk` (`utenti_FOREGIN`),
+  CONSTRAINT `utenti_previlegi_assoc_abilities_id_fk` FOREIGN KEY (`utenti_FOREGIN`) REFERENCES `utenti` (`id`),
   CONSTRAINT `utenti_previlegi_assoc_previlegi_id_fk` FOREIGN KEY (`previlegi_FOREGIN`) REFERENCES `previlegi` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=144 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -511,7 +518,7 @@ CREATE TABLE `utenti_previlegi_assoc` (
 
 LOCK TABLES `utenti_previlegi_assoc` WRITE;
 /*!40000 ALTER TABLE `utenti_previlegi_assoc` DISABLE KEYS */;
-INSERT INTO `utenti_previlegi_assoc` VALUES (51,3,1),(53,3,3),(55,3,5),(57,3,7),(59,3,11),(85,11,1),(87,11,7),(89,11,13),(93,5,9),(95,5,3),(97,5,1),(99,5,11),(101,5,5),(103,5,13),(105,5,7),(111,7,1),(113,1,15),(115,1,3),(117,1,1),(119,1,11),(121,1,5),(123,1,7),(125,1,9),(127,1,13);
+INSERT INTO `utenti_previlegi_assoc` VALUES (51,3,1),(53,3,3),(55,3,5),(57,3,7),(59,3,11),(85,11,1),(87,11,7),(89,11,13),(93,5,9),(95,5,3),(97,5,1),(99,5,11),(101,5,5),(103,5,13),(105,5,7),(111,7,1),(113,1,15),(115,1,3),(117,1,1),(119,1,11),(121,1,5),(123,1,7),(125,1,9),(127,1,13),(129,17,15),(131,19,3),(133,21,1),(135,23,11),(137,25,5),(139,27,7),(141,29,9),(143,31,13);
 /*!40000 ALTER TABLE `utenti_previlegi_assoc` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -524,4 +531,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-01-01 15:29:11
+-- Dump completed on 2019-01-07  9:05:34
