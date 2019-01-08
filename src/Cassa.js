@@ -26,6 +26,8 @@ import ImageButton from "./components/imageButton"
 import ProductTile from "./components/ProductTile";
 import IconButton from "@material-ui/core/es/IconButton/IconButton";
 import Badge from "@material-ui/core/es/Badge/Badge";
+import EditIcon from "@material-ui/icons/Edit"
+import OkIcon from "@material-ui/icons/Check"
 // noinspection ES6CheckImport
 import mqtt from "mqtt"
 import QRCode from "qrcode.react"
@@ -262,7 +264,16 @@ class Cassa extends React.Component {
 
         return (
             <div className={this.props.classes.root}>
-                <NavBar titleText='Cassa' history={this.props.history} showHome={true}
+                <NavBar titleText='Cassa' elements={[
+                    <IconButton
+                        onClick={() => this.setState({subtract: !this.state.subtract})}
+                        color="inherit"
+                    >
+                        {this.state.subtract && <OkIcon/>}
+                        {!this.state.subtract && <EditIcon/>}
+
+                    </IconButton>]}
+                        history={this.props.history} showHome={true}
                         detailsText={this.state.ordernum}/>
 
                 {this.state.currentState === this.status.category &&
@@ -309,7 +320,8 @@ class Cassa extends React.Component {
                                                  qta={e.qta} details={e.details}
                                                  onClick={() => {
                                                      if (!e.details.display) {
-                                                         e.qta += 1;
+                                                         if(this.state.subtract && e.qta > 0) e.qta -= 1;
+                                                         else if(!this.state.subtract) e.qta += 1;
                                                          this.state.cart.push(e);
                                                          this.forceUpdate()
                                                      } else {
