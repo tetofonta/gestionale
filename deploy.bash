@@ -21,7 +21,7 @@ mkdir -p output/CAPTIVE/sslcert
 
 cwd="$PWD"
 cd ./backend/modules/
-node ./buildAll.js
+#node ./buildAll.js
 cd "$cwd"
 
 #package MQTT apps
