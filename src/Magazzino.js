@@ -119,9 +119,7 @@ function getPopup(json) {
 class Magazzino extends React.Component {
     update = null;
     state = {
-        gruppo: {value: 'primi piatti', label: 'Primi piatti'},
         gruppi: [],
-        popup: {value: JSON.parse('{"display": false}'), label: getPopup('{"display": false}')},
         popups: [],
         list: [],
         productlist: [],
@@ -196,7 +194,7 @@ class Magazzino extends React.Component {
         });
     }
 
-    render() {
+    render(start) {
         const {classes} = this.props;
 
         return (
@@ -234,7 +232,7 @@ class Magazzino extends React.Component {
                                     <div className={classes.nomargin}><Button
                                         className={classes.nomargin}
                                         onClick={e => {
-                                            this.state.productlist.push("");
+                                            this.state.productlist.splice(0, 0, "");
                                             this.forceUpdate();
                                         }}>
                                         <AddIcon className={classes.whiteIcon}/>
@@ -249,7 +247,7 @@ class Magazzino extends React.Component {
 
                                                 this.forceUpdate();
 
-                                                // POST(apiCalls.addMeals, {
+                                                // POST(apiCalls., {
                                                 //     user: window.ctx.get("username"),
                                                 //     token: window.ctx.get("token"),
                                                 //     modified: this.state.productlist.filter(e => e.edited)
@@ -337,6 +335,7 @@ class Magazzino extends React.Component {
                                                     value={this.state.productlist[i].popup !== undefined ? JSON.stringify(this.state.productlist[i].popup.value) : "nessuno"}
                                                     onChange={e => {
                                                         this.state.productlist[i].popup.value = JSON.parse(e.target.value);
+                                                        this.state.productlist[i].popup.label = getPopup(JSON.parse(e.target.value));
 
                                                         this.forceUpdate();
                                                     }}>
@@ -352,9 +351,10 @@ class Magazzino extends React.Component {
                                         <CustomTableCell>
                                             <FormControl className={classes.formControl}>
                                                 <Select
-                                                    value={this.state.productlist[i].gruppo.value}
+                                                    value={this.state.productlist[i] !== undefined ? this.state.productlist[i].gruppo.value : ""}
                                                     onChange={e => {
                                                         this.state.productlist[i].gruppo.value = e.target.value;
+                                                        this.state.productlist[i].gruppo.label = e.target.value;
                                                         this.forceUpdate();
                                                     }}>
                                                     {gruppi.map(option => (
@@ -390,14 +390,14 @@ class Magazzino extends React.Component {
                     </Table>
                 </Paper>
                 {/*delete*/}
-                <Dialog
+                {this.state.openDeleteDialog && <Dialog
                     open={this.state.openDeleteDialog}
                     onClose={() =>
                         this.setState({openDeleteDialog: false})
                     }>
                     <DialogTitle>
                         Sei sicuro di voler eliminare
-                        "{this.state.productlist[this.state.product] !== undefined ? this.state.productlist[this.state.product].desc.toLowerCase() : " "}"?
+                        "{(this.state.productlist[this.state.product]) ? this.state.productlist[this.state.product].desc.toLowerCase() : " "}"?
                     </DialogTitle>
                     <DialogActions>
                         <Button onClick={() => this.setState({openDeleteDialog: false})} color="primary">
@@ -412,7 +412,7 @@ class Magazzino extends React.Component {
                             Ok
                         </Button>
                     </DialogActions>
-                </Dialog>
+                </Dialog> }
                 {/*popup*/}
                 <Dialog
                     open={this.state.openPopupDialog}

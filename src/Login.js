@@ -141,10 +141,18 @@ class Login extends React.Component {
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={() => {
-                                this.show("", "", false);
-                                this.continueLIN();
-                            }} color="primary">
+                            <Button
+                                onClick={() => {
+                                    this.show("", "", false);
+                                    this.continueLIN();
+                                }}
+                                /*onKeyPress={(e) => {
+                                    if (e.key === 'Enter') {
+                                        this.show("", "", false);
+                                        this.continueLIN();
+                                    }
+                                }} */
+                                color="primary">
                                 OK
                             </Button>
                         </DialogActions>

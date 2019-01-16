@@ -9,5 +9,6 @@
   "api_action": "POST",
   "api_enable": true,
   "dependencies": {
+    "request": "^2.88.0"
   }
 }

@@ -1,3 +1,5 @@
+const request = require("request");
+
 module.exports.auth_required = true;
 module.exports.privs = ["AMMINISTRAZIONE"];
 
