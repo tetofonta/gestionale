@@ -183,8 +183,6 @@ class Magazzino extends React.Component {
         }).then( () => POST(apiCalls.getGruppiCucina, {user: window.ctx.get("username"), token: window.ctx.get("token")}).then(res => {
             if (res.state) {
                 res.list.forEach(e => {
-                    console.log(res)
-
                     gruppi.push({
                         id: e.id,
                         value: e.id,
