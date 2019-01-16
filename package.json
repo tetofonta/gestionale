@@ -10,7 +10,6 @@
     "webpack-node-externals": "^1.7.2",
     "@material-ui/core": "^3.6.1",
     "@material-ui/icons": "^3.0.1",
-    "babel-loader": "^8.0.4",
     "base-64": "^0.1.0",
     "body-parser": "^1.18.3",
     "chart.js": "^2.7.3",
@@ -21,7 +20,7 @@
     "flatten": "^1.0.2",
     "global": "^4.3.2",
     "history": "^4.7.2",
-    "jspdf": "^1.4.1",
+    "jspdf": "~1.4.1",
     "mosca": "^2.8.3",
     "mqtt": "^2.18.8",
     "mysql": "^2.16.0",
@@ -38,7 +37,8 @@
     "react-scripts": "^2.1.1",
     "request": "^2.88.0",
     "secure-random-string": "^1.1.0",
-    "xlsx": "^0.14.1"
+    "xlsx": "^0.14.1",
+    "html2pdf": "latest"
   },
   "devDependencies": {
     "concurrently": "^4.1.0",
