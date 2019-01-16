@@ -1,1 +1,196 @@
-{"apicalls":{"getStats":{"modulePath":"./essential_module_stats","url":"/api/getStats","action":"POST","enabled":true},"addMeals":{"modulePath":"./modules/built/module_add_meal.js","url":"/api/addMeals","action":"POST","enabled":true},"ads":{"modulePath":"./modules/built/module_ads.js","url":"/api/ads","action":"GET","enabled":true},"auth":{"modulePath":"./modules/built/module_auth.js","url":"/api/auth","action":"POST","enabled":true},"refresh":{"modulePath":"./modules/built/module_auth_refresh.js","url":"/api/refresh","action":"POST","enabled":true},"buono":{"modulePath":"./modules/built/module_buono_details.js","url":"/api/buono","action":"POST","enabled":true},"buoni":{"modulePath":"./modules/built/module_buono_get_all.js","url":"/api/buoni","action":"POST","enabled":true},"updbuoni":{"modulePath":"./modules/built/module_buono_update.js","url":"/api/updateBuoni","action":"POST","enabled":true},"delAds":{"modulePath":"./modules/built/module_del_ads.js","url":"/api/delAds","action":"POST","enabled":true},"editAds":{"modulePath":"./modules/built/module_edit_ads.js","url":"/api/editAds","action":"POST","enabled":true},"getFeedback":{"modulePath":"./modules/built/module_feedback_get.js","url":"/api/getFeedback","action":"GET","enabled":true},"sendFeedback":{"modulePath":"./modules/built/module_feedback_send.js","url":"/api/sendFeedback","action":"POST","enabled":true},"getAllFncs":{"modulePath":"./modules/built/module_functions_get_all.js","url":"/api/getAllFncs","action":"GET","enabled":true},"getAds":{"modulePath":"./modules/built/module_get_ads.js","url":"/api/getAds","action":"POST","enabled":true},"getGruppiCucina":{"modulePath":"./modules/built/module_get_kitchen_groups.js","url":"/api/gruppiCucina","action":"POST","enabled":true},"getPopups":{"modulePath":"./modules/built/module_get_popups.js","url":"/api/popups","action":"POST","enabled":true},"productList":{"modulePath":"./modules/built/module_get_product_list.js","url":"/api/products","action":"GET","enabled":true},"getProducts":{"modulePath":"./modules/built/module_get_products.js","url":"/api/getProducts","action":"POST","enabled":true},"hello":{"modulePath":"./modules/built/module_hello.js","url":"/api/hello","action":"GET","enabled":true},"ip":{"modulePath":"./modules/built/module_ip.js","url":"/api/ip","action":"GET","enabled":true},"getNWCreds":{"modulePath":"./modules/built/module_network_access_gen_credentials.js","url":"/api/getNetworkCreds","action":"POST","enabled":true},"loginnw":{"modulePath":"./modules/built/module_network_access_login.js","url":"/api/loginnw","action":"POST","enabled":true},"getOrdNum":{"modulePath":"./modules/built/module_ordnum_get_next.js","url":"/api/new_order","action":"POST","enabled":true},"operate":{"modulePath":"./modules/built/module_ordnum_operate.js","url":"/api/operate","action":"POST","enabled":true},"serve":{"modulePath":"./modules/built/module_static_serve.js","url":"/_*","action":"GET","enabled":true},"getStorico":{"modulePath":"./modules/built/module_storico_get.js","url":"/api/getStorico","action":"POST","enabled":true},"newUser":{"modulePath":"./modules/built/module_user_add.js","url":"/api/newUser","action":"POST","enabled":true},"delUser":{"modulePath":"./modules/built/module_user_del.js","url":"/api/delUser","action":"POST","enabled":true},"editUser":{"modulePath":"./modules/built/module_user_edit.js","url":"/api/editUser","action":"POST","enabled":true},"getFncs":{"modulePath":"./modules/built/module_user_get_functions.js","url":"/api/getfunctions","action":"POST","enabled":true},"userList":{"modulePath":"./modules/built/module_user_list.js","url":"/api/userlist","action":"POST","enabled":true}}}
+{
+  "apicalls": {
+    "getStats": {
+      "modulePath": "./essential_module_stats",
+      "url": "/api/getStats",
+      "action": "POST",
+      "enabled": true
+    },
+    "addMeals": {
+      "modulePath": "./modules/built/module_add_meal.js",
+      "url": "/api/addMeals",
+      "action": "POST",
+      "enabled": true
+    },
+    "ads": {
+      "modulePath": "./modules/built/module_ads.js",
+      "url": "/api/ads",
+      "action": "GET",
+      "enabled": true
+    },
+    "auth": {
+      "modulePath": "./modules/built/module_auth.js",
+      "url": "/api/auth",
+      "action": "POST",
+      "enabled": true
+    },
+    "refresh": {
+      "modulePath": "./modules/built/module_auth_refresh.js",
+      "url": "/api/refresh",
+      "action": "POST",
+      "enabled": true
+    },
+    "buono": {
+      "modulePath": "./modules/built/module_buono_details.js",
+      "url": "/api/buono",
+      "action": "POST",
+      "enabled": true
+    },
+    "buoni": {
+      "modulePath": "./modules/built/module_buono_get_all.js",
+      "url": "/api/buoni",
+      "action": "POST",
+      "enabled": true
+    },
+    "updbuoni": {
+      "modulePath": "./modules/built/module_buono_update.js",
+      "url": "/api/updateBuoni",
+      "action": "POST",
+      "enabled": true
+    },
+    "delAds": {
+      "modulePath": "./modules/built/module_del_ads.js",
+      "url": "/api/delAds",
+      "action": "POST",
+      "enabled": true
+    },
+    "editAds": {
+      "modulePath": "./modules/built/module_edit_ads.js",
+      "url": "/api/editAds",
+      "action": "POST",
+      "enabled": true
+    },
+    "getFeedback": {
+      "modulePath": "./modules/built/module_feedback_get.js",
+      "url": "/api/getFeedback",
+      "action": "GET",
+      "enabled": true
+    },
+    "sendFeedback": {
+      "modulePath": "./modules/built/module_feedback_send.js",
+      "url": "/api/sendFeedback",
+      "action": "POST",
+      "enabled": true
+    },
+    "getAllFncs": {
+      "modulePath": "./modules/built/module_functions_get_all.js",
+      "url": "/api/getAllFncs",
+      "action": "GET",
+      "enabled": true
+    },
+    "getAds": {
+      "modulePath": "./modules/built/module_get_ads.js",
+      "url": "/api/getAds",
+      "action": "POST",
+      "enabled": true
+    },
+    "getGruppiCucina": {
+      "modulePath": "./modules/built/module_get_kitchen_groups.js",
+      "url": "/api/gruppiCucina",
+      "action": "POST",
+      "enabled": true
+    },
+    "getPopups": {
+      "modulePath": "./modules/built/module_get_popups.js",
+      "url": "/api/popups",
+      "action": "POST",
+      "enabled": true
+    },
+    "productList": {
+      "modulePath": "./modules/built/module_get_product_list.js",
+      "url": "/api/products",
+      "action": "GET",
+      "enabled": true
+    },
+    "getProducts": {
+      "modulePath": "./modules/built/module_get_products.js",
+      "url": "/api/getProducts",
+      "action": "POST",
+      "enabled": true
+    },
+    "hello": {
+      "modulePath": "./modules/built/module_hello.js",
+      "url": "/api/hello",
+      "action": "GET",
+      "enabled": true
+    },
+    "ip": {
+      "modulePath": "./modules/built/module_ip.js",
+      "url": "/api/ip",
+      "action": "GET",
+      "enabled": true
+    },
+    "updmagazzino": {
+      "modulePath": "./modules/built/module_magazzino_update.js",
+      "url": "/api/updateMagazzino",
+      "action": "POST",
+      "enabled": true
+    },
+    "getNWCreds": {
+      "modulePath": "./modules/built/module_network_access_gen_credentials.js",
+      "url": "/api/getNetworkCreds",
+      "action": "POST",
+      "enabled": true
+    },
+    "loginnw": {
+      "modulePath": "./modules/built/module_network_access_login.js",
+      "url": "/api/loginnw",
+      "action": "POST",
+      "enabled": true
+    },
+    "getOrdNum": {
+      "modulePath": "./modules/built/module_ordnum_get_next.js",
+      "url": "/api/new_order",
+      "action": "POST",
+      "enabled": true
+    },
+    "operate": {
+      "modulePath": "./modules/built/module_ordnum_operate.js",
+      "url": "/api/operate",
+      "action": "POST",
+      "enabled": true
+    },
+    "serve": {
+      "modulePath": "./modules/built/module_static_serve.js",
+      "url": "/_*",
+      "action": "GET",
+      "enabled": true
+    },
+    "getStorico": {
+      "modulePath": "./modules/built/module_storico_get.js",
+      "url": "/api/getStorico",
+      "action": "POST",
+      "enabled": true
+    },
+    "newUser": {
+      "modulePath": "./modules/built/module_user_add.js",
+      "url": "/api/newUser",
+      "action": "POST",
+      "enabled": true
+    },
+    "delUser": {
+      "modulePath": "./modules/built/module_user_del.js",
+      "url": "/api/delUser",
+      "action": "POST",
+      "enabled": true
+    },
+    "editUser": {
+      "modulePath": "./modules/built/module_user_edit.js",
+      "url": "/api/editUser",
+      "action": "POST",
+      "enabled": true
+    },
+    "getFncs": {
+      "modulePath": "./modules/built/module_user_get_functions.js",
+      "url": "/api/getfunctions",
+      "action": "POST",
+      "enabled": true
+    },
+    "userList": {
+      "modulePath": "./modules/built/module_user_list.js",
+      "url": "/api/userlist",
+      "action": "POST",
+      "enabled": true
+    }
+  }
+}

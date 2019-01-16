@@ -97,7 +97,7 @@ const CustomTableCell = withStyles(theme => ({
 let gruppi = [];
 let popups = [];
 
-function getPopup(json) {
+function getPopupByJson(json) {
     let label = "";
 
     if (json.dialog) {
@@ -116,12 +116,32 @@ function getPopup(json) {
     return label;
 }
 
+function getPopupById(id) {
+    let label = "";
+
+    popups.forEach(popup => {
+        if (popup.id === id)
+            label = popup.label;
+    });
+
+    return label;
+}
+
+function getGruppoById(id) {
+    let label = "";
+
+    gruppi.forEach(gruppo => {
+        if (gruppo.id === id)
+            label = gruppo.label;
+    });
+
+    return label;
+}
+
 class Magazzino extends React.Component {
     update = null;
     state = {
-        gruppo: {value: 'primi piatti', label: 'Primi piatti'},
         gruppi: [],
-        popup: {value: JSON.parse('{"display": false}'), label: getPopup('{"display": false}')},
         popups: [],
         list: [],
         productlist: [],
@@ -152,51 +172,52 @@ class Magazzino extends React.Component {
             if (res.state) {
                 res.list.forEach(e => {
                     popups.push({
+                        id: e.id,
                         value: JSON.parse(e.json),
-                        label: getPopup(JSON.parse(e.json))
+                        label: getPopupByJson(JSON.parse(e.json))
                     })
                 });
 
                 this.forceUpdate();
             } else console.log(res)
-        });
-
-        POST(apiCalls.getGruppiCucina, {user: window.ctx.get("username"), token: window.ctx.get("token")}).then(res => {
+        }).then( () => POST(apiCalls.getGruppiCucina, {user: window.ctx.get("username"), token: window.ctx.get("token")}).then(res => {
             if (res.state) {
                 res.list.forEach(e => {
                     gruppi.push({
-                        value: (e.nome.toLowerCase()),
-                        label: (e.nome.charAt(0).toUpperCase() + e.nome.slice(1).toLowerCase())
+                        id: e.id,
+                        value: e.id,
+                        label: e.nome[0].toUpperCase() + e.nome.slice(1).toLowerCase()
                     })
                 });
                 this.forceUpdate();
             } else console.log(res)
-        });
-
-        POST(apiCalls.getProducts, {user: window.ctx.get("username"), token: window.ctx.get("token")}).then(res => {
+        }).then(() => POST(apiCalls.getProducts, {user: window.ctx.get("username"), token: window.ctx.get("token")}).then(res => {
             if (res.state) {
                 let plist = [];
 
                 Object.keys(res.list).forEach(e => {
+                    console.log(res.list[e])
+
                     res.list[e].popup = {
                         value: res.list[e].details,
-                        label: getPopup(res.list[e].details)
+                        label: getPopupById(res.list[e].details)
                     };
+
                     res.list[e].gruppo = {
-                        value: res.list[e].gnome.toLowerCase(),
-                        label: (res.list[e].gnome.charAt(0).toUpperCase() + res.list[e].gnome.slice(1).toLowerCase())
+                        value: res.list[e].gruppo,
+                        label: getGruppoById(res.list[e].gruppo)
                     };
                     plist.push(res.list[e]);
                 });
 
                 this.setState({productlist: plist, productlistCpy: JSON.parse(JSON.stringify(plist))});
 
-                this.forceUpdate();
+                console.log(this.state.productlist)
             } else console.log(res);
-        });
+        })));
     }
 
-    render() {
+    render(start) {
         const {classes} = this.props;
 
         return (
@@ -234,7 +255,34 @@ class Magazzino extends React.Component {
                                     <div className={classes.nomargin}><Button
                                         className={classes.nomargin}
                                         onClick={e => {
-                                            this.state.productlist.push("");
+                                            this.state.productlist.splice(0, 0, {
+                                                id: -1,
+                                                costo: 1,
+
+
+
+                                                /*
+                                                costo: 10.1
+desc: "Vino bianco"
+details:
+dialog: {choose: Array(2)}
+display: true
+title: "Ancora alcuni dettagli..."
+__proto__: Object
+giacenza: 3
+gnome: "VINI"
+gruppo:
+label: "Vini"
+value: "vini"
+__proto__: Object
+info: null
+popup:
+label: "Frizzante - Naturale"
+value: {display: true, dialog: {…}, title: "Ancora alcuni dettagli..."}
+__proto__: Object
+__proto__: Object
+                                                 */
+                                            });
                                             this.forceUpdate();
                                         }}>
                                         <AddIcon className={classes.whiteIcon}/>
@@ -242,18 +290,20 @@ class Magazzino extends React.Component {
                                         <Button
                                             className={classes.nomargin}
                                             onClick={e => {
+                                                POST(apiCalls.updmagazzino, {
+                                                    user: window.ctx.get("username"),
+                                                    token: window.ctx.get("token"),
+                                                    modified: this.state.productlist.filter(e => e.edited)
+                                                });
+
                                                 this.state.modify = false;
                                                 this.state.productlist.forEach(e => {
                                                     e.edited = false;
                                                 });
 
-                                                this.forceUpdate();
+                                                console.log(this.state.productlist[0])
 
-                                                // POST(apiCalls.addMeals, {
-                                                //     user: window.ctx.get("username"),
-                                                //     token: window.ctx.get("token"),
-                                                //     modified: this.state.productlist.filter(e => e.edited)
-                                                // })
+                                                this.forceUpdate();
                                             }}>
                                             <SaveIcon className={classes.whiteIcon}/>
                                         </Button>
@@ -300,8 +350,6 @@ class Magazzino extends React.Component {
                                                 this.state.productlist[i].info = e.target.value;
                                                 this.state.productlist[i].edited = true;
 
-                                                console.log(this.state.productlistCpy);
-
                                                 if (this.update !== null)
                                                     clearTimeout(this.update);
 
@@ -336,12 +384,19 @@ class Magazzino extends React.Component {
                                                 <Select
                                                     value={this.state.productlist[i].popup !== undefined ? JSON.stringify(this.state.productlist[i].popup.value) : "nessuno"}
                                                     onChange={e => {
-                                                        this.state.productlist[i].popup.value = JSON.parse(e.target.value);
+                                                        let id = -1;
+                                                        popups.forEach(popup => {if (popup.label === getPopupByJson(JSON.parse(e.target.value))) id = popup.id;});
+
+                                                        console.log(e.target)
+
+                                                        this.state.productlist[i].popup.id = id;
+                                                        this.state.productlist[i].popup.value = e.target.value;
+                                                        this.state.productlist[i].popup.label = getPopupById(e.target.value);
 
                                                         this.forceUpdate();
                                                     }}>
                                                     {popups.map(option => (
-                                                        <MenuItem value={JSON.stringify(option.value)}>
+                                                        <MenuItem value={option.value}>
                                                             {option.label}
                                                         </MenuItem>
                                                     ))}
@@ -352,9 +407,15 @@ class Magazzino extends React.Component {
                                         <CustomTableCell>
                                             <FormControl className={classes.formControl}>
                                                 <Select
-                                                    value={this.state.productlist[i].gruppo.value}
+                                                    value={this.state.productlist[i].gruppo !== undefined ? this.state.productlist[i].gruppo.value : ""}
                                                     onChange={e => {
+                                                        let id = -1;
+                                                        gruppi.forEach(gruppo => {if (gruppo.label === e.target.value) id = gruppo.id;});
+
+                                                        this.state.productlist[i].gruppo.id = id;
                                                         this.state.productlist[i].gruppo.value = e.target.value;
+                                                        this.state.productlist[i].gruppo.label = getGruppoById(e.target.value);
+
                                                         this.forceUpdate();
                                                     }}>
                                                     {gruppi.map(option => (
@@ -390,14 +451,14 @@ class Magazzino extends React.Component {
                     </Table>
                 </Paper>
                 {/*delete*/}
-                <Dialog
+                {this.state.openDeleteDialog && <Dialog
                     open={this.state.openDeleteDialog}
                     onClose={() =>
                         this.setState({openDeleteDialog: false})
                     }>
                     <DialogTitle>
                         Sei sicuro di voler eliminare
-                        "{this.state.productlist[this.state.product] !== undefined ? this.state.productlist[this.state.product].desc.toLowerCase() : " "}"?
+                        "{(this.state.productlist[this.state.product]) ? this.state.productlist[this.state.product].desc.toLowerCase() : " "}"?
                     </DialogTitle>
                     <DialogActions>
                         <Button onClick={() => this.setState({openDeleteDialog: false})} color="primary">
@@ -412,7 +473,7 @@ class Magazzino extends React.Component {
                             Ok
                         </Button>
                     </DialogActions>
-                </Dialog>
+                </Dialog> }
                 {/*popup*/}
                 <Dialog
                     open={this.state.openPopupDialog}

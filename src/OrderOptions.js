@@ -47,8 +47,8 @@ class OrderOprions extends React.Component {
                 <NavBar titleText='Gestione numero ordine' history={this.props.history} showHome={true}/>
                 <Paper className={this.props.classes.marginTop}>
                     <div className={this.props.classes.centred}>
-                        <TextField placeholder={this.state.currentno} onChange={(e) => this.value = e.target.value}/>
-                        <Button onClick={() => {
+                        <TextField placeholder={this.state.currentno} onChange={(e) => this.value = e.target.value} style={{padding: 10}}/>
+                        <Button style={{padding: 10}} onClick={() => {
                             POST(apiCalls.operate, {
                                 user: window.ctx.get("username"),
                                 token: window.ctx.get("token"),

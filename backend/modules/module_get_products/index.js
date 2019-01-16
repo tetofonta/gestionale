@@ -4,23 +4,18 @@ module.exports.privs = ["MAGAZZINO"];
 module.exports.format = [];
 
 module.exports.callback = function (proxy) {
-    proxy.getConnection().query(`SELECT magazzino.descrizione as descrizione, magazzino.info as info, magazzino.giacenza as giacenza, magazzino.prezzoEur as eur, magazzino.prezzoCents as cents, gruppi_cucina.nome as gnome, gruppi_cucina.bg as gbg, details.json as json FROM magazzino, gruppi_cucina, details WHERE magazzino.gruppo = gruppi_cucina.id AND magazzino.details = details.id ORDER BY giacenza ASC`, (e, r, f) => {
-        if (r && !e) {
+    proxy.getConnection().query(`SELECT id, descrizione, info, giacenza, prezzoEur, prezzoCents, gruppo, details FROM magazzino ORDER BY giacenza ASC`, (e, r, f) => {
+            if (r && !e) {
             let map = new Map();
             r.forEach(e => {
-                let json = '{"display": false}';
-                try {
-                    json = JSON.parse(e.json)
-                } catch (e) {
-                }
-
                 let obj = {
+                    id: e.id,
                     desc: e.descrizione,
                     info: e.info,
                     giacenza: e.giacenza,
-                    costo: (e.eur + (e.cents / 100)),
-                    details: json,
-                    gnome: e.gnome
+                    costo: (e.prezzoEur + (e.prezzoCents / 100)),
+                    details: e.details,
+                    gruppo: e.gruppo
                 };
                 if (!map.has(e.descrizione)) map.set(e.descrizione, obj);
                 else map.get(e.descrizione).elements.push(obj)

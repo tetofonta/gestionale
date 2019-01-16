@@ -4,7 +4,7 @@ module.exports.privs = ["MAGAZZINO"];
 module.exports.format = [];
 
 module.exports.callback = function (proxy) {
-    proxy.getConnection().query(`SELECT id, json FROM details WHERE 1 ORDER BY id ASC`, (e, r, f) => {
+    proxy.getConnection().query(`SELECT id, json FROM details ORDER BY id ASC`, (e, r, f) => {
         if (r.length < 1) {
             proxy.send({state: false, err: ""});
             return;

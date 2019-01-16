@@ -22,7 +22,7 @@ class Err404 extends React.Component {
         return (
             <div id="dash">
                 <NavBar titleText="404 - Pagina non trovata =(" showHome={true} state={{auth: false, anchorEl: null}}/>
-                <Paper className={this.props.classes.marginTop}>
+                <Paper className={this.props.classes.marginTop} style={{padding: 25}}>
                     <Grid container spacing={24} justify="center" alignItems="center">
                         <Grid item xs={12}>
                             <Typography variant="display4"><i className="fas fa-sad-tear"/></Typography>

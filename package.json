@@ -62,6 +62,7 @@
     "start": "HTTPS=true && react-scripts start",
     "dev_ws_essential": "yarn concurrently --kill-others-on-fail \"yarn start-server\" \"yarn start-manager\" \"yarn start-broker\" \"yarn start-guest-tracker -worker-enable\" \"yarn start\"",
     "dev_ws": "yarn concurrently --kill-others-on-fail \"yarn start-server\" \"yarn start-manager\" \"yarn start-broker\" \"yarn start-guest-tracker -worker-enable\" \"yarn start-order-processor\" \"yarn start-order-printer\" \"yarn start\"",
+    "dev_ws_dbg": "yarn concurrently --kill-others-on-fail \"yarn start-manager\" \"yarn start-broker\" \"yarn start-guest-tracker -worker-enable\" \"yarn start-order-processor\" \"yarn start-order-printer\" \"yarn start\"",
     "dev_load_balancer": "yarn concurrently --kill-others-on-fail \"yarn start-load-balancer\" \"yarn start-server\" \"yarn start-manager\" \"yarn start-broker\" \"yarn start-guest-tracker -worker-enable\" \"yarn start-order-processor\" \"yarn start-order-printer\" \"yarn start\"",
     "dev": "yarn concurrently --kill-others-on-fail \"yarn start-load-balancer\" \"yarn start-captive\" \"yarn start-server\" \"yarn start-manager\" \"yarn start-broker\" \"yarn start-guest-tracker -worker-enable\" \"yarn start-order-processor\" \"yarn start-order-printer\" \"yarn start\"",
     "build": "react-scripts build",

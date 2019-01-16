@@ -38,7 +38,7 @@ function connect(host, user, password, db) {
 
 function secure(str) {
     if(!connection){
-        console.error("Trying to escape without getting a connection")
+        console.error("Trying to escape without getting a connection");
     }
     return connection.escape(str).replaceAll("'", "")
 }

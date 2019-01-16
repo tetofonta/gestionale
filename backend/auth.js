@@ -43,7 +43,6 @@ function onUserAuthenticated(proxy, cb, neededPrivs) {
             body = JSON.parse(body);
             if (body.state) {
                 data.token = undefined;
-                data.neededPrivs = undefined;
                 if (cb) cb(proxy);
             } else proxy.res.send(body);
         });
