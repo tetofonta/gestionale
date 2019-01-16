@@ -41,8 +41,11 @@ module.exports.format = [{
 
 
 module.exports.callback = function (proxy) {
+    console.log(proxy.recv);
     if (proxy.recv.modified)
         proxy.recv.modified.forEach(e => {
-            getConnection().query(`INSERT INTO cupons(id, tipo, valore, minimo, usato) VALUES (${proxy.secure(e.id)}, ${proxy.secure(e.tipo)}, ${proxy.secure(e.valore)}, ${proxy.secure(e.minimo)}, ${proxy.secure(e.usato) ? 1 : 0}) ON DUPLICATE KEY UPDATE id=${proxy.secure(e.id)}, tipo=${proxy.secure(e.tipo)}, valore=${proxy.secure(e.valore)}, minimo=${proxy.secure(e.minimo)}, usato=${proxy.secure(e.usato) ? 1 : 0}`);
+            proxy.getConnection().query(`INSERT INTO cupons(id, tipo, valore, minimo, usato, accettato_usr) VALUES (${proxy.secure(e.id)}, ${proxy.secure(e.tipo)}, ${proxy.secure(e.valore)}, ${proxy.secure(e.minimo)}, ${proxy.secure(e.usato) ? 1 : 0}) ON DUPLICATE KEY UPDATE id=${proxy.secure(e.id)}, tipo=${proxy.secure(e.tipo)}, valore=${proxy.secure(e.valore)}, minimo=${proxy.secure(e.minimo)}, usato=${proxy.secure(e.usato) ? 1 : 0}, accettato_usr=${proxy.secure(e.usato) ? proxy.recv.user : "null"}`, (e, r) => {
+                console.error(e)
+            });
         });
 }

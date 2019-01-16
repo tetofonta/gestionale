@@ -1,0 +1,13 @@
+{
+  "name": "module_magazzino_update",
+  "index": "index.js",
+  "version": "1.0",
+  "license": "GPL3",
+  "private": true,
+  "api_name": "updmagazzino",
+  "api_url": "/api/updateMagazzino",
+  "api_action": "POST",
+  "api_enable": true,
+  "dependencies": {
+  }
+}

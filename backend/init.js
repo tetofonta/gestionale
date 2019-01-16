@@ -131,3 +131,5 @@ if (cfg.network.use_ssl) {
     let server = http.createServer(app);
     server.listen(cfg.serverPort, () => console.log(`Listening on port ${cfg.serverPort}`));
 }
+
+getConnection().query('SELECT 1');

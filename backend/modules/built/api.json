@@ -120,6 +120,12 @@
       "action": "GET",
       "enabled": true
     },
+    "updmagazzino": {
+      "modulePath": "./modules/built/module_magazzino_update.js",
+      "url": "/api/updateMagazzino",
+      "action": "POST",
+      "enabled": true
+    },
     "getNWCreds": {
       "modulePath": "./modules/built/module_network_access_gen_credentials.js",
       "url": "/api/getNetworkCreds",
