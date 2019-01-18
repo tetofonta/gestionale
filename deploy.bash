@@ -54,18 +54,27 @@ fi
 
 cp "$CERT" ./output/SERVER/sslcert/server.crt
 cp "$KEY" ./output/SERVER/sslcert/server.key
+cp network.config.json ./output/SERVER/
 
 cp "$CERT" ./output/MQTT/broker/sslcert/server.crt
 cp "$KEY" ./output/MQTT/broker/sslcert/server.key
+cp network.config.json ./output/MQTT/broker/
+cp network.config.json ./output/MQTT/orderPrinter/
+cp network.config.json ./output/MQTT/orderProcessor/
+cp network.config.json ./output/MQTT/guestTracker/
 
 cp "$CERT" ./output/LOAD_BALANCER/sslcert/server.crt
 cp "$KEY" ./output/LOAD_BALANCER/sslcert/server.key
+cp network.config.json ./output/LOAD_BALANCER/
 
 cp "$CERT" ./output/MANAGER/sslcert/server.crt
 cp "$KEY" ./output/MANAGER/sslcert/server.key
+cp network.config.json ./output/MANAGER/
 
 cp "$CERT" ./output/CAPTIVE/sslcert/server.crt
 cp "$KEY" ./output/CAPTIVE/sslcert/server.key
+cp network.config.json ./output/CAPTIVE/
+
 
 #remove junk
 rm -rf ./build/
