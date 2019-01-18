@@ -120,8 +120,10 @@ function getPopupById(id) {
     let label = "";
 
     popups.forEach(popup => {
-        if (popup.id === id)
+        if (popup.value === id) {
             label = popup.label;
+            popup.used = true;
+        }
     });
 
     return label;
@@ -131,11 +133,24 @@ function getGruppoById(id) {
     let label = "";
 
     gruppi.forEach(gruppo => {
-        if (gruppo.id === id)
+        if (gruppo.value === id) {
             label = gruppo.label;
+            gruppo.used = true;
+        }
     });
 
     return label;
+}
+
+function getGreaterId(plist) {
+    let id = -1;
+
+    plist.forEach(e => {
+        if (e.id > id)
+            id = e.id;
+    });
+
+    return id;
 }
 
 class Magazzino extends React.Component {
@@ -162,6 +177,9 @@ class Magazzino extends React.Component {
         grpNavValue: 'add',
         anchorEl: null,
         modify: false,
+        greaterid: -1,
+        popupsRemovedId: [],
+        gruppiRemovedId: [],
     };
 
     componentDidMount() {
@@ -172,8 +190,7 @@ class Magazzino extends React.Component {
             if (res.state) {
                 res.list.forEach(e => {
                     popups.push({
-                        id: e.id,
-                        value: JSON.parse(e.json),
+                        value: e.id,
                         label: getPopupByJson(JSON.parse(e.json))
                     })
                 });
@@ -184,7 +201,6 @@ class Magazzino extends React.Component {
             if (res.state) {
                 res.list.forEach(e => {
                     gruppi.push({
-                        id: e.id,
                         value: e.id,
                         label: e.nome[0].toUpperCase() + e.nome.slice(1).toLowerCase()
                     })
@@ -196,8 +212,6 @@ class Magazzino extends React.Component {
                 let plist = [];
 
                 Object.keys(res.list).forEach(e => {
-                    console.log(res.list[e])
-
                     res.list[e].popup = {
                         value: res.list[e].details,
                         label: getPopupById(res.list[e].details)
@@ -207,12 +221,13 @@ class Magazzino extends React.Component {
                         value: res.list[e].gruppo,
                         label: getGruppoById(res.list[e].gruppo)
                     };
+
+                    res.list[e].showDelete = true;
+
                     plist.push(res.list[e]);
                 });
 
-                this.setState({productlist: plist, productlistCpy: JSON.parse(JSON.stringify(plist))});
-
-                console.log(this.state.productlist)
+                this.setState({productlist: plist, productlistCpy: JSON.parse(JSON.stringify(plist)), greaterId: getGreaterId(plist)});
             } else console.log(res);
         })));
     }
@@ -232,7 +247,7 @@ class Magazzino extends React.Component {
                                 <CustomTableCell>Descrizione</CustomTableCell>
                                 <CustomTableCell numeric>Giacenza</CustomTableCell>
                                 <CustomTableCell decimal>Costo</CustomTableCell>
-                                <CustomTableCell>Popop</CustomTableCell>
+                                <CustomTableCell>Popup</CustomTableCell>
                                 <CustomTableCell>Gruppo</CustomTableCell>
                                 <CustomTableCell className={classes.nomarginANDwidth} padding={'dense'}>
                                     {!this.state.modify &&
@@ -256,32 +271,22 @@ class Magazzino extends React.Component {
                                         className={classes.nomargin}
                                         onClick={e => {
                                             this.state.productlist.splice(0, 0, {
-                                                id: -1,
+                                                id: this.state.greaterid,
+                                                desc: "",
+                                                details: 1,
+                                                giacenza: 0,
                                                 costo: 1,
-
-
-
-                                                /*
-                                                costo: 10.1
-desc: "Vino bianco"
-details:
-dialog: {choose: Array(2)}
-display: true
-title: "Ancora alcuni dettagli..."
-__proto__: Object
-giacenza: 3
-gnome: "VINI"
-gruppo:
-label: "Vini"
-value: "vini"
-__proto__: Object
-info: null
-popup:
-label: "Frizzante - Naturale"
-value: {display: true, dialog: {…}, title: "Ancora alcuni dettagli..."}
-__proto__: Object
-__proto__: Object
-                                                 */
+                                                info: "",
+                                                gruppo: {
+                                                    value: 5,
+                                                    label: "All in one"
+                                                },
+                                                popup: {
+                                                    value: 1,
+                                                    label: "Nessuno"
+                                                },
+                                                edited: false,
+                                                showDelete: false
                                             });
                                             this.forceUpdate();
                                         }}>
@@ -294,6 +299,8 @@ __proto__: Object
                                                     user: window.ctx.get("username"),
                                                     token: window.ctx.get("token"),
                                                     modified: this.state.productlist.filter(e => e.edited)
+                                                }).then(e => {
+                                                    this.componentDidMount();
                                                 });
 
                                                 this.state.modify = false;
@@ -301,9 +308,11 @@ __proto__: Object
                                                     e.edited = false;
                                                 });
 
-                                                console.log(this.state.productlist[0])
-
                                                 this.forceUpdate();
+
+
+                                                console.log(this.state.productlist)
+
                                             }}>
                                             <SaveIcon className={classes.whiteIcon}/>
                                         </Button>
@@ -313,6 +322,7 @@ __proto__: Object
                         </TableHead>
                         <TableBody>
                             {!this.state.modify && this.state.productlist.map((e, i) => {
+                                let foo = this.state.productlist;
                                 return (
                                     <TableRow className={classes.row}>
                                         <CustomTableCell>{e.desc}</CustomTableCell>
@@ -384,16 +394,13 @@ __proto__: Object
                                                 <Select
                                                     value={this.state.productlist[i].popup !== undefined ? JSON.stringify(this.state.productlist[i].popup.value) : "nessuno"}
                                                     onChange={e => {
-                                                        let id = -1;
-                                                        popups.forEach(popup => {if (popup.label === getPopupByJson(JSON.parse(e.target.value))) id = popup.id;});
-
-                                                        console.log(e.target)
-
-                                                        this.state.productlist[i].popup.id = id;
                                                         this.state.productlist[i].popup.value = e.target.value;
                                                         this.state.productlist[i].popup.label = getPopupById(e.target.value);
+                                                        this.state.productlist[i].edited = true;
 
                                                         this.forceUpdate();
+
+                                                        console.log(this.state.productlist)
                                                     }}>
                                                     {popups.map(option => (
                                                         <MenuItem value={option.value}>
@@ -410,11 +417,11 @@ __proto__: Object
                                                     value={this.state.productlist[i].gruppo !== undefined ? this.state.productlist[i].gruppo.value : ""}
                                                     onChange={e => {
                                                         let id = -1;
-                                                        gruppi.forEach(gruppo => {if (gruppo.label === e.target.value) id = gruppo.id;});
+                                                        gruppi.forEach(gruppo => {if (gruppo.label === e.target.value) id = gruppo.value;});
 
-                                                        this.state.productlist[i].gruppo.id = id;
-                                                        this.state.productlist[i].gruppo.value = e.target.value;
+                                                        this.state.productlist[i].gruppo.value = id;
                                                         this.state.productlist[i].gruppo.label = getGruppoById(e.target.value);
+                                                        this.state.productlist[i].edited = true;
 
                                                         this.forceUpdate();
                                                     }}>
@@ -429,8 +436,8 @@ __proto__: Object
                                         </CustomTableCell>
                                         <CustomTableCell>
                                             <div>
-                                                <Button onClick={() => {
-                                                    this.setState({openDeleteDialog: true, product: i});
+                                                <Button disabled={!e.showDelete}
+                                                    onClick={() => {this.setState({openDeleteDialog: true, product: i});
                                                 }}>
                                                     <DeleteIcon/>
                                                 </Button>
@@ -465,6 +472,12 @@ __proto__: Object
                             Cancel
                         </Button>
                         <Button onClick={() => {
+                            POST(apiCalls.dltmagazzino, {
+                                user: window.ctx.get("username"),
+                                token: window.ctx.get("token"),
+                                modified: [this.state.productlist[this.state.product].id]
+                            });
+
                             this.state.openDeleteDialog = false;
                             this.state.productlist.splice(this.state.product, 1);
                             this.state.product = null;
@@ -570,8 +583,9 @@ __proto__: Object
                                     let rows =
                                         <div>
                                             <Typography>
-                                                <Button onClick={() => {
+                                                <Button disabled={e.used} onClick={() => {
                                                     if (popups.length > 1) {
+                                                        this.state.popupsRemovedId.push(e.value);
                                                         popups.splice(i, 1);
                                                         this.state.okPopDisabled = false;
                                                         this.forceUpdate();
@@ -601,29 +615,37 @@ __proto__: Object
                         <Button
                             disabled={this.state.okPopDisabled}
                             onClick={() => {
-                                let popupType = this.state.buttonsPopup[this.state.buttonsPopupSelected.findIndex(e => e === true)].toLowerCase();
-                                let elements = '';
+                                if (this.state.popNavValue === 'add') {
+                                    let popupType = this.state.buttonsPopup[this.state.buttonsPopupSelected.findIndex(e => e === true)].toLowerCase();
+                                    let elements = '';
 
-                                this.state.popupItems.forEach(e => {
-                                    elements += '"' + e + '", ';
-                                });
+                                    this.state.popupItems.forEach(e => {
+                                        elements += '"' + e + '", ';
+                                    });
 
-                                elements = elements.slice(0, -2);
+                                    elements = elements.slice(0, -2);
 
-                                let json = '{"display": ' + this.state.display;
+                                    let json = '{"display": ' + this.state.display;
 
-                                if (this.state.display)
-                                    json += ', "dialog": {"' + popupType + '": [' + elements + ']}, "title": "Ancora alcuni dettagli ..."';
+                                    if (this.state.display)
+                                        json += ', "dialog": {"' + popupType + '": [' + elements + ']}, "title": "Ancora alcuni dettagli ..."';
 
-                                json += '}';
+                                    json += '}';
+                                } else if (this.state.popNavValue === 'remove') {
+                                    console.log(this.state.popupsRemovedId)
+
+                                    POST(apiCalls.dltmagazzinopopups, {
+                                        user: window.ctx.get("username"),
+                                        token: window.ctx.get("token"),
+                                        modified: this.state.popupsRemovedId
+                                    });
+                                }
 
                                 this.state.openPopupDialog = false;
                                 this.state.popupItems = [];
                                 this.state.display = false;
                                 this.state.buttonsDisplaySelected = [false, true];
                                 this.state.buttonsPopupSelected = [true, false];
-
-                                console.log(json);
 
                                 this.forceUpdate();
                             }} color="primary" autoFocus>

@@ -1,0 +1,13 @@
+{
+  "name": "module_magazzino_delete",
+  "index": "index.js",
+  "version": "1.0",
+  "license": "GPL3",
+  "private": true,
+  "api_name": "dltmagazzino",
+  "api_url": "/api/deleteMagazzino",
+  "api_action": "POST",
+  "api_enable": true,
+  "dependencies": {
+  }
+}
