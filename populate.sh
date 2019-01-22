@@ -22,6 +22,13 @@ if [ ! -f ./network.config.json ]; then
 fi
 
 ln -s "$PWD/network.config.json" ./backend/
+ln -s "$PWD/network.config.json" ./backend/MQTT/
+ln -s "$PWD/network.config.json" ./backend/MQTT/CLIENTS/guestTracker/
+ln -s "$PWD/network.config.json" ./backend/MQTT/CLIENTS/orderPrinter/
+ln -s "$PWD/network.config.json" ./backend/MQTT/CLIENTS/orderProcessor//
+ln -s "$PWD/network.config.json" ./backend/LOAD_BALANCER/
+ln -s "$PWD/network.config.json" ./backend/CAPTIVE/
+ln -s "$PWD/network.config.json" ./backend/dataManager/
 ln -s "$PWD/network.config.json" ./src/configs/
 ln -s "$PWD/backend/modules/built/api.json" ./src/configs/
 

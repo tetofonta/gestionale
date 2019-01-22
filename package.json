@@ -43,7 +43,7 @@
   "devDependencies": {
     "concurrently": "^4.1.0",
     "jest": "^23.6.0",
-    "pkg": "^4.2.3",
+    "pkg": "~4.2.3",
     "rewire": "^4.0.1",
     "webpack": "~4.19.1",
     "webpack-cli": "^3.1.2",
