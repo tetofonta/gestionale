@@ -88,7 +88,12 @@ class Login extends React.Component {
                             <FormControl margin="normal" required fullWidth>
                                 <InputLabel htmlFor="email">Nome utente</InputLabel>
                                 <Input id="email" name="email" autoComplete="email" autoFocus
-                                       onChange={evt => creds.username = evt.target.value}/>
+                                       onChange={evt => creds.username = evt.target.value}
+                                       onKeyPress={(e) => {
+                                           if (e.key === 'Enter')
+                                               auth(this.continueLIN, creds.username, creds.password, this.show)
+                                       }}
+                                />
                             </FormControl>
                             <FormControl margin="normal" required fullWidth>
                                 <InputLabel htmlFor="password">Password</InputLabel>
@@ -141,18 +146,10 @@ class Login extends React.Component {
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
-                            <Button
-                                onClick={() => {
+                            <Button onClick={() => {
                                     this.show("", "", false);
                                     this.continueLIN();
-                                }}
-                                /*onKeyPress={(e) => {
-                                    if (e.key === 'Enter') {
-                                        this.show("", "", false);
-                                        this.continueLIN();
-                                    }
-                                }} */
-                                color="primary">
+                                }} color="primary">
                                 OK
                             </Button>
                         </DialogActions>

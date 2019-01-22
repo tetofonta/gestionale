@@ -4,7 +4,7 @@ module.exports.privs = ["MAGAZZINO"];
 module.exports.format = [];
 
 module.exports.callback = function (proxy) {
-    proxy.getConnection().query(`SELECT id, nome FROM gruppi_cucina ORDER BY id ASC`, (e, r, f) => {
+    proxy.getConnection().query(`SELECT id, nome, bg as image FROM gruppi_cucina ORDER BY id ASC`, (e, r, f) => {
         if (r.length < 1) {
             proxy.send({state: false, err: ""});
             return;

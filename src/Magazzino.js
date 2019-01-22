@@ -12,6 +12,7 @@ import {apiCalls} from "./consts";
 import Typography from "@material-ui/core/es/Typography/Typography";
 import SaveIcon from '@material-ui/icons/Save';
 import EditIcon from '@material-ui/icons/Edit';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import Select from "@material-ui/core/Select/Select";
 import FormControl from "@material-ui/core/FormControl/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText/FormHelperText";
@@ -32,6 +33,12 @@ import TableRow from "@material-ui/core/TableRow/TableRow";
 import TableBody from "@material-ui/core/TableBody/TableBody";
 import MenuIcon from "@material-ui/icons/Menu";
 import Menu from "@material-ui/core/Menu/Menu";
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
 
 const styles = theme => ({
     marginTop: {
@@ -94,105 +101,162 @@ const CustomTableCell = withStyles(theme => ({
     },
 }))(TableCell);
 
-let gruppi = [];
-let popups = [];
-
-function getPopupByJson(json) {
-    let label = "";
-
-    if (json.dialog) {
-        if (json.dialog.choose)
-            json.dialog.choose.forEach(ei => {
-                label += (ei.charAt(0).toUpperCase() + ei.slice(1)) + " - ";
-            });
-        else if (json.dialog.select)
-            json.dialog.select.forEach(ei => {
-                label += (ei.charAt(0).toUpperCase() + ei.slice(1)) + " - ";
-            });
-    } else
-        label += "Nessuno - ";
-
-    label = label.slice(0, -3);
-    return label;
-}
-
-function getPopupById(id) {
-    let label = "";
-
-    popups.forEach(popup => {
-        if (popup.value === id) {
-            label = popup.label;
-            popup.used = true;
-        }
-    });
-
-    return label;
-}
-
-function getGruppoById(id) {
-    let label = "";
-
-    gruppi.forEach(gruppo => {
-        if (gruppo.value === id) {
-            label = gruppo.label;
-            gruppo.used = true;
-        }
-    });
-
-    return label;
-}
-
-function getGreaterId(plist) {
-    let id = -1;
-
-    plist.forEach(e => {
-        if (e.id > id)
-            id = e.id;
-    });
-
-    return id;
-}
-
 class Magazzino extends React.Component {
     update = null;
     state = {
+        current: 1,
         gruppi: [],
-        popups: [],
-        list: [],
+        details: [],
         productlist: [],
-        productlistCpy: [],
         openDeleteDialog: false,
-        openPopupDialog: false,
-        openGruppoDialog: false,
         product: null,
-        popupItems: [],
-        buttonsPopup: ["Select", "Choose"],
-        buttonsDisplay: ["Si", "No"],
-        display: false,
-        buttonsPopupSelected: [true, false],
-        buttonsDisplaySelected: [false, true],
-        okGroupDisabled: true,
-        okPopDisabled: false,
-        popNavValue: 'add',
-        grpNavValue: 'add',
         anchorEl: null,
         modify: false,
-        greaterid: -1,
-        popupsRemovedId: [],
-        gruppiRemovedId: [],
+        detailsDisplay: [
+            {
+                value: true,
+                label: 'Si'
+            },
+            {
+                value: false,
+                label: 'No'
+            },
+        ],
+        detailsType: [
+            {
+                value: 'choose',
+                label: 'Choose'
+            },
+            {
+                value: 'select',
+                label: 'Select'
+            },
+        ],
+        detailsContent: ''
     };
 
-    componentDidMount() {
-        gruppi = [];
-        popups = [];
+    getDetailByJson(json) {
+        let label = "";
 
-        POST(apiCalls.getPopups, {user: window.ctx.get("username"), token: window.ctx.get("token")}).then(res => {
+        if (json.dialog) {
+            if (json.dialog.choose)
+                json.dialog.choose.forEach(ei => {
+                    label += (ei.charAt(0).toUpperCase() + ei.slice(1)) + " - ";
+                });
+            else if (json.dialog.select)
+                json.dialog.select.forEach(ei => {
+                    label += (ei.charAt(0).toUpperCase() + ei.slice(1)) + " - ";
+                });
+        } else
+            label += "Nessuno - ";
+
+        label = label.slice(0, -3);
+        return label;
+    }
+
+    getDetailById(id) {
+        let label = "";
+
+        this.state.details.forEach(detail => {
+            if (detail.value === id) {
+                label = detail.label;
+                detail.used = true;
+                detail.showButton = false;
+            }
+        });
+
+        return label;
+    }
+
+    getGruppoById(id) {
+        let label = "";
+
+        this.state.gruppi.forEach(gruppo => {
+            if (gruppo.value === id) {
+                label = gruppo.label;
+                gruppo.used = true;
+                gruppo.showButton = false;
+            }
+        });
+
+        return label;
+    }
+
+    getGreaterIdProdotto(plist) {
+        let id = -1;
+
+        plist.forEach(e => {
+            if (e.id > id)
+                id = e.id;
+        });
+
+        return id;
+    }
+
+    getGreaterIdGruppo() {
+        let id = -1;
+
+        this.state.gruppi.forEach(e => {
+            if (e.value > id)
+                id = e.value;
+        });
+
+        return id;
+    }
+
+    getItFromBoolean(bool) {
+        if (bool === true)
+            return 'Si';
+        else if (bool === false)
+            return 'No';
+    }
+
+    getRandomGroup() {
+        let gruppo = {
+            value: 0,
+            label: 'Error'
+        };
+
+        this.state.gruppi.forEach(gruppo1 => {
+            if (gruppo1.label === 'Bar')
+                gruppo = gruppo1;
+        });
+
+        return gruppo;
+    }
+
+    getRandomDetails() {
+        let detail = {
+            value: 0,
+            label: 'Error'
+        };
+
+        this.state.details.forEach(detail1 => {
+            if (detail1.label === 'Nessuno')
+                detail = detail1;
+        });
+
+        return detail;
+    }
+
+    componentDidMount() {
+        this.state.gruppi = [];
+        this.state.details = [];
+
+        POST(apiCalls.getDetails, {user: window.ctx.get("username"), token: window.ctx.get("token")}).then(res => {
             if (res.state) {
                 res.list.forEach(e => {
-                    popups.push({
+                    let json = JSON.parse(e.json);
+
+                    this.state.details.push({
                         value: e.id,
-                        label: getPopupByJson(JSON.parse(e.json))
-                    })
+                        label: this.getDetailByJson(json),
+                        json: json,
+                        used: false,
+                        showButton: true,
+                        display: json.display,
+                        type: json.dialog ? (json.dialog.choose ? 'choose' : 'select') : ''
+                    });
                 });
 
                 this.forceUpdate();
@@ -200,9 +264,12 @@ class Magazzino extends React.Component {
         }).then( () => POST(apiCalls.getGruppiCucina, {user: window.ctx.get("username"), token: window.ctx.get("token")}).then(res => {
             if (res.state) {
                 res.list.forEach(e => {
-                    gruppi.push({
+                    this.state.gruppi.push({
                         value: e.id,
-                        label: e.nome[0].toUpperCase() + e.nome.slice(1).toLowerCase()
+                        label: e.nome[0].toUpperCase() + e.nome.slice(1).toLowerCase(),
+                        image: e.image,
+                        used: false,
+                        showButton: true
                     })
                 });
                 this.forceUpdate();
@@ -212,14 +279,14 @@ class Magazzino extends React.Component {
                 let plist = [];
 
                 Object.keys(res.list).forEach(e => {
-                    res.list[e].popup = {
+                    res.list[e].detail = {
                         value: res.list[e].details,
-                        label: getPopupById(res.list[e].details)
+                        label: this.getDetailById(res.list[e].details)
                     };
 
                     res.list[e].gruppo = {
                         value: res.list[e].gruppo,
-                        label: getGruppoById(res.list[e].gruppo)
+                        label: this.getGruppoById(res.list[e].gruppo)
                     };
 
                     res.list[e].showDelete = true;
@@ -227,7 +294,13 @@ class Magazzino extends React.Component {
                     plist.push(res.list[e]);
                 });
 
-                this.setState({productlist: plist, productlistCpy: JSON.parse(JSON.stringify(plist)), greaterId: getGreaterId(plist)});
+                this.setState({productlist: plist,
+                    greaterIdProdotto: this.getGreaterIdProdotto(plist),
+                    greaterIdGruppo: this.getGreaterIdGruppo(),
+                    randomGruppo: this.getRandomGroup(),
+                    randomDetail: this.getRandomDetails()
+                });
+
             } else console.log(res);
         })));
     }
@@ -237,18 +310,20 @@ class Magazzino extends React.Component {
 
         return (
             <div>
-                <NavBar titleText='Magazzino' history={this.props.history} showHome={true}/>
+                <NavBar titleText={'Magazzino - ' + (this.state.current === 1 ? 'Prodotti' : (this.state.current === 2 ? 'Dettagli' : (this.state.current === 3 ? 'Gruppi' : '')))}
+                        history={this.props.history} showHome={true}/>
 
                 <Paper className={this.props.classes.marginTop}>
+                    {this.state.current === 1 &&
                     <Table className={classes.table}>
                         <TableHead>
                             <TableRow>
-                                <CustomTableCell>Pietanza</CustomTableCell>
-                                <CustomTableCell>Descrizione</CustomTableCell>
-                                <CustomTableCell numeric>Giacenza</CustomTableCell>
-                                <CustomTableCell decimal>Costo</CustomTableCell>
-                                <CustomTableCell>Popup</CustomTableCell>
-                                <CustomTableCell>Gruppo</CustomTableCell>
+                                <CustomTableCell style={{fontSize: 25}}>Pietanza</CustomTableCell>
+                                <CustomTableCell style={{fontSize: 25}}>Descrizione</CustomTableCell>
+                                <CustomTableCell style={{fontSize: 25}}>Giacenza</CustomTableCell>
+                                <CustomTableCell style={{fontSize: 25}}>Costo</CustomTableCell>
+                                <CustomTableCell style={{fontSize: 25}}>Dettagli</CustomTableCell>
+                                <CustomTableCell style={{fontSize: 25}}>Gruppo</CustomTableCell>
                                 <CustomTableCell className={classes.nomarginANDwidth} padding={'dense'}>
                                     {!this.state.modify &&
                                     <div className={classes.nomargin}>
@@ -270,24 +345,20 @@ class Magazzino extends React.Component {
                                     <div className={classes.nomargin}><Button
                                         className={classes.nomargin}
                                         onClick={e => {
-                                            this.state.productlist.splice(0, 0, {
-                                                id: this.state.greaterid,
+                                            this.state.productlist.push({
+                                                id: this.state.greaterIdProdotto + 1,
                                                 desc: "",
                                                 details: 1,
                                                 giacenza: 0,
                                                 costo: 1,
                                                 info: "",
-                                                gruppo: {
-                                                    value: 5,
-                                                    label: "All in one"
-                                                },
-                                                popup: {
-                                                    value: 1,
-                                                    label: "Nessuno"
-                                                },
+                                                gruppo: this.state.randomGruppo,
+                                                detail: this.state.randomDetail,
                                                 edited: false,
                                                 showDelete: false
                                             });
+                                            this.state.greaterIdProdotto++;
+
                                             this.forceUpdate();
                                         }}>
                                         <AddIcon className={classes.whiteIcon}/>
@@ -303,16 +374,14 @@ class Magazzino extends React.Component {
                                                     this.componentDidMount();
                                                 });
 
+                                                this.state.productlist.filter(e => e.edited).forEach(e => console.log(e))
+
                                                 this.state.modify = false;
                                                 this.state.productlist.forEach(e => {
                                                     e.edited = false;
                                                 });
 
                                                 this.forceUpdate();
-
-
-                                                console.log(this.state.productlist)
-
                                             }}>
                                             <SaveIcon className={classes.whiteIcon}/>
                                         </Button>
@@ -322,14 +391,13 @@ class Magazzino extends React.Component {
                         </TableHead>
                         <TableBody>
                             {!this.state.modify && this.state.productlist.map((e, i) => {
-                                let foo = this.state.productlist;
                                 return (
                                     <TableRow className={classes.row}>
                                         <CustomTableCell>{e.desc}</CustomTableCell>
-                                        <CustomTableCell>{e.info}</CustomTableCell>
-                                        <CustomTableCell numeric>{e.giacenza}</CustomTableCell>
-                                        <CustomTableCell decimal>{e.costo.toFixed(2)}</CustomTableCell>
-                                        <CustomTableCell>{e.popup.label}</CustomTableCell>
+                                        <CustomTableCell>{e.info === 'NULL' ? '' : e.info}</CustomTableCell>
+                                        <CustomTableCell>{e.giacenza}</CustomTableCell>
+                                        <CustomTableCell>{e.costo.toFixed(2)}</CustomTableCell>
+                                        <CustomTableCell>{e.detail.label}</CustomTableCell>
                                         <CustomTableCell>{e.gruppo.label}</CustomTableCell>
                                         <CustomTableCell>
                                             <Button onClick={() => {
@@ -356,7 +424,7 @@ class Magazzino extends React.Component {
                                             }}/>
                                         </CustomTableCell>
                                         <CustomTableCell>
-                                            <TextField placeholder={e.info} onChange={e => {
+                                            <TextField placeholder={e.info === 'NULL' ? '' : e.info} onChange={e => {
                                                 this.state.productlist[i].info = e.target.value;
                                                 this.state.productlist[i].edited = true;
 
@@ -366,7 +434,7 @@ class Magazzino extends React.Component {
                                                 this.update = setTimeout(() => this.forceUpdate(), 1000);
                                             }}/>
                                         </CustomTableCell>
-                                        <CustomTableCell numeric>
+                                        <CustomTableCell>
                                             <TextField placeholder={e.giacenza} onChange={e => {
                                                 this.state.productlist[i].giacenza = e.target.value;
                                                 this.state.productlist[i].edited = true;
@@ -377,10 +445,10 @@ class Magazzino extends React.Component {
                                                 this.update = setTimeout(() => this.forceUpdate(), 1000);
                                             }}/>
                                         </CustomTableCell>
-                                        <CustomTableCell decimal>
+                                        <CustomTableCell>
                                             <TextField placeholder={!e.costo ? 1.00 : e.costo.toFixed(2)}
                                                        onChange={e => {
-                                                           this.state.productlist[i].eur = isNaN(parseFloat(e.target.value)) ? 1.00 : parseFloat(e.target.value);
+                                                           this.state.productlist[i].costo = isNaN(parseFloat(e.target.value)) ? 1.00 : parseFloat(e.target.value);
                                                            this.state.productlist[i].edited = true;
 
                                                            if (this.update !== null)
@@ -392,23 +460,21 @@ class Magazzino extends React.Component {
                                         <CustomTableCell>
                                             <FormControl className={classes.formControl}>
                                                 <Select
-                                                    value={this.state.productlist[i].popup !== undefined ? JSON.stringify(this.state.productlist[i].popup.value) : "nessuno"}
+                                                    value={this.state.productlist[i].detail !== undefined ? JSON.stringify(this.state.productlist[i].detail.value) : "nessuno"}
                                                     onChange={e => {
-                                                        this.state.productlist[i].popup.value = e.target.value;
-                                                        this.state.productlist[i].popup.label = getPopupById(e.target.value);
+                                                        this.state.productlist[i].detail.value = e.target.value;
+                                                        this.state.productlist[i].detail.label = this.getDetailById(e.target.value);
                                                         this.state.productlist[i].edited = true;
 
                                                         this.forceUpdate();
-
-                                                        console.log(this.state.productlist)
                                                     }}>
-                                                    {popups.map(option => (
+                                                    {this.state.details.map(option => (
                                                         <MenuItem value={option.value}>
                                                             {option.label}
                                                         </MenuItem>
                                                     ))}
                                                 </Select>
-                                                <FormHelperText>Selezionare il popup</FormHelperText>
+                                                <FormHelperText>Selezionare il dettaglio</FormHelperText>
                                             </FormControl>
                                         </CustomTableCell>
                                         <CustomTableCell>
@@ -416,16 +482,13 @@ class Magazzino extends React.Component {
                                                 <Select
                                                     value={this.state.productlist[i].gruppo !== undefined ? this.state.productlist[i].gruppo.value : ""}
                                                     onChange={e => {
-                                                        let id = -1;
-                                                        gruppi.forEach(gruppo => {if (gruppo.label === e.target.value) id = gruppo.value;});
-
-                                                        this.state.productlist[i].gruppo.value = id;
-                                                        this.state.productlist[i].gruppo.label = getGruppoById(e.target.value);
+                                                        this.state.productlist[i].gruppo.value = e.target.value;
+                                                        this.state.productlist[i].gruppo.label = this.getGruppoById(e.target.value);
                                                         this.state.productlist[i].edited = true;
 
                                                         this.forceUpdate();
                                                     }}>
-                                                    {gruppi.map(option => (
+                                                    {this.state.gruppi.map(option => (
                                                         <MenuItem value={option.value}>
                                                             {option.label}
                                                         </MenuItem>
@@ -443,10 +506,7 @@ class Magazzino extends React.Component {
                                                 </Button>
 
                                                 {this.state.productlist[i].edited &&
-                                                <Button onClick={e => {
-                                                    this.state.productlist[i] = this.state.productlistCpy[i];
-                                                    this.forceUpdate();
-                                                }}>
+                                                <Button>
                                                     <EditIcon className={classes.redIcon}/>
                                                 </Button>}
                                             </div>
@@ -455,7 +515,313 @@ class Magazzino extends React.Component {
                                 );
                             })}
                         </TableBody>
-                    </Table>
+                    </Table>}
+                    {this.state.current === 2 &&
+                    <Table className={classes.table}>
+                        <TableHead>
+                            <TableRow>
+                                <CustomTableCell style={{fontSize: 25}}>Nome</CustomTableCell>
+                                <CustomTableCell style={{fontSize: 25}}>Visibilità</CustomTableCell>
+                                <CustomTableCell style={{fontSize: 25}}>Tipo</CustomTableCell>
+                                <CustomTableCell style={{fontSize: 25}}>Contenuto</CustomTableCell>
+                                <CustomTableCell style={{fontSize: 25}}>Utilizzato</CustomTableCell>
+                                <CustomTableCell className={classes.nomarginANDwidth} padding={'dense'}>
+                                    {!this.state.modify &&
+                                    <div className={classes.nomargin}>
+                                        <Button
+                                            className={classes.nomargin}
+                                            onClick={e => this.setState({modify: true})}>
+                                            <EditIcon className={classes.whiteIcon}/>
+                                        </Button>
+                                        <Button
+                                            className={classes.nomargin}
+                                            onClick={e => {
+                                                this.setState({anchorEl: e.currentTarget})
+                                            }}>
+                                            <MenuIcon className={classes.whiteIcon}/>
+                                        </Button>
+                                    </div>}
+
+                                    {this.state.modify &&
+                                    <div className={classes.nomargin}><Button
+                                        className={classes.nomargin}
+                                        onClick={e => {
+
+                                            this.forceUpdate();
+                                        }}>
+                                        <AddIcon className={classes.whiteIcon}/>
+                                    </Button>
+                                        <Button
+                                            className={classes.nomargin}
+                                            onClick={e => {
+
+                                            }}>
+                                            <SaveIcon className={classes.whiteIcon}/>
+                                        </Button>
+                                    </div>}
+                                </CustomTableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {!this.state.modify && this.state.details.map((e, i) => {
+                                return (
+                                    <TableRow className={classes.row}>
+                                        <CustomTableCell>{e.label}</CustomTableCell>
+                                        <CustomTableCell>{this.getItFromBoolean(e.json.display)}</CustomTableCell>
+                                        <CustomTableCell>{e.json.display ? (e.json.dialog.choose ? 'Choose' : 'Select') : ''}</CustomTableCell>
+                                        <CustomTableCell>
+                                            {e.json.display &&
+                                            <List>
+                                                {e.json.dialog.choose && e.json.dialog.choose.forEach((e1) => {
+                                                    console.log(e1)
+
+                                                    return(
+                                                        <ListItem>
+                                                            <ListItemIcon>
+                                                                <ChevronRightIcon/>
+                                                            </ListItemIcon>
+                                                            <ListItemText>
+                                                                {e1}
+                                                            </ListItemText>
+                                                        </ListItem>);
+                                                })}
+                                                {e.json.dialog.select && e.json.dialog.select.forEach((e1) => {
+                                                    return(<p>{e1}</p>);
+                                                })}
+                                                <ListItem>
+                                                    <ListItemIcon>
+                                                        <ChevronRightIcon/>
+                                                    </ListItemIcon>
+                                                    <ListItemText>
+                                                        e1
+                                                    </ListItemText>
+                                                </ListItem>
+                                            </List>}
+                                        </CustomTableCell>
+                                        <CustomTableCell>{this.getItFromBoolean(e.used)}</CustomTableCell>
+                                        <CustomTableCell>
+                                            <Button disabled={!e.showButton} onClick={() => {
+                                                this.setState({openDeleteDialog: true, detailToRemove: i});
+                                            }}>
+                                                <DeleteIcon/>
+                                            </Button>
+                                        </CustomTableCell>
+                                    </TableRow>
+                                );
+                            })}
+                            {this.state.modify && this.state.details.map((e, i) => {
+                                return(
+                                    <TableRow className={classes.row}>
+                                        <CustomTableCell>
+                                            <TextField placeholder={e.label} onChange={e => {
+                                                this.state.details[i].label = e.target.value;
+                                                this.state.details[i].edited = true;
+
+                                                if (this.update !== null)
+                                                    clearTimeout(this.update);
+
+                                                setTimeout(() => this.forceUpdate(), 1000);
+                                            }}/>
+                                        </CustomTableCell>
+                                        <CustomTableCell>
+                                            <FormControl className={classes.formControl}>
+                                                <Select
+                                                    value={this.state.details[i] ? this.state.details[i].display : ''}
+                                                    onChange={e => {
+                                                        this.state.details[i].display = e.target.value;
+                                                        this.state.details[i].edited = true;
+
+                                                        this.forceUpdate();
+                                                    }}>
+                                                    {this.state.detailsDisplay.map(option => (
+                                                        <MenuItem value={option.value}>
+                                                            {option.label}
+                                                        </MenuItem>
+                                                    ))}
+                                                </Select>
+                                                <FormHelperText>Selezionare la visibilità</FormHelperText>
+                                            </FormControl>
+                                        </CustomTableCell>
+                                        {this.state.details[i].display &&
+                                        <CustomTableCell>
+                                            <FormControl className={classes.formControl}>
+                                                <Select
+                                                    value={this.state.details[i] ? this.state.details[i].type : ''}
+                                                    onChange={e => {
+                                                        this.state.details[i].type = e.target.value;
+                                                        this.state.details[i].edited = true;
+
+                                                        this.forceUpdate();
+                                                    }}>
+                                                    {this.state.detailsType.map(option => (
+                                                        <MenuItem value={option.value}>
+                                                            {option.label}
+                                                        </MenuItem>
+                                                    ))}
+                                                </Select>
+                                                <FormHelperText>Selezionare il tipo</FormHelperText>
+                                            </FormControl>
+                                        </CustomTableCell>}
+                                        {this.state.details[i].display &&
+                                        <CustomTableCell>
+                                            {/*<TextField placeholder={e.} onChange={e => {*/}
+                                                {/*this.state.details[i].label = e.target.value;*/}
+                                                {/*this.state.details[i].edited = true;*/}
+
+                                                {/*if (this.update !== null)*/}
+                                                    {/*clearTimeout(this.update);*/}
+
+                                                {/*setTimeout(() => this.forceUpdate(), 1000);*/}
+                                            {/*}}/>*/}
+                                        </CustomTableCell>}
+                                        {!this.state.details[i].display &&
+                                        <CustomTableCell/>}
+                                        {!this.state.details[i].display &&
+                                        <CustomTableCell/>}
+                                        <CustomTableCell>{this.getItFromBoolean(e.used)}</CustomTableCell>
+                                        <CustomTableCell>
+                                            <div>
+                                                <Button disabled={!e.showButton} onClick={() => {
+                                                    this.setState({openDeleteDialog: true, detailToRemove: i});
+                                                }}>
+                                                    <DeleteIcon/>
+                                                </Button>
+                                                {this.state.details[i].edited &&
+                                                <Button>
+                                                    <EditIcon className={classes.redIcon}/>
+                                                </Button>}
+                                            </div>
+                                        </CustomTableCell>
+                                    </TableRow>
+                                );})}
+                        </TableBody>
+                    </Table>}
+                    {this.state.current === 3 &&
+                    <Table className={classes.table}>
+                        <TableHead>
+                            <TableRow>
+                                <CustomTableCell style={{fontSize: 25}}>Nome</CustomTableCell>
+                                <CustomTableCell style={{fontSize: 25}}>Immagine</CustomTableCell>
+                                <CustomTableCell style={{fontSize: 25}}>Utilizzato</CustomTableCell>
+                                <CustomTableCell className={classes.nomarginANDwidth} padding={'dense'}>
+                                    {!this.state.modify &&
+                                    <div className={classes.nomargin}>
+                                        <Button
+                                            className={classes.nomargin}
+                                            onClick={e => this.setState({modify: true})}>
+                                            <EditIcon className={classes.whiteIcon}/>
+                                        </Button>
+                                        <Button
+                                            className={classes.nomargin}
+                                            onClick={e => {
+                                                this.setState({anchorEl: e.currentTarget})
+                                            }}>
+                                            <MenuIcon className={classes.whiteIcon}/>
+                                        </Button>
+                                    </div>}
+
+                                    {this.state.modify &&
+                                    <div className={classes.nomargin}><Button
+                                        className={classes.nomargin}
+                                        onClick={e => {
+                                            this.state.gruppi.push({
+                                                value: this.state.greaterIdGruppo + 1,
+                                                label: '',
+                                                image: '/bg/food.jpg',
+                                                used: false,
+                                                showButton: false
+                                            });
+
+                                            this.state.greaterIdGruppo++;
+                                            this.forceUpdate();
+                                        }}>
+                                        <AddIcon className={classes.whiteIcon}/>
+                                    </Button>
+                                        <Button
+                                            className={classes.nomargin}
+                                            onClick={e => {
+                                                POST(apiCalls.updGruppiCucina, {
+                                                    user: window.ctx.get("username"),
+                                                    token: window.ctx.get("token"),
+                                                    modified: this.state.gruppi.filter(e => e.edited)
+                                                }).then(e =>
+                                                    this.componentDidMount()
+                                                );
+
+                                                this.state.modify = false;
+                                                this.state.productlist.forEach(e => {
+                                                    e.edited = false;
+                                                });
+
+                                                this.forceUpdate();
+                                            }}>
+                                            <SaveIcon className={classes.whiteIcon}/>
+                                        </Button>
+                                    </div>}
+                                </CustomTableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {!this.state.modify && this.state.gruppi.map((e, i) => {
+                                return (
+                                    <TableRow className={classes.row}>
+                                        <CustomTableCell>{e.label}</CustomTableCell>
+                                        <CustomTableCell>{e.image}</CustomTableCell>
+                                        <CustomTableCell>{this.getItFromBoolean(e.used)}</CustomTableCell>
+                                        <CustomTableCell>
+                                            <Button disabled={!e.showButton} onClick={() => {
+                                                this.setState({openDeleteDialog: true, gruppoToRemove: i});
+                                            }}>
+                                                <DeleteIcon/>
+                                            </Button>
+                                        </CustomTableCell>
+                                    </TableRow>
+                                );
+                            })}
+                            {this.state.modify && this.state.gruppi.map((e, i) => {
+                                return (
+                                    <TableRow className={classes.row}>
+                                        <CustomTableCell>
+                                            <TextField placeholder={e.label} onChange={e => {
+                                                this.state.gruppi[i].label = e.target.value;
+                                                this.state.gruppi[i].edited = true;
+
+                                                if (this.update !== null)
+                                                    clearTimeout(this.update);
+
+                                                setTimeout(() => this.forceUpdate(), 1000);
+                                            }}/>
+                                        </CustomTableCell>
+                                        <CustomTableCell>
+                                            <TextField placeholder={e.image} onChange={e => {
+                                                this.state.gruppi[i].image = e.target.value;
+                                                this.state.gruppi[i].edited = true;
+
+                                                if (this.update !== null)
+                                                    clearTimeout(this.update);
+
+                                                setTimeout(() => this.forceUpdate(), 1000);
+                                            }}/>
+                                        </CustomTableCell>
+                                        <CustomTableCell>{this.getItFromBoolean(e.used)}</CustomTableCell>
+                                        <CustomTableCell>
+                                            <div>
+                                                <Button disabled={!e.showButton} onClick={() => {
+                                                    this.setState({openDeleteDialog: true, gruppoToRemove: i});
+                                                }}>
+                                                    <DeleteIcon/>
+                                                </Button>
+                                                {this.state.gruppi[i].edited &&
+                                                <Button>
+                                                    <EditIcon className={classes.redIcon}/>
+                                                </Button>}
+                                            </div>
+                                    </CustomTableCell>
+                                    </TableRow>
+                                );
+                            })}
+                        </TableBody>
+                    </Table>}
                 </Paper>
                 {/*delete*/}
                 {this.state.openDeleteDialog && <Dialog
@@ -465,275 +831,58 @@ class Magazzino extends React.Component {
                     }>
                     <DialogTitle>
                         Sei sicuro di voler eliminare
-                        "{(this.state.productlist[this.state.product]) ? this.state.productlist[this.state.product].desc.toLowerCase() : " "}"?
+                        "{
+                        this.state.current === 1 ?
+                            ((this.state.productlist[this.state.product]) ? this.state.productlist[this.state.product].desc.toLowerCase() : " ") :
+                            this.state.current === 2 ?
+                                ((this.state.details[this.state.detailToRemove]) ? this.state.details[this.state.detailToRemove].label.toLowerCase() : " ") :
+                                this.state.current === 3 ?
+                                    ((this.state.gruppi[this.state.gruppoToRemove]) ? this.state.gruppi[this.state.gruppoToRemove].label.toLowerCase() : " ") :
+                                    " "
+                        }"?
                     </DialogTitle>
                     <DialogActions>
                         <Button onClick={() => this.setState({openDeleteDialog: false})} color="primary">
                             Cancel
                         </Button>
                         <Button onClick={() => {
-                            POST(apiCalls.dltmagazzino, {
-                                user: window.ctx.get("username"),
-                                token: window.ctx.get("token"),
-                                modified: [this.state.productlist[this.state.product].id]
-                            });
+                            if (this.state.current === 1){
+                                POST(apiCalls.dltmagazzino, {
+                                    user: window.ctx.get("username"),
+                                    token: window.ctx.get("token"),
+                                    modified: [this.state.productlist[this.state.product].id]
+                                });
+                                this.state.productlist.splice(this.state.product, 1);
+                                this.state.product = null;
+                            } else if (this.state.current === 3) {
+                                POST(apiCalls.dltmagazzinogruppi, {
+                                    user: window.ctx.get("username"),
+                                    token: window.ctx.get("token"),
+                                    modified: [this.state.gruppi[this.state.gruppoToRemove].value]
+                                });
+                                this.state.gruppi.splice(this.state.gruppoToRemove, 1);
+                                this.state.gruppoToRemove = null;
+                            }
 
                             this.state.openDeleteDialog = false;
-                            this.state.productlist.splice(this.state.product, 1);
-                            this.state.product = null;
                             this.forceUpdate();
                         }} color="primary" autoFocus>
                             Ok
                         </Button>
                     </DialogActions>
                 </Dialog> }
-                {/*popup*/}
-                <Dialog
-                    open={this.state.openPopupDialog}
-                    onClose={() =>
-                        this.setState({openPopupDialog: false})
-                    }>
-                    <DialogTitle>Gestione popup</DialogTitle>
-                    <div style={{width: 350}}>
-                        <div style={{marginLeft: 30}}>
-                            <BottomNavigation value={this.state.popNavValue}
-                                              onChange={(e, v) => {
-                                                  this.setState({popNavValue: v, okPopDisabled: v === 'remove'})
-                                              }}>
-                                <BottomNavigationAction label="Aggiungi" value="add" icon={<AddIcon/>}/>
-                                <BottomNavigationAction label="Rimuovi" value="remove" icon={<RemoveIcon/>}/>
-                            </BottomNavigation>
-
-                            {/*Aggiunta*/}
-                            {this.state.popNavValue === 'add' &&
-                            <div>
-                                <DialogContentText>
-                                    Selezionare la visibilità del popup:
-                                </DialogContentText>
-                                <DialogContent>
-                                    {this.state.buttonsDisplay.map((e, i) => {
-                                        return <FormControlLabel
-                                            control={<Radio color="primary"/>}
-                                            label={e}
-                                            checked={this.state.buttonsDisplaySelected[i]}
-                                            onChange={() => {
-                                                let bdsCpy = this.state.buttonsDisplaySelected;
-                                                this.state.buttonsDisplaySelected = [];
-                                                bdsCpy.map((e1, i1) => this.state.buttonsDisplaySelected.push(i1 === i));
-
-                                                this.state.display = e === "Si";
-
-                                                this.forceUpdate();
-                                            }}
-                                        />
-                                    })}
-                                </DialogContent>
-
-                                {this.state.display &&
-                                <div>
-                                    <DialogContentText>
-                                        Selezionare la tipologia di popup:
-                                    </DialogContentText>
-                                    <DialogContent>
-                                        {this.state.buttonsPopup.map((e, i) => {
-                                            return <FormControlLabel
-                                                control={<Radio color="primary"/>}
-                                                label={e}
-                                                checked={this.state.buttonsPopupSelected[i]}
-                                                onChange={() => {
-                                                    let bdsCpy = this.state.buttonsPopupSelected;
-                                                    this.state.buttonsPopupSelected = [];
-                                                    bdsCpy.map((e1, i1) => this.state.buttonsPopupSelected.push(i1 === i));
-
-                                                    this.forceUpdate();
-                                                }}
-                                            />
-                                        })}
-                                    </DialogContent>
-                                    <DialogContentText style={{maxWidth: 400, margin: 0}}>
-                                        Indicare i nomi dei popup:
-                                        <Button onClick={() => {
-                                            this.state.popupItems.push("");
-                                            this.forceUpdate();
-                                        }}><AddIcon/></Button>
-                                    </DialogContentText>
-                                    <DialogContent>
-                                        {this.state.popupItems.map((e, i) => {
-                                            let rows =
-                                                <div>
-                                                    <Typography>
-                                                        <TextField onChange={e => {
-                                                            this.state.popupItems[i] = e.target.value;
-                                                        }}/>
-                                                        <Button onClick={() => {
-                                                            this.state.popupItems.splice(i, 1);
-                                                            this.forceUpdate();
-                                                        }}><RemoveIcon/></Button>
-                                                    </Typography>
-                                                </div>;
-                                            return <div> {rows} </div>;
-                                        })}
-                                    </DialogContent>
-                                </div>}
-                            </div>}
-                            {/*Rimozione*/}
-                            {this.state.popNavValue === 'remove' &&
-                            <div>
-                                {popups.map((e, i) => {
-                                    let rows =
-                                        <div>
-                                            <Typography>
-                                                <Button disabled={e.used} onClick={() => {
-                                                    if (popups.length > 1) {
-                                                        this.state.popupsRemovedId.push(e.value);
-                                                        popups.splice(i, 1);
-                                                        this.state.okPopDisabled = false;
-                                                        this.forceUpdate();
-                                                    }
-                                                }}><DeleteIcon/></Button>
-                                                {e.label}
-                                            </Typography>
-                                        </div>;
-                                    return <div> {rows} </div>;
-                                })}
-                            </div>}
-                        </div>
-                    </div>
-                    <DialogActions>
-                        <Button
-                            onClick={() => {
-                                this.state.openPopupDialog = false;
-                                this.state.popupItems = [];
-                                this.state.display = false;
-                                this.state.buttonsDisplaySelected = [false, true];
-                                this.state.buttonsPopupSelected = [true, false];
-
-                                this.forceUpdate();
-                            }} color="primary">
-                            Cancel
-                        </Button>
-                        <Button
-                            disabled={this.state.okPopDisabled}
-                            onClick={() => {
-                                if (this.state.popNavValue === 'add') {
-                                    let popupType = this.state.buttonsPopup[this.state.buttonsPopupSelected.findIndex(e => e === true)].toLowerCase();
-                                    let elements = '';
-
-                                    this.state.popupItems.forEach(e => {
-                                        elements += '"' + e + '", ';
-                                    });
-
-                                    elements = elements.slice(0, -2);
-
-                                    let json = '{"display": ' + this.state.display;
-
-                                    if (this.state.display)
-                                        json += ', "dialog": {"' + popupType + '": [' + elements + ']}, "title": "Ancora alcuni dettagli ..."';
-
-                                    json += '}';
-                                } else if (this.state.popNavValue === 'remove') {
-                                    console.log(this.state.popupsRemovedId)
-
-                                    POST(apiCalls.dltmagazzinopopups, {
-                                        user: window.ctx.get("username"),
-                                        token: window.ctx.get("token"),
-                                        modified: this.state.popupsRemovedId
-                                    });
-                                }
-
-                                this.state.openPopupDialog = false;
-                                this.state.popupItems = [];
-                                this.state.display = false;
-                                this.state.buttonsDisplaySelected = [false, true];
-                                this.state.buttonsPopupSelected = [true, false];
-
-                                this.forceUpdate();
-                            }} color="primary" autoFocus>
-                            Ok
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-                {/*gruppo*/}
-                <Dialog
-                    open={this.state.openGruppoDialog}
-                    onClose={() =>
-                        this.setState({openGruppoDialog: false})
-                    }>
-                    <DialogTitle>Gestione gruppi</DialogTitle>
-                    <div style={{width: 350}}>
-                        <div style={{marginLeft: 30}}>
-                            <BottomNavigation value={this.state.grpNavValue}
-                                              onChange={(e, v) => this.setState({grpNavValue: v})}>
-                                <BottomNavigationAction label="Aggiungi" value="add" icon={<AddIcon/>}/>
-                                <BottomNavigationAction label="Rimuovi" value="remove" icon={<RemoveIcon/>}/>
-                            </BottomNavigation>
-
-                            {/*Aggiunta*/}
-                            {this.state.grpNavValue === 'add' &&
-                            <DialogContent>
-                                <TextField placeholder={"Inserire il nome del gruppo"}
-                                           onChange={e => {
-                                               this.state.newGruppo = e.target.value;
-
-                                               if (this.state.okGroupDisabled)
-                                                   this.state.okGroupDisabled = false;
-
-                                               if (this.update !== null)
-                                                   clearTimeout(this.update);
-
-                                               this.update = setTimeout(() => this.forceUpdate(), 500);
-                                           }}/>
-                            </DialogContent>}
-                            {/*Rimozione*/}
-                            {this.state.grpNavValue === 'remove' &&
-                            <div>
-                                {gruppi.map((e, i) => {
-                                    let rows =
-                                        <div>
-                                            <Typography>
-                                                <Button onClick={() => {
-                                                    if (gruppi.length > 1) {
-                                                        gruppi.splice(i, 1);
-                                                        this.state.okGroupDisabled = false;
-                                                        this.forceUpdate();
-                                                    }
-                                                }}><DeleteIcon/></Button>
-                                                {e.label}
-                                            </Typography>
-                                        </div>;
-                                    return <div> {rows} </div>;
-                                })}
-                            </div>}
-                        </div>
-                    </div>
-                    <DialogActions>
-                        <Button
-                            onClick={() => this.setState({openGruppoDialog: false})} color="primary">
-                            Cancel
-                        </Button>
-                        <Button
-                            disabled={this.state.okGroupDisabled}
-                            onClick={() => {
-                                this.state.openGruppoDialog = false;
-
-                                console.log(this.state.newGruppo);
-
-                                this.forceUpdate();
-                            }} color="primary" autoFocus>
-                            Ok
-                        </Button>
-                    </DialogActions>
-                </Dialog>
                 {/*Menu*/}
                 <Menu
                     id="menu"
                     anchorEl={this.state.anchorEl}
                     open={Boolean(this.state.anchorEl)}
                     onClose={() => this.setState({anchorEl: null})}>
-                    <MenuItem onClick={() => this.setState({anchorEl: null, openPopupDialog: true})}>Gestione
-                        popup</MenuItem>
-                    <MenuItem onClick={() => this.setState({anchorEl: null, openGruppoDialog: true})}>Gestione
-                        Gruppi</MenuItem>
+                    <MenuItem onClick={() => this.setState({anchorEl: null, current: 1})}>Gestione
+                        prodotti</MenuItem>
+                    <MenuItem onClick={() => this.setState({anchorEl: null, current: 2})}>Gestione
+                        dettagli</MenuItem>
+                    <MenuItem onClick={() => this.setState({anchorEl: null, current: 3})}>Gestione
+                        gruppi</MenuItem>
                 </Menu>
             </div>)
     }

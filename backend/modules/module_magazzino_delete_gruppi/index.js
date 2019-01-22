@@ -7,7 +7,7 @@ module.exports.format = [{
     type: "array",
     inner: [
         {
-            field: "id",
+            field: "value",
             required: true,
             type: "number",
             strict: false

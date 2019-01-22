@@ -17,8 +17,6 @@ module.exports.format = [{
 
 
 module.exports.callback = function (proxy) {
-    console.log(proxy.recv)
-
     if (proxy.recv.modified)
         proxy.recv.modified.forEach(e => {
             proxy.getConnection().query(`DELETE FROM details WHERE id=${proxy.secure(e)}`, (e, r) => {
