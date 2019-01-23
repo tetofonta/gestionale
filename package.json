@@ -35,7 +35,7 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-scripts": "^2.1.1",
-    "request": "^2.88.0",
+    "request": "~2.88.0",
     "secure-random-string": "^1.1.0",
     "xlsx": "^0.14.1",
     "html2pdf": "latest"

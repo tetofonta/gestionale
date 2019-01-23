@@ -204,6 +204,17 @@ class Magazzino extends React.Component {
         return id;
     }
 
+    getGreaterIdDetails() {
+        let id = -1;
+
+        this.state.details.forEach(e => {
+            if (e.value > id)
+                id = e.value;
+        });
+
+        return id;
+    }
+
     getItFromBoolean(bool) {
         if (bool === true)
             return 'Si';
@@ -297,6 +308,7 @@ class Magazzino extends React.Component {
                 this.setState({productlist: plist,
                     greaterIdProdotto: this.getGreaterIdProdotto(plist),
                     greaterIdGruppo: this.getGreaterIdGruppo(),
+                    greaterIdDetails: this.getGreaterIdDetails(),
                     randomGruppo: this.getRandomGroup(),
                     randomDetail: this.getRandomDetails()
                 });
@@ -345,18 +357,25 @@ class Magazzino extends React.Component {
                                     <div className={classes.nomargin}><Button
                                         className={classes.nomargin}
                                         onClick={e => {
-                                            this.state.productlist.push({
-                                                id: this.state.greaterIdProdotto + 1,
-                                                desc: "",
-                                                details: 1,
-                                                giacenza: 0,
-                                                costo: 1,
-                                                info: "",
-                                                gruppo: this.state.randomGruppo,
-                                                detail: this.state.randomDetail,
-                                                edited: false,
-                                                showDelete: false
-                                            });
+                                            // this.state.productlist.push({
+                                            //     id: this.state.greaterIdProdotto + 1,
+                                            //     desc: "",
+                                            //     details: 1,
+                                            //     giacenza: 0,
+                                            //     costo: 1,
+                                            //     info: "",
+                                            //     gruppo: this.state.randomGruppo,
+                                            //     detail: this.state.randomDetail,
+                                            //     edited: false,
+                                            //     showDelete: false
+                                            // });
+
+                                            this.state.productlist.push(JSON.parse(JSON.stringify(this.state.productlist[this.state.productlist.length - 1])));
+                                            this.state.productlist[this.state.productlist.length - 1].id = this.state.greaterIdProdotto + 1;
+                                            this.state.productlist[this.state.productlist.length - 1].desc = 'Nuovo';
+                                            this.state.productlist[this.state.productlist.length - 1].info = '';
+                                            this.state.productlist[this.state.productlist.length - 1].costo = 1.00;
+
                                             this.state.greaterIdProdotto++;
 
                                             this.forceUpdate();
@@ -373,8 +392,6 @@ class Magazzino extends React.Component {
                                                 }).then(e => {
                                                     this.componentDidMount();
                                                 });
-
-                                                this.state.productlist.filter(e => e.edited).forEach(e => console.log(e))
 
                                                 this.state.modify = false;
                                                 this.state.productlist.forEach(e => {
@@ -460,11 +477,14 @@ class Magazzino extends React.Component {
                                         <CustomTableCell>
                                             <FormControl className={classes.formControl}>
                                                 <Select
-                                                    value={this.state.productlist[i].detail !== undefined ? JSON.stringify(this.state.productlist[i].detail.value) : "nessuno"}
+                                                    value={JSON.stringify(this.state.productlist[i].detail.value)}
                                                     onChange={e => {
                                                         this.state.productlist[i].detail.value = e.target.value;
                                                         this.state.productlist[i].detail.label = this.getDetailById(e.target.value);
                                                         this.state.productlist[i].edited = true;
+
+                                                        console.log(this.state.productlist)
+                                                        console.log(this.state.details)
 
                                                         this.forceUpdate();
                                                     }}>
@@ -485,6 +505,9 @@ class Magazzino extends React.Component {
                                                         this.state.productlist[i].gruppo.value = e.target.value;
                                                         this.state.productlist[i].gruppo.label = this.getGruppoById(e.target.value);
                                                         this.state.productlist[i].edited = true;
+
+                                                        console.log(i + "--->" + this.state.productlist.length)
+                                                        console.log(this.state.productlist)
 
                                                         this.forceUpdate();
                                                     }}>
@@ -546,7 +569,26 @@ class Magazzino extends React.Component {
                                     <div className={classes.nomargin}><Button
                                         className={classes.nomargin}
                                         onClick={e => {
+                                            this.state.details.push({
+                                                display: true,
+                                                edited: true,
+                                                label: "Nuovo",
+                                                showButton: false,
+                                                type: "choose",
+                                                used: false,
+                                                value: this.state.greaterIdDetails + 1,
+                                                json: {
+                                                    dialog: {
+                                                        choose: [
+                                                            "Nuovo"
+                                                        ]
+                                                    },
+                                                    display: true,
+                                                    title: "Ancora alcuni dettagli..."
+                                                }
+                                            });
 
+                                            this.state.greaterIdDetails++;
                                             this.forceUpdate();
                                         }}>
                                         <AddIcon className={classes.whiteIcon}/>
@@ -554,7 +596,36 @@ class Magazzino extends React.Component {
                                         <Button
                                             className={classes.nomargin}
                                             onClick={e => {
+                                                this.state.details.map((e1, i) => {
+                                                    console.log(e1)
 
+                                                    if (e1.display) {
+                                                        Object.keys(e1.json.dialog).map(e2 => {
+                                                            e1.json.dialog[e2].map((e3, i1) => {
+                                                                if (e3 === '')
+                                                                    e1.json.dialog[e2].splice(i1, 1);
+                                                            });
+                                                        })
+                                                    }
+
+                                                    e1.showButton = !e1.used;
+                                                    e1.json.display = e1.display;
+                                                });
+
+                                                POST(apiCalls.updDetails, {
+                                                    user: window.ctx.get("username"),
+                                                    token: window.ctx.get("token"),
+                                                    modified: this.state.details.filter(e => e.edited)
+                                                }).then(e => {
+                                                    this.componentDidMount();
+                                                });
+
+                                                this.state.modify = false;
+                                                this.state.details.forEach(e => {
+                                                    e.edited = false;
+                                                });
+
+                                                this.forceUpdate();
                                             }}>
                                             <SaveIcon className={classes.whiteIcon}/>
                                         </Button>
@@ -571,31 +642,20 @@ class Magazzino extends React.Component {
                                         <CustomTableCell>{e.json.display ? (e.json.dialog.choose ? 'Choose' : 'Select') : ''}</CustomTableCell>
                                         <CustomTableCell>
                                             {e.json.display &&
-                                            <List>
-                                                {e.json.dialog.choose && e.json.dialog.choose.forEach((e1) => {
-                                                    console.log(e1)
-
-                                                    return(
-                                                        <ListItem>
-                                                            <ListItemIcon>
-                                                                <ChevronRightIcon/>
-                                                            </ListItemIcon>
-                                                            <ListItemText>
-                                                                {e1}
-                                                            </ListItemText>
-                                                        </ListItem>);
+                                            <List style={{margin: 0, padding: 0}}>
+                                                {Object.keys(e.json.dialog).map(e1 => {
+                                                    return e.json.dialog[e1].map((e2) => {
+                                                        return(
+                                                            <ListItem style={{margin: 0, padding: 2}}>
+                                                                <ListItemIcon>
+                                                                    <ChevronRightIcon/>
+                                                                </ListItemIcon>
+                                                                <ListItemText>
+                                                                    {e2.charAt(0).toUpperCase() + e2.slice(1)}
+                                                                </ListItemText>
+                                                            </ListItem>);
+                                                    })
                                                 })}
-                                                {e.json.dialog.select && e.json.dialog.select.forEach((e1) => {
-                                                    return(<p>{e1}</p>);
-                                                })}
-                                                <ListItem>
-                                                    <ListItemIcon>
-                                                        <ChevronRightIcon/>
-                                                    </ListItemIcon>
-                                                    <ListItemText>
-                                                        e1
-                                                    </ListItemText>
-                                                </ListItem>
                                             </List>}
                                         </CustomTableCell>
                                         <CustomTableCell>{this.getItFromBoolean(e.used)}</CustomTableCell>
@@ -612,17 +672,7 @@ class Magazzino extends React.Component {
                             {this.state.modify && this.state.details.map((e, i) => {
                                 return(
                                     <TableRow className={classes.row}>
-                                        <CustomTableCell>
-                                            <TextField placeholder={e.label} onChange={e => {
-                                                this.state.details[i].label = e.target.value;
-                                                this.state.details[i].edited = true;
-
-                                                if (this.update !== null)
-                                                    clearTimeout(this.update);
-
-                                                setTimeout(() => this.forceUpdate(), 1000);
-                                            }}/>
-                                        </CustomTableCell>
+                                        <CustomTableCell>{e.label}</CustomTableCell>
                                         <CustomTableCell>
                                             <FormControl className={classes.formControl}>
                                                 <Select
@@ -664,15 +714,47 @@ class Magazzino extends React.Component {
                                         </CustomTableCell>}
                                         {this.state.details[i].display &&
                                         <CustomTableCell>
-                                            {/*<TextField placeholder={e.} onChange={e => {*/}
-                                                {/*this.state.details[i].label = e.target.value;*/}
-                                                {/*this.state.details[i].edited = true;*/}
+                                            {e.json.display &&
+                                            <List style={{margin: 0, padding: 0}}>
+                                                {Object.keys(e.json.dialog).map(e1 => {
+                                                    return e.json.dialog[e1].map((e2, i1) => {
+                                                        return(
+                                                            <ListItem style={{margin: 0, padding: 2}}>
+                                                                <ListItemIcon>
+                                                                    <ChevronRightIcon/>
+                                                                </ListItemIcon>
+                                                                <ListItemText>
+                                                                    <TextField placeholder={e2.charAt(0).toUpperCase() + e2.slice(1)} onChange={e3 => {
+                                                                        (e.json.dialog[e1])[i1] = e3.target.value;
+                                                                        this.state.details[i].edited = true;
 
-                                                {/*if (this.update !== null)*/}
-                                                    {/*clearTimeout(this.update);*/}
+                                                                        if (this.update !== null)
+                                                                            clearTimeout(this.update);
 
-                                                {/*setTimeout(() => this.forceUpdate(), 1000);*/}
-                                            {/*}}/>*/}
+                                                                        this.update = setTimeout(() => this.forceUpdate(), 1000);
+                                                                    }}/>
+                                                                </ListItemText>
+                                                                {i1 === (e.json.dialog[e1].length - 1) &&
+                                                                <Button onClick={() => {
+                                                                    e.json.dialog[e1].push("");
+                                                                    this.state.details[i].edited = true;
+
+                                                                    this.forceUpdate();
+                                                                }}>
+                                                                    <AddIcon/>
+                                                                </Button>}
+                                                                <Button disabled={e.json.dialog[e1].length < 2} onClick={() => {
+                                                                    e.json.dialog[e1].splice(i1, 1);
+                                                                    this.state.details[i].edited = true;
+
+                                                                    this.forceUpdate();
+                                                                }}>
+                                                                    <DeleteIcon/>
+                                                                </Button>
+                                                            </ListItem>);
+                                                    })
+                                                })}
+                                            </List>}
                                         </CustomTableCell>}
                                         {!this.state.details[i].display &&
                                         <CustomTableCell/>}
@@ -854,6 +936,14 @@ class Magazzino extends React.Component {
                                 });
                                 this.state.productlist.splice(this.state.product, 1);
                                 this.state.product = null;
+                            } else if (this.state.current === 2) {
+                                POST(apiCalls.dltmagazzinopopups, {
+                                    user: window.ctx.get("username"),
+                                    token: window.ctx.get("token"),
+                                    modified: [this.state.details[this.state.detailToRemove].value]
+                                });
+                                this.state.details.splice(this.state.detailToRemove, 1);
+                                this.state.detailToRemove = null;
                             } else if (this.state.current === 3) {
                                 POST(apiCalls.dltmagazzinogruppi, {
                                     user: window.ctx.get("username"),

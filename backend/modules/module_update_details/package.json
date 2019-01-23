@@ -1,0 +1,13 @@
+{
+  "name": "module_update_details",
+  "index": "index.js",
+  "version": "1.0",
+  "license": "GPL3",
+  "private": true,
+  "api_name": "updDetails",
+  "api_url": "/api/updDetails",
+  "api_action": "POST",
+  "api_enable": true,
+  "dependencies": {
+  }
+}

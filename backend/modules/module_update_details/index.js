@@ -13,13 +13,13 @@ module.exports.format = [{
             strict: false
         },
         {
-            field: "label",
+            field: "json",
             required: true,
-            type: "text",
+            type: "object",
             strict: false
         },
         {
-            field: "image",
+            field: "type",
             required: true,
             type: "text",
             strict: false
@@ -30,7 +30,14 @@ module.exports.format = [{
 module.exports.callback = function (proxy) {
     if (proxy.recv.modified)
         proxy.recv.modified.forEach(e => {
-            proxy.getConnection().query(`INSERT INTO gruppi_cucina(id, nome, bg) VALUES('${proxy.secure(e.value)}', '${proxy.secure(e.label.toUpperCase())}', '${proxy.secure(e.image)}') ON DUPLICATE KEY UPDATE id='${proxy.secure(e.value)}', nome='${proxy.secure(e.label.toUpperCase())}', bg='${proxy.secure(e.image)}'`, (e, r) => {
+            let json = JSON.stringify(e.json).replaceAll("'", "");
+
+            if (e.type === 'select')
+                json = json.replace('choose', 'select');
+            else if (e.type === 'choose')
+                json = json.replace('select', 'choose');
+
+            proxy.getConnection().query(`INSERT INTO details(id, json, human_dec) VALUES('${proxy.secure(e.value)}', '${json}', NULL) ON DUPLICATE KEY UPDATE id='${proxy.secure(e.value)}', json='${json}', human_dec=NULL`, (e, r) => {
                 console.log(e);
             });
         });
