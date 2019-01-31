@@ -303,7 +303,7 @@ class Cassa extends React.Component {
                                 <Grid container spacing={24}>
                                     <Grid item xs={2}>
                                         <Button
-                                            onClick={() => this.setState({currentState: this.status.category})}>Indietro</Button>
+                                            onClick={() => this.setState({currentState: this.status.category, subtract: false})}>Indietro</Button>
                                     </Grid>
                                     <Grid item xs={8}>
                                         <Typography noWrap variant='title'>Prodotti Disponibili</Typography>
@@ -320,8 +320,8 @@ class Cassa extends React.Component {
                                                  qta={e.qta} details={e.details}
                                                  onClick={() => {
                                                      if (!e.details.display) {
-                                                         if(this.state.subtract && e.qta > 0) e.qta -= 1;
-                                                         else if(!this.state.subtract) e.qta += 1;
+                                                         if (this.state.subtract && e.qta > 0) e.qta -= 1;
+                                                         else if (!this.state.subtract) e.qta += 1;
                                                          this.state.cart.push(e);
                                                          this.forceUpdate()
                                                      } else {
@@ -561,7 +561,7 @@ class Cassa extends React.Component {
                         </Paper>
                     </Grid>
                 </Grid>
-                <Dialog open={this.state.isAddOpen}
+                <Dialog open={this.state.isAddOpen} onClose={() => this.setState({isAddOpen: false})}
                         aria-labelledby="simple-dialog-title">
                     <DialogTitle id="simple-dialog-title"><Typography
                         variant='title'>{this.state.currentDetail.title}</Typography></DialogTitle>

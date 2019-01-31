@@ -7,6 +7,7 @@ import AddIcon from "@material-ui/icons/Add"
 import MinusIcon from "@material-ui/icons/Remove"
 import Typography from "@material-ui/core/es/Typography/Typography";
 import * as cfg from "./configs/network.config"
+import PlusMinusBtn from "./components/PlusMinusBtn";
 
 let normalizeCart = (cart) => {
     let map = new Map();
@@ -95,28 +96,25 @@ let renderCart = (cart, classes, classs, normalized = false, withButtons = true)
                                 </Grid>
                                 {typeof(v.variants) === 'undefined' &&
                                 [
-                                    <Grid item xs={2}>
-                                        {withButtons && <Button onClick={() => {
+                                    <Grid item xs={4}>
+                                        {withButtons && <PlusMinusBtn onPlus={() => {
                                             for (let i = 0; i < cart.length; i++)
                                                 if (cart[i].desc === k) {
                                                     cart[i].qta++;
                                                     break;
                                                 }
                                             classs.forceUpdate()
-                                        }} variant="contained" color="primary"><AddIcon/></Button>}
-                                    </Grid>,
-                                    <Grid item xs={2}>
-                                        {withButtons && <Button onClick={() => {
+                                        }} onMinus={() => {
                                             for (let i = 0; i < cart.length; i++)
                                                 if (cart[i].desc === k) {
                                                     cart[i].qta > 0 ? cart[i].qta-- : cart.splice(i, 1);
                                                     break;
                                                 }
                                             classs.forceUpdate()
-                                        }} variant="contained" color="secondary"><MinusIcon/></Button>}
+                                        }}/>}
                                     </Grid>
                                 ]}
-                                {!typeof(v.variants) === 'undefined' && <Grid item xs={4}/>}
+                                {typeof(v.variants) !== 'undefined' && <Grid item xs={4}/>}
                                 {typeof(v.variants) !== 'undefined' && v.variants.map(e => {
                                     if (e.qta > 0)
                                         return [
@@ -130,23 +128,20 @@ let renderCart = (cart, classes, classs, normalized = false, withButtons = true)
                                                 <Typography>{e.qta}</Typography>
                                             </Grid>,
                                             <Grid item xs={2}/>,
-                                            <Grid item xs={2}>
-                                                {withButtons && <Button onClick={() => {
+                                            <Grid item xs={4}>
+                                                {withButtons && <PlusMinusBtn onPlus={() => {
                                                     for (let i = 0; i < cart.length; i++)
                                                         if (cart[i].desc === k && JSON.stringify(cart[i].variant) === JSON.stringify(e.var)) {
                                                             cart[i].qta++;
                                                         }
                                                     classs.forceUpdate()
-                                                }} variant="contained" color="primary"><AddIcon/></Button>}
-                                            </Grid>,
-                                            <Grid item xs={2}>
-                                                {withButtons && <Button onClick={() => {
+                                                }} onMinus={() => {
                                                     for (let i = 0; i < cart.length; i++)
                                                         if (cart[i].desc === k && JSON.stringify(cart[i].variant) === JSON.stringify(e.var)) {
                                                             cart[i].qta > 0 ? cart[i].qta-- : cart.splice(i, 1);
                                                         }
                                                     classs.forceUpdate()
-                                                }} variant="contained" color="secondary"><MinusIcon/></Button>}
+                                                }}/>}
                                             </Grid>
                                         ]
                                 })}
