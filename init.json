@@ -1,5 +1,5 @@
 {
   "pkg": {
-    "scripts": "backend/*.js"
+    "scripts": "backend/modules/built/*.js"
   }
 }

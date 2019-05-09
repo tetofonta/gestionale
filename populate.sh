@@ -6,15 +6,15 @@ mkdir -p ./backend/CAPTIVE/sslcert
 mkdir -p ./backend/LOAD_BALANCER/sslcert
 mkdir -p ./backend/dataManager/sslcert
 
-openssl req -nodes -new -x509 -keyout ./backend/sslcert/server.key -out ./backend/sslcert/server.crt
-ln -s "$PWD/backend/sslcert/server.key" backend/MQTT/sslcert/server.key
-ln -s "$PWD/backend/sslcert/server.crt" backend/MQTT/sslcert/server.crt
-ln -s "$PWD/backend/sslcert/server.key" backend/CAPTIVE/sslcert/server.key
-ln -s "$PWD/backend/sslcert/server.crt" backend/CAPTIVE/sslcert/server.crt
-ln -s "$PWD/backend/sslcert/server.key" backend/LOAD_BALANCER/sslcert/server.key
-ln -s "$PWD/backend/sslcert/server.crt" backend/LOAD_BALANCER/sslcert/server.crt
-ln -s "$PWD/backend/sslcert/server.key" backend/dataManager/sslcert/server.key
-ln -s "$PWD/backend/sslcert/server.crt" backend/dataManager/sslcert/server.crt
+#openssl req -nodes -new -x509 -keyout ./backend/sslcert/server.key -out ./backend/sslcert/server.crt
+#ln -s "$PWD/backend/sslcert/server.key" backend/MQTT/sslcert/server.key
+#ln -s "$PWD/backend/sslcert/server.crt" backend/MQTT/sslcert/server.crt
+#ln -s "$PWD/backend/sslcert/server.key" backend/CAPTIVE/sslcert/server.key
+#ln -s "$PWD/backend/sslcert/server.crt" backend/CAPTIVE/sslcert/server.crt
+#ln -s "$PWD/backend/sslcert/server.key" backend/LOAD_BALANCER/sslcert/server.key
+#ln -s "$PWD/backend/sslcert/server.crt" backend/LOAD_BALANCER/sslcert/server.crt
+#ln -s "$PWD/backend/sslcert/server.key" backend/dataManager/sslcert/server.key
+#ln -s "$PWD/backend/sslcert/server.crt" backend/dataManager/sslcert/server.crt
 
 if [ ! -f ./network.config.json ]; then
     cp ./network.config.json.TEMPLATE ./network.config.json
