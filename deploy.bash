@@ -87,3 +87,5 @@ find output -name "*.scss" -type f -delete
 find output -name ".github" -exec rm -rf "{}" \;
 find output -name "less" -exec rm -rf "{}" \;
 find output -name "scss" -exec rm -rf "{}" \;
+
+mv output/SERVER/init output/SERVER/server

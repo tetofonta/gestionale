@@ -1,5 +1,5 @@
 const mosca = require('mosca');
-const {getNW_st} = require("../network");
+//const {getNW_st} = require("../network");
 const cfg = require("../network.config");
 const {logger_init} = require("../logger");
 logger_init("./log/broker.error.log", "./log/broker.log");
@@ -9,7 +9,7 @@ let restrictedTopics = [cfg.mqtt["order-official"]];
 function nop() {
 }
 
-mosca.Server.prototype.publish = function publish(packet, client, callback) {
+/*mosca.Server.prototype.publish = function publish(packet, client, callback) {
 
     if (client) {
         try {
@@ -92,7 +92,7 @@ mosca.Server.prototype.publish = function publish(packet, client, callback) {
             }
         );
     });
-};
+};*/
 
 // let settings = {
 //     http: {
